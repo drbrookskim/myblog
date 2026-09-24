@@ -1,0 +1,3382 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dr. Brooks Services — 3D Chrono-Spatial Chain &amp; Autonomous Web Intelligence</title>
+
+<!-- Fonts: Space Grotesk (Display), JetBrains Mono (Tech/Data), Inter & Pretendard (Body) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+  /* --- 1. DESIGN TOKEN SYSTEM --- */
+  :root {
+    --obsidian-void: #05070d;
+    --slate-panel: #0b101d;
+    --slate-card: #12192a;
+    --slate-hover: #1b243b;
+    
+    --cyber-cyan: #00f0ff;
+    --cyber-glow: rgba(0, 240, 255, 0.35);
+    
+    --aurora-emerald: #10e79d;
+    --aurora-glow: rgba(16, 231, 157, 0.25);
+    
+    --solar-amber: #ffb020;
+    --solar-glow: rgba(255, 176, 32, 0.25);
+    
+    --quantum-violet: #9d4edd;
+    --quantum-glow: rgba(157, 78, 221, 0.35);
+    
+    --horizon-pink: #f43f5e;
+    --pulse-rose: #ff3366;
+
+    --text-pure: #ffffff;
+    --text-primary: #e2e8f0;
+    --text-muted: #94a3b8;
+    --text-dim: #64748b;
+
+    --border-glass: rgba(255, 255, 255, 0.08);
+    --border-active: rgba(0, 240, 255, 0.45);
+    
+    --font-display: 'Space Grotesk', -apple-system, sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+    --font-body: 'Inter', -apple-system, BlinkMacSystemFont, "Pretendard", sans-serif;
+
+    --radius-xl: 24px;
+    --radius-lg: 16px;
+    --radius-md: 10px;
+    --radius-pill: 9999px;
+  }
+
+  /* --- 2. BASE & RESET --- */
+  *, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    color-scheme: dark;
+  }
+
+  body {
+    background-color: var(--obsidian-void);
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.68;
+    overflow-x: hidden;
+    selection-background-color: var(--cyber-cyan);
+    selection-color: var(--obsidian-void);
+  }
+
+  ::selection {
+    background: var(--cyber-cyan);
+    color: var(--obsidian-void);
+  }
+
+  /* Scroll Progress Indicator */
+  .scroll-progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 0%;
+    height: 3px;
+    background: linear-gradient(90deg, var(--cyber-cyan), var(--aurora-emerald), var(--quantum-violet), var(--horizon-pink));
+    z-index: 1000;
+    box-shadow: 0 0 14px var(--cyber-cyan);
+    transition: width 0.1s linear;
+  }
+
+  /* Ambient Living Canvas */
+  .ambient-canvas {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+  .ambient-mesh {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-image: 
+      radial-gradient(circle at 15% 15%, rgba(0, 240, 255, 0.08) 0%, transparent 40%),
+      radial-gradient(circle at 85% 30%, rgba(157, 78, 221, 0.09) 0%, transparent 45%),
+      radial-gradient(circle at 50% 80%, rgba(16, 231, 157, 0.07) 0%, transparent 50%);
+  }
+
+  /* --- 3. NAVIGATION BAR --- */
+  .top-nav {
+    position: sticky;
+    top: 0;
+    z-index: 900;
+    background: rgba(5, 7, 13, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border-glass);
+    padding: 14px 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: var(--text-pure);
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+  .brand-icon-pulse {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, var(--cyber-cyan), var(--quantum-violet));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--obsidian-void);
+    font-size: 0.95rem;
+    box-shadow: 0 0 16px var(--cyber-glow);
+  }
+  .brand-name span {
+    color: var(--cyber-cyan);
+    font-weight: 600;
+    font-size: 0.85em;
+    margin-left: 4px;
+  }
+  .nav-menu {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    list-style: none;
+  }
+  @media (max-width: 768px) {
+    .nav-menu { display: none; }
+  }
+  .nav-link {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 6px 14px;
+    border-radius: var(--radius-pill);
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .nav-link:hover, .nav-link.active {
+    color: var(--text-pure);
+    background: rgba(255, 255, 255, 0.08);
+  }
+  .nav-link.active {
+    color: var(--cyber-cyan);
+    border: 1px solid rgba(0, 240, 255, 0.25);
+  }
+  .nav-cta-btn {
+    background: linear-gradient(135deg, rgba(0, 240, 255, 0.15), rgba(16, 231, 157, 0.15));
+    border: 1px solid var(--cyber-cyan);
+    color: var(--cyber-cyan);
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 8px 16px;
+    border-radius: var(--radius-pill);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.25s;
+  }
+  .nav-cta-btn:hover {
+    background: var(--cyber-cyan);
+    color: var(--obsidian-void);
+    box-shadow: 0 0 20px var(--cyber-glow);
+    transform: translateY(-1px);
+  }
+
+  /* --- 4. SHELL CONTAINER --- */
+  .app-shell {
+    position: relative;
+    z-index: 10;
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 40px 24px;
+  }
+
+  /* --- 5. HERO SECTION (EDITORIAL THESIS) --- */
+  .hero-wrapper {
+    position: relative;
+    margin-bottom: 56px;
+  }
+  .hero-panel {
+    background: linear-gradient(170deg, rgba(18, 25, 42, 0.85) 0%, rgba(11, 16, 29, 0.95) 100%);
+    border: 1px solid var(--border-glass);
+    border-radius: var(--radius-xl);
+    padding: 56px 44px;
+    box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(24px);
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-panel::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent 0%, var(--cyber-cyan) 25%, var(--quantum-violet) 70%, var(--horizon-pink) 90%, transparent 100%);
+  }
+  
+  .hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 16px;
+    background: rgba(0, 240, 255, 0.08);
+    border: 1px solid rgba(0, 240, 255, 0.25);
+    border-radius: var(--radius-pill);
+    color: var(--cyber-cyan);
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 20px;
+  }
+  .live-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--aurora-emerald);
+    box-shadow: 0 0 10px var(--aurora-emerald);
+    animation: livePulse 2s infinite;
+  }
+  @keyframes livePulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.85); }
+  }
+
+  .hero-headline {
+    font-family: var(--font-display);
+    font-size: clamp(2.3rem, 4.8vw, 3.6rem);
+    font-weight: 800;
+    line-height: 1.16;
+    letter-spacing: -0.03em;
+    color: var(--text-pure);
+    margin-bottom: 18px;
+  }
+  .hero-headline .gradient-text {
+    background: linear-gradient(135deg, #ffffff 10%, var(--cyber-cyan) 50%, var(--quantum-violet) 85%, var(--horizon-pink) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .hero-lead {
+    font-size: 1.15rem;
+    color: var(--text-muted);
+    max-width: 880px;
+    line-height: 1.75;
+    margin-bottom: 32px;
+  }
+
+  /* Telemetry Grid */
+  .telemetry-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    padding-top: 28px;
+    border-top: 1px solid var(--border-glass);
+  }
+  @media (max-width: 900px) {
+    .telemetry-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 540px) {
+    .telemetry-grid { grid-template-columns: 1fr; }
+  }
+
+  .telemetry-card {
+    background: rgba(5, 7, 13, 0.6);
+    border: 1px solid var(--border-glass);
+    border-radius: var(--radius-md);
+    padding: 16px 20px;
+    transition: all 0.2s;
+  }
+  .telemetry-card:hover {
+    border-color: var(--border-active);
+    transform: translateY(-2px);
+  }
+  .telemetry-metric {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 800;
+    margin-bottom: 2px;
+  }
+  .telemetry-metric.cyan { color: var(--cyber-cyan); text-shadow: 0 0 16px var(--cyber-glow); }
+  .telemetry-metric.emerald { color: var(--aurora-emerald); text-shadow: 0 0 16px var(--aurora-glow); }
+  .telemetry-metric.amber { color: var(--solar-amber); text-shadow: 0 0 16px var(--solar-glow); }
+  .telemetry-metric.violet { color: var(--quantum-violet); text-shadow: 0 0 16px var(--quantum-glow); }
+
+  .telemetry-label {
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-dim);
+  }
+  .telemetry-sub {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
+
+  /* --- 6. SECTION: 3D CHRONO-SPATIAL CHAIN & ORBIT ENGINE --- */
+  .chrono-section {
+    background: radial-gradient(circle at 50% 20%, rgba(18, 25, 42, 0.9) 0%, rgba(7, 10, 18, 0.98) 100%);
+    border: 1px solid rgba(0, 240, 255, 0.3);
+    border-radius: var(--radius-xl);
+    padding: 36px 32px 48px;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 0 0 35px rgba(0, 240, 255, 0.12);
+    margin-bottom: 84px;
+    position: relative;
+    overflow: hidden;
+  }
+  .chrono-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .chrono-title-group h2 {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--text-pure);
+    letter-spacing: -0.02em;
+  }
+  .chrono-title-group p {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    margin-top: 4px;
+  }
+
+  /* Camera Presets Toolbar */
+  .cam-controls {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    background: rgba(5, 7, 13, 0.85);
+    padding: 4px;
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--border-glass);
+  }
+  .btn-cam-preset {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: 0.76rem;
+    font-weight: 600;
+    padding: 6px 14px;
+    border-radius: var(--radius-pill);
+    cursor: pointer;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .btn-cam-preset:hover {
+    color: var(--text-pure);
+    background: rgba(255, 255, 255, 0.08);
+  }
+  .btn-cam-preset.active {
+    background: var(--cyber-cyan);
+    color: var(--obsidian-void);
+    font-weight: 800;
+    box-shadow: 0 0 14px var(--cyber-glow);
+  }
+
+  /* 3D Canvas Viewport Container (Overscroll / Wheel strictly isolated) */
+  .viewport-3d-box {
+    position: relative;
+    width: 100%;
+    height: 560px;
+    border-radius: var(--radius-lg);
+    background: #04060b;
+    border: 1px solid var(--border-glass);
+    overflow: hidden;
+    cursor: grab;
+    user-select: none;
+    overscroll-behavior: contain;
+    touch-action: none;
+  }
+  .viewport-3d-box.is-node-drag {
+    cursor: ew-resize !important;
+  }
+  .viewport-3d-box:active {
+    cursor: grabbing !important;
+  }
+  
+  #chronoCanvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  /* Floating 3D Holographic Side Callout HUD Tooltip with Slow Entrance & Reverse Collapse on Exit */
+  .hud-3d-tooltip {
+    position: absolute;
+    pointer-events: none;
+    z-index: 50;
+    background: rgba(11, 16, 29, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--hud-accent, var(--cyber-cyan));
+    border-radius: var(--radius-lg);
+    padding: 18px 22px;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.75), 0 0 25px color-mix(in srgb, var(--hud-accent, var(--cyber-cyan)) 35%, transparent);
+    min-width: 290px;
+    max-width: 350px;
+    opacity: 0;
+    visibility: hidden;
+    /* Reverse exit transition: collapses back into the line origin */
+    transition: opacity 0.65s cubic-bezier(0.4, 0, 0.2, 1),
+                transform 0.65s cubic-bezier(0.4, 0, 0.2, 1),
+                border-color 0.4s ease,
+                box-shadow 0.4s ease,
+                visibility 0.65s;
+    overflow: hidden;
+  }
+
+  /* Directional Outward Blooming & Reverse Collapse */
+  .hud-3d-tooltip.hud-dir-right {
+    transform-origin: left bottom;
+    transform: scale(0.78) translateX(-28px) translateY(28px);
+  }
+  .hud-3d-tooltip.hud-dir-right.active {
+    transform: scale(1) translateX(0) translateY(0);
+    /* Slower, majestic entrance */
+    transition: opacity 0.88s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.88s cubic-bezier(0.16, 1, 0.3, 1),
+                border-color 0.4s ease,
+                box-shadow 0.4s ease,
+                visibility 0.88s;
+  }
+
+  .hud-3d-tooltip.hud-dir-left {
+    transform-origin: right bottom;
+    transform: scale(0.78) translateX(28px) translateY(28px);
+  }
+  .hud-3d-tooltip.hud-dir-left.active {
+    transform: scale(1) translateX(0) translateY(0);
+    /* Slower, majestic entrance */
+    transition: opacity 0.88s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.88s cubic-bezier(0.16, 1, 0.3, 1),
+                border-color 0.4s ease,
+                box-shadow 0.4s ease,
+                visibility 0.88s;
+  }
+
+  /* Natural Outward Dynamic Gradient Fill */
+  .hud-3d-tooltip::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.65s cubic-bezier(0.4, 0, 0.2, 1), transform 0.65s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  .hud-3d-tooltip.hud-dir-right::before {
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.04) 0%,
+      rgba(11, 16, 29, 0.25) 25%,
+      color-mix(in srgb, var(--hud-accent, var(--cyber-cyan)) 16%, transparent) 65%,
+      color-mix(in srgb, var(--hud-accent, var(--cyber-cyan)) 40%, transparent) 100%
+    );
+    transform: translateX(-35px) translateY(35px);
+  }
+
+  .hud-3d-tooltip.hud-dir-left::before {
+    background: linear-gradient(
+      225deg,
+      rgba(255, 255, 255, 0.04) 0%,
+      rgba(11, 16, 29, 0.25) 25%,
+      color-mix(in srgb, var(--hud-accent, var(--cyber-cyan)) 16%, transparent) 65%,
+      color-mix(in srgb, var(--hud-accent, var(--cyber-cyan)) 40%, transparent) 100%
+    );
+    transform: translateX(35px) translateY(35px);
+  }
+
+  /* Shimmer Light Bar */
+  .hud-3d-tooltip::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--hud-accent, var(--cyber-cyan)), transparent);
+    opacity: 0;
+    transform: scaleX(0);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+
+  .hud-3d-tooltip.active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  .hud-3d-tooltip.active::before {
+    opacity: 1;
+    transform: translateX(0) translateY(0);
+    transition: opacity 0.95s cubic-bezier(0.16, 1, 0.3, 1), transform 0.95s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .hud-3d-tooltip.active::after {
+    opacity: 1;
+    transform: scaleX(1);
+    transition: opacity 0.8s ease 0.15s, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.15s;
+  }
+  .hud-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+  }
+  .hud-badge {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: rgba(0, 240, 255, 0.15);
+    color: var(--cyber-cyan);
+    border: 1px solid rgba(0, 240, 255, 0.3);
+  }
+  .hud-era {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--text-dim);
+  }
+  .hud-title {
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: var(--text-pure);
+    margin-bottom: 4px;
+  }
+  .hud-tagline {
+    font-size: 0.82rem;
+    color: var(--solar-amber);
+    font-weight: 600;
+    margin-bottom: 8px;
+    line-height: 1.35;
+  }
+  .hud-desc {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+    margin-bottom: 12px;
+  }
+  .hud-action {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 10px;
+    border-top: 1px solid var(--border-glass);
+  }
+  .hud-click-hint {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--cyber-cyan);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  /* 3D Interaction Guide Overlay */
+  .viewport-overlay-hint {
+    position: absolute;
+    bottom: 16px;
+    left: 16px;
+    background: rgba(5, 7, 13, 0.85);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--border-glass);
+    border-radius: var(--radius-pill);
+    padding: 8px 18px;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    pointer-events: none;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.6);
+  }
+
+  /* Evolutionary Stages Indicator */
+  .evolution-stages-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin-top: 24px;
+  }
+  @media (max-width: 900px) {
+    .evolution-stages-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  /* Keyframes for Ambient Breathing Gradient Glow & Shimmer */
+  @keyframes tileGradientBreath {
+    0% {
+      opacity: 0.22;
+      transform: scale(0.97) translateY(4px);
+    }
+    50% {
+      opacity: 0.48;
+      transform: scale(1.03) translateY(-2px);
+    }
+    100% {
+      opacity: 0.22;
+      transform: scale(0.97) translateY(4px);
+    }
+  }
+
+  @keyframes shimmerSheen {
+    0% {
+      background-position: -200% 0;
+    }
+    100% {
+      background-position: 200% 0;
+    }
+  }
+
+  /* Evolutionary Stages Indicator */
+  .evolution-stages-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin-top: 24px;
+  }
+  @media (max-width: 900px) {
+    .evolution-stages-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 500px) {
+    .evolution-stages-grid { grid-template-columns: 1fr; }
+  }
+  .stage-box {
+    background: rgba(11, 16, 29, 0.75);
+    border: 1px solid var(--border-glass);
+    border-radius: var(--radius-md);
+    padding: 16px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 1;
+  }
+  .stage-box::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 38px;
+    height: 3px;
+    background: var(--stage-color, var(--cyber-cyan));
+    border-radius: 2px;
+    z-index: 2;
+    transition: width 0.35s ease;
+  }
+  /* Natural Color-Matched Gradient Fill Layer */
+  .stage-box::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 10% 10%, color-mix(in srgb, var(--stage-color, var(--cyber-cyan)) 26%, transparent) 0%, rgba(11, 16, 29, 0) 75%),
+                linear-gradient(135deg, transparent 0%, color-mix(in srgb, var(--stage-color, var(--cyber-cyan)) 20%, transparent) 100%);
+    opacity: 0.25;
+    transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: -1;
+    animation: tileGradientBreath 6s ease-in-out infinite alternate;
+  }
+  .stage-box:hover {
+    border-color: var(--stage-color, var(--cyber-cyan));
+    background: rgba(18, 25, 42, 0.92);
+    transform: translateY(-4px);
+    box-shadow: 0 14px 28px -8px color-mix(in srgb, var(--stage-color, var(--cyber-cyan)) 38%, transparent),
+                0 0 18px -4px color-mix(in srgb, var(--stage-color, var(--cyber-cyan)) 24%, transparent);
+  }
+  .stage-box:hover::before {
+    width: 100%;
+  }
+  .stage-box:hover::after {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+  .stage-tag {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--stage-color, var(--cyber-cyan));
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .stage-name {
+    font-family: var(--font-display);
+    font-size: 0.98rem;
+    font-weight: 700;
+    color: var(--text-pure);
+    margin-bottom: 6px;
+  }
+  .stage-summary {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+
+  /* --- 7. SECTION HEADERS & CATALOG MATRIX --- */
+  .section-wrap {
+    margin-bottom: 96px;
+    scroll-margin-top: 80px;
+  }
+  .section-tag {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--cyber-cyan);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 8px;
+  }
+  .section-title {
+    font-family: var(--font-display);
+    font-size: 2.2rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--text-pure);
+    margin-bottom: 12px;
+  }
+  .section-description {
+    font-size: 1.05rem;
+    color: var(--text-muted);
+    max-width: 760px;
+    margin-bottom: 36px;
+  }
+
+  .matrix-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+  }
+  .filter-ribbon {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    background: rgba(11, 16, 29, 0.7);
+    padding: 6px;
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--border-glass);
+  }
+  .filter-chip {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 8px 18px;
+    border-radius: var(--radius-pill);
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .filter-chip:hover {
+    color: var(--text-pure);
+    background: rgba(255, 255, 255, 0.06);
+  }
+  .filter-chip.active {
+    background: var(--cyber-cyan);
+    color: var(--obsidian-void);
+    font-weight: 700;
+    box-shadow: 0 0 16px var(--cyber-glow);
+  }
+
+  .search-box-wrap {
+    position: relative;
+    min-width: 260px;
+  }
+  .search-input {
+    width: 100%;
+    background: rgba(11, 16, 29, 0.8);
+    border: 1px solid var(--border-glass);
+    border-radius: var(--radius-pill);
+    padding: 10px 18px 10px 42px;
+    color: var(--text-pure);
+    font-family: var(--font-body);
+    font-size: 0.88rem;
+    outline: none;
+    transition: all 0.2s;
+  }
+  .search-input:focus {
+    border-color: var(--cyber-cyan);
+    box-shadow: 0 0 16px var(--cyber-glow);
+  }
+  .search-icon {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-dim);
+    font-size: 0.85rem;
+  }
+
+  /* Matrix Grid */
+  .matrix-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+    gap: 24px;
+  }
+  @media (max-width: 480px) {
+    .matrix-grid { grid-template-columns: 1fr; }
+  }
+
+  /* Matrix Card Tile with Dynamic Color-Matched Gradient Fill */
+  .matrix-card {
+    background: var(--slate-card);
+    border: 1px solid var(--border-glass);
+    border-radius: var(--radius-lg);
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    cursor: pointer;
+    z-index: 1;
+  }
+
+  /* Ambient Breathing Gradient Base */
+  .matrix-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 80% 120%, var(--card-accent, var(--cyber-cyan)) 0%, rgba(11, 16, 29, 0) 70%);
+    opacity: 0.22;
+    transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    pointer-events: none;
+    z-index: -2;
+    animation: tileGradientBreath 7s ease-in-out infinite alternate;
+  }
+
+  /* Smooth Color-Matched Gradient Fill Layer (Naturally rises & floods on hover) */
+  .matrix-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      155deg,
+      rgba(255, 255, 255, 0.04) 0%,
+      rgba(11, 16, 29, 0.35) 30%,
+      color-mix(in srgb, var(--card-accent, var(--cyber-cyan)) 18%, transparent) 65%,
+      color-mix(in srgb, var(--card-accent, var(--cyber-cyan)) 38%, transparent) 100%
+    );
+    opacity: 0;
+    transform: translateY(24px) scale(0.98);
+    transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1), transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  .matrix-card:hover {
+    background: rgba(18, 25, 42, 0.95);
+    border-color: var(--card-accent, var(--cyber-cyan));
+    transform: translateY(-7px);
+    box-shadow: 0 22px 50px -12px color-mix(in srgb, var(--card-accent, var(--cyber-cyan)) 38%, transparent),
+                0 0 25px -4px color-mix(in srgb, var(--card-accent, var(--cyber-cyan)) 24%, transparent);
+  }
+  .matrix-card:hover::before {
+    opacity: 0.65;
+    transform: scale(1.18) translateY(-8px);
+  }
+  .matrix-card:hover::after {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  .card-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 16px;
+  }
+  .card-seq {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--card-accent, var(--cyber-cyan));
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  .card-domain-badge {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--text-dim);
+  }
+
+  .card-title-group {
+    margin-bottom: 12px;
+  }
+  .card-main-title {
+    font-family: var(--font-display);
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--text-pure);
+    margin-bottom: 4px;
+    letter-spacing: -0.01em;
+  }
+  .card-tagline {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--card-accent, var(--solar-amber));
+    line-height: 1.4;
+  }
+
+  .card-body-desc {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-bottom: 20px;
+  }
+
+  .card-pills-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 24px;
+  }
+  .tech-chip {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    padding: 3px 8px;
+    border-radius: 4px;
+    background: rgba(5, 7, 13, 0.6);
+    border: 1px solid var(--border-glass);
+    color: #cbd5e1;
+  }
+
+  .card-foot-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 16px;
+    border-top: 1px solid var(--border-glass);
+    margin-top: auto;
+  }
+  .btn-launch-site {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--text-pure);
+    text-decoration: none;
+    font-size: 0.86rem;
+    font-weight: 700;
+    padding: 6px 14px;
+    border-radius: var(--radius-pill);
+    background: rgba(255, 255, 255, 0.08);
+    transition: all 0.2s;
+  }
+  .btn-launch-site:hover {
+    background: var(--card-accent, var(--cyber-cyan));
+    color: var(--obsidian-void);
+  }
+  .btn-detail-trigger {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-size: 0.86rem;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    transition: color 0.2s;
+  }
+  .btn-detail-trigger:hover {
+    color: var(--cyber-cyan);
+  }
+
+  /* --- 8. SECTION: ARCHITECTURAL PILLARS --- */
+  .pillars-quad {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+  @media (max-width: 820px) {
+    .pillars-quad { grid-template-columns: 1fr; }
+  }
+
+  .pillar-panel {
+    background: var(--slate-panel);
+    border: 1px solid var(--border-glass);
+    border-radius: var(--radius-lg);
+    padding: 36px 32px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 1;
+  }
+
+  .pillar-panel:nth-child(1) { --pillar-accent: var(--cyber-cyan); }
+  .pillar-panel:nth-child(2) { --pillar-accent: var(--solar-amber); }
+  .pillar-panel:nth-child(3) { --pillar-accent: var(--aurora-emerald); }
+  .pillar-panel:nth-child(4) { --pillar-accent: var(--quantum-violet); }
+
+  /* Pillar Ambient Breathing Gradient */
+  .pillar-panel::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 85% 15%, var(--pillar-accent, var(--cyber-cyan)) 0%, transparent 65%);
+    opacity: 0.18;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    z-index: -2;
+    animation: tileGradientBreath 7s ease-in-out infinite alternate;
+  }
+
+  /* Pillar Smooth Color-Matched Gradient Fill Layer */
+  .pillar-panel::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      140deg,
+      rgba(255, 255, 255, 0.04) 0%,
+      color-mix(in srgb, var(--pillar-accent, var(--cyber-cyan)) 14%, transparent) 40%,
+      color-mix(in srgb, var(--pillar-accent, var(--cyber-cyan)) 32%, transparent) 100%
+    );
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1), transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: -1;
+  }
+
+  .pillar-panel:hover {
+    border-color: var(--pillar-accent, var(--cyber-cyan));
+    transform: translateY(-6px);
+    box-shadow: 0 22px 50px -12px color-mix(in srgb, var(--pillar-accent, var(--cyber-cyan)) 32%, transparent),
+                0 0 24px -4px color-mix(in srgb, var(--pillar-accent, var(--cyber-cyan)) 20%, transparent);
+  }
+  .pillar-panel:hover::before {
+    opacity: 0.6;
+    transform: scale(1.12);
+  }
+  .pillar-panel:hover::after {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .pillar-num {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--pillar-accent, var(--cyber-cyan));
+    margin-bottom: 12px;
+  }
+  .pillar-heading {
+    font-family: var(--font-display);
+    font-size: 1.45rem;
+    font-weight: 800;
+    color: var(--text-pure);
+    margin-bottom: 12px;
+    letter-spacing: -0.02em;
+  }
+  .pillar-text {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+    margin-bottom: 24px;
+  }
+  .pillar-proof {
+    background: rgba(5, 7, 13, 0.7);
+    border-left: 3px solid var(--pillar-accent, var(--cyber-cyan));
+    padding: 14px 18px;
+    border-radius: 0 8px 8px 0;
+    font-size: 0.86rem;
+    color: #e2e8f0;
+  }
+  .pillar-proof code {
+    font-family: var(--font-mono);
+    color: var(--pillar-accent, var(--cyber-cyan));
+  }
+
+  /* --- 9. SECTION: ARCHITECTURAL COMPARISON --- */
+  .comparison-split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+  }
+  @media (max-width: 860px) {
+    .comparison-split { grid-template-columns: 1fr; }
+  }
+
+  .comp-column {
+    background: var(--slate-panel);
+    border: 1px solid var(--border-glass);
+    border-radius: var(--radius-lg);
+    padding: 36px 32px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 1;
+  }
+
+  .comp-column.hero-comp {
+    border-color: rgba(0, 240, 255, 0.35);
+    background: linear-gradient(180deg, rgba(18, 25, 42, 0.9), var(--slate-panel));
+    box-shadow: 0 20px 40px -15px var(--cyber-glow);
+  }
+
+  .comp-column.hero-comp::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 100% 0%, rgba(0, 240, 255, 0.25) 0%, transparent 65%);
+    opacity: 0.35;
+    transition: opacity 0.45s ease;
+    z-index: -2;
+    animation: tileGradientBreath 6s ease-in-out infinite alternate;
+  }
+
+  .comp-column.hero-comp::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(145deg, transparent 0%, rgba(0, 240, 255, 0.12) 60%, rgba(16, 231, 157, 0.18) 100%);
+    opacity: 0;
+    transform: translateY(16px);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: -1;
+  }
+
+  .comp-column.hero-comp:hover {
+    border-color: var(--cyber-cyan);
+    transform: translateY(-5px);
+    box-shadow: 0 24px 50px -12px var(--cyber-glow);
+  }
+
+  .comp-column.hero-comp:hover::before {
+    opacity: 0.75;
+  }
+  .comp-column.hero-comp:hover::after {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .comp-head {
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    font-weight: 800;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .comp-items-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .comp-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: 0.92rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+  .comp-item strong {
+    color: var(--text-pure);
+  }
+  .comp-icon {
+    font-size: 1.1rem;
+    margin-top: 2px;
+    flex-shrink: 0;
+  }
+
+  /* --- 10. NATIVE HTML5 DIALOG MODAL (with @starting-style) --- */
+  dialog#serviceModal {
+    margin: auto;
+    padding: 0;
+    border: 1px solid rgba(0, 240, 255, 0.3);
+    border-radius: var(--radius-xl);
+    background: rgba(11, 16, 29, 0.96);
+    backdrop-filter: blur(28px);
+    -webkit-backdrop-filter: blur(28px);
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.8), 0 0 40px var(--cyber-glow);
+    color: var(--text-primary);
+    max-width: 680px;
+    width: 90vw;
+    outline: none;
+
+    opacity: 0;
+    transform: scale(0.92) translateY(20px);
+    transition-property: opacity, transform, display, overlay;
+    transition-duration: 0.3s;
+    transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+    transition-behavior: allow-discrete;
+  }
+
+  dialog#serviceModal[open] {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+
+    @starting-style {
+      opacity: 0;
+      transform: scale(0.92) translateY(20px);
+    }
+  }
+
+  dialog#serviceModal::backdrop {
+    background-color: rgba(5, 7, 13, 0);
+    backdrop-filter: blur(0px);
+    transition: 
+      display 0.3s allow-discrete,
+      overlay 0.3s allow-discrete,
+      background-color 0.3s ease-out,
+      backdrop-filter 0.3s ease-out;
+  }
+
+  dialog#serviceModal[open]::backdrop {
+    background-color: rgba(5, 7, 13, 0.82);
+    backdrop-filter: blur(12px);
+
+    @starting-style {
+      background-color: rgba(5, 7, 13, 0);
+      backdrop-filter: blur(0px);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    dialog#serviceModal {
+      transform: none !important;
+      transition-duration: 0.1s;
+    }
+    @starting-style {
+      dialog#serviceModal[open] {
+        transform: none !important;
+      }
+    }
+  }
+
+  .modal-inner {
+    padding: 36px 32px;
+  }
+  .modal-top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  .modal-close-btn {
+    background: rgba(255, 255, 255, 0.08);
+    border: none;
+    color: var(--text-muted);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    transition: all 0.2s;
+  }
+  .modal-close-btn:hover {
+    background: var(--pulse-rose);
+    color: var(--text-pure);
+  }
+  .modal-title {
+    font-family: var(--font-display);
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--text-pure);
+    margin-bottom: 6px;
+  }
+  .modal-tagline {
+    font-size: 1rem;
+    color: var(--solar-amber);
+    font-weight: 600;
+    margin-bottom: 20px;
+  }
+  .modal-desc {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+    margin-bottom: 24px;
+  }
+  .modal-section-title {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--cyber-cyan);
+    margin-bottom: 10px;
+  }
+  .modal-highlight-list {
+    list-style: none;
+    margin-bottom: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .modal-highlight-list li {
+    font-size: 0.9rem;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .modal-highlight-list i {
+    color: var(--aurora-emerald);
+  }
+  .modal-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 32px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-glass);
+  }
+  .btn-modal-primary {
+    flex: 1;
+    background: var(--cyber-cyan);
+    color: var(--obsidian-void);
+    font-weight: 800;
+    padding: 12px 20px;
+    border-radius: var(--radius-pill);
+    text-decoration: none;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.2s;
+  }
+  .btn-modal-primary:hover {
+    box-shadow: 0 0 24px var(--cyber-glow);
+    transform: translateY(-2px);
+  }
+  .btn-modal-copy {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--border-glass);
+    color: var(--text-pure);
+    font-weight: 600;
+    padding: 12px 18px;
+    border-radius: var(--radius-pill);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s;
+  }
+  .btn-modal-copy:hover {
+    background: rgba(255, 255, 255, 0.15);
+  }
+
+  /* --- 11. TOAST NOTIFICATIONS --- */
+  .toast-region {
+    position: fixed;
+    bottom: 32px;
+    right: 32px;
+    z-index: 1100;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    pointer-events: none;
+  }
+  .toast-message {
+    background: var(--slate-card);
+    border: 1px solid var(--cyber-cyan);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 16px var(--cyber-glow);
+    border-radius: var(--radius-pill);
+    padding: 12px 24px;
+    color: var(--text-pure);
+    font-size: 0.88rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    animation: toastIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+  @keyframes toastIn {
+    from { opacity: 0; transform: translateY(16px) scale(0.95); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  /* --- 12. FOOTER --- */
+  .app-footer {
+    border-top: 1px solid var(--border-glass);
+    padding: 48px 24px 24px;
+    text-align: center;
+    color: var(--text-dim);
+    font-size: 0.85rem;
+    background: rgba(5, 7, 13, 0.95);
+  }
+  .footer-meta {
+    margin-bottom: 12px;
+    font-family: var(--font-mono);
+  }
+</style>
+</head>
+<body>
+
+  <!-- Scroll Progress Indicator -->
+  <div class="scroll-progress-bar" id="progressBar"></div>
+
+  <!-- Ambient Living Mesh -->
+  <div class="ambient-canvas" aria-hidden="true">
+    <div class="ambient-mesh"></div>
+  </div>
+
+  <!-- Sticky Top Navigation -->
+  <nav class="top-nav">
+    <a href="#hero" class="nav-brand">
+      <div class="brand-icon-pulse">
+        <i class="fa-solid fa-shapes"></i>
+      </div>
+      <div class="brand-name">
+        About Dr. Brooks Services
+      </div>
+    </a>
+    <ul class="nav-menu">
+      <li><a href="#chrono3d" class="nav-link active">3D 시공간 궤적</a></li>
+      <li><a href="#matrix" class="nav-link">시스템 매트릭스 (12)</a></li>
+      <li><a href="#pillars" class="nav-link">4대 아키텍처 원칙</a></li>
+      <li><a href="#comparison" class="nav-link">생태계 비교</a></li>
+    </ul>
+    <a href="https://drbrooks.pages.dev/" target="_blank" rel="noopener" class="nav-cta-btn">
+      <i class="fa-solid fa-house"></i>
+      <span>Back to Home</span>
+    </a>
+  </nav>
+
+  <!-- App Shell -->
+  <main class="app-shell">
+
+    <!-- HERO / EDITORIAL THESIS -->
+    <header class="hero-wrapper" id="hero">
+      <div class="hero-panel">
+        <div class="hero-eyebrow">
+          <span class="live-dot"></span>
+          <span>Autonomous Edge &amp; Quant Intelligence Hub</span>
+        </div>
+        
+        <h1 class="hero-headline">
+          과거의 계산기에서 미래의 자율 에이전트까지<br>
+          <span class="gradient-text">13개의 3차원 인텔리전스 진화 궤적</span>
+        </h1>
+        
+        <p class="hero-lead">
+          <strong>Dr. Brooks Services</strong>는 2026년 초 단순 교차환율 계산기(환율 NOW)로 출발하여, 퀀트 4계층 주식 진단, 지식 그래프, 에이전트 스킬 번들을 거쳐 거시경제 밸류체인 리포트(Dr. Brooks Money & Knowledge Report)와 70년 역사·시장 파동 아카이브(EpochWave), 그리고 미래의 다중 자율 에이전트 지평으로 팽창하는 <strong>3차원 지식·도구 연쇄망</strong>입니다.
+        </p>
+
+        <!-- Live Telemetry Stats -->
+        <div class="telemetry-grid">
+          <div class="telemetry-card">
+            <div class="telemetry-metric cyan">13 + ∞</div>
+            <div class="telemetry-label">Timeline Nodes</div>
+            <div class="telemetry-sub">환율 NOW ~ EpochWave ~ 미래 지평</div>
+          </div>
+          <div class="telemetry-card">
+            <div class="telemetry-metric emerald">0.1s</div>
+            <div class="telemetry-label">Edge Latency</div>
+            <div class="telemetry-sub">Cloudflare Pages &amp; Vercel 엣지</div>
+          </div>
+          <div class="telemetry-card">
+            <div class="telemetry-metric amber">4-Layer</div>
+            <div class="telemetry-label">Quant Analysis</div>
+            <div class="telemetry-sub">펀더멘털 · 해자 · 정성 · 기술 지표</div>
+          </div>
+          <div class="telemetry-card">
+            <div class="telemetry-metric violet">AGY/Claude</div>
+            <div class="telemetry-label">Agent Ready</div>
+            <div class="telemetry-sub">스킬 패키지 &amp; 프롬프트 툴킷 연동</div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- SECTION: 3D CHRONO-SPATIAL CHAIN & ORBIT ENGINE -->
+    <section class="chrono-section" id="chrono3d">
+      <div class="chrono-header">
+        <div class="chrono-title-group">
+          <span class="section-tag">3D Deep Space Cosmos &amp; Planetary Pathway</span>
+          <h2>3차원 심우주 진화 궤도 &amp; 행성계 (Celestial Planetary Highway)</h2>
+          <p>
+            <strong>행성을 잡고 부드럽게 끌면 중력 궤도를 따라 각 행성이 순차적으로 딸려옵니다.</strong> 3D 우주 영역 내 휠 스크롤은 심우주 공간 안에서만 독립적으로 작동하며, 다채로운 성운(Nebulae)과 별무리 사이를 유영할 수 있습니다.
+          </p>
+        </div>
+
+        <!-- Camera Perspective Presets -->
+        <div class="cam-controls" id="camControlsGroup">
+          <button class="btn-cam-preset active" data-view="orbit">
+            <i class="fa-solid fa-globe"></i> 🌌 은하 전체 조망
+          </button>
+          <button class="btn-cam-preset" data-view="journey">
+            <i class="fa-solid fa-route"></i> ⏳ 성간 항해 시점
+          </button>
+          <button class="btn-cam-preset" data-view="horizon">
+            <i class="fa-solid fa-infinity"></i> 🚀 미래 지평 (Swarm)
+          </button>
+        </div>
+      </div>
+
+      <!-- 3D Interactive Viewport -->
+      <div class="viewport-3d-box" id="viewport3d">
+        <canvas id="chronoCanvas"></canvas>
+
+        <!-- Dynamic Floating 3D Tooltip (HUD) -->
+        <div class="hud-3d-tooltip" id="hudTooltip">
+          <div class="hud-top">
+            <span class="hud-badge" id="hudBadge">EpochWave</span>
+            <span class="hud-era" id="hudEra">2026 Production</span>
+          </div>
+          <h4 class="hud-title" id="hudTitle">EpochWave</h4>
+          <div class="hud-tagline" id="hudTagline">1955 → 2026 역사와 시장의 파동 인터랙티브 아카이브</div>
+          <p class="hud-desc" id="hudDesc">
+            영화 〈백 투 더 퓨처〉 시간 지평 70년간의 대사건과 한·미 4대 증시 궤적을 타임서킷으로 연결한 아카이브입니다.
+          </p>
+          <div class="hud-action">
+            <span class="hud-click-hint"><i class="fa-solid fa-arrow-pointer"></i> 더블클릭하여 행성 스펙 열기</span>
+            <span class="tech-chip" id="hudTech" style="color: var(--cyber-cyan);">Cloudflare Pages</span>
+          </div>
+        </div>
+
+        <div class="viewport-overlay-hint">
+          <i class="fa-solid fa-satellite" style="color: var(--cyber-cyan);"></i>
+          <span><strong>행성 드래그</strong>: 중력 궤도 이동 • <strong>더블클릭</strong>: 행성 스펙 • <strong>휠 스크롤</strong>: 은하 궤적 탐항</span>
+        </div>
+      </div>
+
+      <!-- Evolutionary Stages Breakdown -->
+      <div class="evolution-stages-grid">
+        <div class="stage-box" style="--stage-color: #0E9080;">
+          <div class="stage-tag">STAGE 01 • 기틀 조성기</div>
+          <div class="stage-name">통화 &amp; 퀀트 진단 (환율 NOW · 위스키 · SIGNNITH · EquiSense)</div>
+          <div class="stage-summary">실시간 교차환율(환율 NOW), 위스키 큐레이션, 실시간 수급(SIGNNITH), 4계층 주식 진단(EquiSense)</div>
+        </div>
+
+        <div class="stage-box" style="--stage-color: #38bdf8;">
+          <div class="stage-tag">STAGE 02 • 지식망 확장기</div>
+          <div class="stage-name">지식 그래프 &amp; 기획 (Thoughts · News Finder · PITL · gitmark)</div>
+          <div class="stage-summary">3D 지식 그래프(Thoughts), AI 실시간 뉴스(NewsFinder), 제품 기획(PITL), 지능형 북마크 PWA(gitmark)</div>
+        </div>
+
+        <div class="stage-box" style="--stage-color: #9d4edd;">
+          <div class="stage-tag">STAGE 03 • 에이전틱 완성기</div>
+          <div class="stage-name">에이전트 스킬 &amp; 전략·시계열 (SkillBoard · Chart Deep Dive · Buy the Dip · Money &amp; Knowledge Report · EpochWave)</div>
+          <div class="stage-summary">에이전트 스킬 허브(SkillBoard), 캔들 차트(Chart Deep Dive), 눌림목 백테스팅(Buy the Dip), 밸류체인(Money &amp; Knowledge Report), 70년 역사·시장 파동(EpochWave)</div>
+        </div>
+
+        <div class="stage-box" style="--stage-color: #f43f5e;">
+          <div class="stage-tag">STAGE 04 • 무한 확장기</div>
+          <div class="stage-name">자율 에이전트 스웜 (Autonomous Multi-Agent Swarm)</div>
+          <div class="stage-summary">스스로 시그널을 수집하고 분석 리포트를 생산하여 포털을 자율 확장하는 Autonomous Multi-Agent Matrix</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION I: THE INTERACTIVE SYSTEM MATRIX -->
+    <section class="section-wrap" id="matrix">
+      <span class="section-tag">Interactive Catalog &amp; Component Inventory</span>
+      <h2 class="section-title">시스템 인텔리전스 매트릭스 (12대 핵심 서비스)</h2>
+      <p class="section-description">
+        카테고리 필터링 및 실시간 검색을 통해 각 애플리케이션의 세부 명세, 기술 스택, 핵심 혁신점을 즉각 탐색할 수 있습니다.
+      </p>
+
+      <!-- Matrix Control Toolbar -->
+      <div class="matrix-toolbar">
+        <div class="filter-ribbon" id="filterRibbon">
+          <button class="filter-chip active" data-filter="all">전체 (12)</button>
+          <button class="filter-chip" data-filter="finance">금융 / 외환 (4)</button>
+          <button class="filter-chip" data-filter="ai">AI / 에이전트 (2)</button>
+          <button class="filter-chip" data-filter="productivity">기획 / 생산성 (2)</button>
+          <button class="filter-chip" data-filter="knowledge">지식 / 라이프 (4)</button>
+        </div>
+
+        <div class="search-box-wrap">
+          <i class="fa-solid fa-magnifying-glass search-icon"></i>
+          <input type="text" id="serviceSearch" class="search-input" placeholder="서비스명, 기술 스택 검색 (/)...">
+        </div>
+      </div>
+
+      <!-- Matrix Cards Grid -->
+      <div class="matrix-grid" id="matrixGridContainer">
+        <!-- populated by JS -->
+      </div>
+    </section>
+
+    <!-- SECTION II: THE 4 ARCHITECTURAL PILLARS -->
+    <section class="section-wrap" id="pillars">
+      <span class="section-tag">System Architecture &amp; Engineering Principles</span>
+      <h2 class="section-title">4대 핵심 아키텍처 원칙</h2>
+      <p class="section-description">
+        Dr. Brooks 생태계가 제로 인프라 비용과 높은 복원력을 유지하며 지속 발전할 수 있는 구조적 비결입니다.
+      </p>
+
+      <div class="pillars-quad">
+        <!-- Pillar 1 -->
+        <article class="pillar-panel">
+          <div>
+            <div class="pillar-num">PILLAR 01</div>
+            <h3 class="pillar-heading">초경량 엣지 &amp; 서버리스 배포</h3>
+            <p class="pillar-text">
+              무거운 백엔드 RDBMS 대신 <strong>Cloudflare Pages, Vercel, GitHub Pages</strong>를 조합하여 전 세계 300+ 글로벌 엣지 PoP에서 지연 시간 없이 서빙합니다.
+            </p>
+          </div>
+          <div class="pillar-proof">
+            <code>Infra Cost: $0/mo</code> • CDN 캐싱과 브라우저 인메모리 연산 극대화
+          </div>
+        </article>
+
+        <!-- Pillar 2 -->
+        <article class="pillar-panel">
+          <div>
+            <div class="pillar-num">PILLAR 02</div>
+            <h3 class="pillar-heading">다계층 퀀트 인텔리전스</h3>
+            <p class="pillar-text">
+              단순 주가 조회를 넘어 <strong>4-Layer 분석(EquiSense)</strong>과 <strong>눌림목/트레일링스탑 백테스팅(Buy the Dip)</strong> 등 복합 전략 엔진을 클라이언트 사이드에 탑재했습니다.
+            </p>
+          </div>
+          <div class="pillar-proof">
+            <code>Chart.js + D3.js Engine</code> • 실시간 KPI &amp; 수급 시그널 추출
+          </div>
+        </article>
+
+        <!-- Pillar 3 -->
+        <article class="pillar-panel">
+          <div>
+            <div class="pillar-num">PILLAR 03</div>
+            <h3 class="pillar-heading">에이전틱 시너지 (Agent-Ready)</h3>
+            <p class="pillar-text">
+              인간 사용자를 위한 웹 UI뿐만 아니라, <strong>Claude Code 및 Antigravity(AGY)</strong> 코딩 에이전트가 바로 장착할 수 있는 스킬 번들(SkillBoard)을 배포하는 허브 역할을 수행합니다.
+            </p>
+          </div>
+          <div class="pillar-proof">
+            <code>SKILL.md Bundles</code> • AI 에이전트용 프롬프트 및 도구 툴킷 제공
+          </div>
+        </article>
+
+        <!-- Pillar 4 -->
+        <article class="pillar-panel">
+          <div>
+            <div class="pillar-num">PILLAR 04</div>
+            <h3 class="pillar-heading">지식의 3D 네트워크 그래프화</h3>
+            <p class="pillar-text">
+              단편적인 아티클을 옵시디언 스타일의 <strong>Vis.js 3D 지식 그래프(Thoughts)</strong>로 시각화하여 생각의 맥락과 기술 노드를 유기적으로 연결합니다.
+            </p>
+          </div>
+          <div class="pillar-proof">
+            <code>Vis.js Graph Sync</code> • 브런치 연재 글과 기술 아카이브의 노드 융합
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- SECTION III: ARCHITECTURAL COMPARISON -->
+    <section class="section-wrap" id="comparison">
+      <span class="section-tag">Comparative Paradigm</span>
+      <h2 class="section-title">전통적 모놀리스 vs Dr. Brooks 자율 생태계</h2>
+      <p class="section-description">
+        기존 금융/주식 포털의 폐쇄적 한계를 극복하고 현대 웹 표준 기술로 재해석한 차이점입니다.
+      </p>
+
+      <div class="comparison-split">
+        <div class="comp-column">
+          <div class="comp-head" style="color: var(--text-dim);">
+            <i class="fa-solid fa-server"></i>
+            <span>기존 상용 금융/포털 서비스</span>
+          </div>
+          <ul class="comp-items-list">
+            <li class="comp-item">
+              <span class="comp-icon" style="color: var(--pulse-rose);">✕</span>
+              <div><strong>느린 초기 로딩:</strong> 광고 트래커 및 불필요한 스크립트로 인한 LCP 저하</div>
+            </li>
+            <li class="comp-item">
+              <span class="comp-icon" style="color: var(--pulse-rose);">✕</span>
+              <div><strong>폐쇄형 구조:</strong> 사용자가 백테스팅 조건이나 전략 매개변수를 직접 조정할 수 없음</div>
+            </li>
+            <li class="comp-item">
+              <span class="comp-icon" style="color: var(--pulse-rose);">✕</span>
+              <div><strong>AI 연동 단절:</strong> 최신 AI 코딩 에이전트 및 자동화 도구와 연동 불가</div>
+            </li>
+            <li class="comp-item">
+              <span class="comp-icon" style="color: var(--pulse-rose);">✕</span>
+              <div><strong>높은 유지비:</strong> 거대 백엔드 서버 인프라 비용 및 배포 병목</div>
+            </li>
+          </ul>
+        </div>
+
+        <div class="comp-column hero-comp">
+          <div class="comp-head" style="color: var(--cyber-cyan);">
+            <i class="fa-solid fa-bolt"></i>
+            <span>Dr. Brooks Services 생태계</span>
+          </div>
+          <ul class="comp-items-list">
+            <li class="comp-item">
+              <span class="comp-icon" style="color: var(--aurora-emerald);">✓</span>
+              <div><strong>초경량 인터랙티브 UI:</strong> 엣지 CDN 정적 서빙 및 제로 런타임 딜레이</div>
+            </li>
+            <li class="comp-item">
+              <span class="comp-icon" style="color: var(--aurora-emerald);">✓</span>
+              <div><strong>인터랙티브 퀀트 랩:</strong> 브라우저 내 Chart.js/D3.js 실시간 시뮬레이션 및 차트 줌/팬</div>
+            </li>
+            <li class="comp-item">
+              <span class="comp-icon" style="color: var(--aurora-emerald);">✓</span>
+              <div><strong>에이전트 오케스트레이션:</strong> SkillBoard 허브를 통한 에이전트 스킬 생태계 직접 제공</div>
+            </li>
+            <li class="comp-item">
+              <span class="comp-icon" style="color: var(--aurora-emerald);">✓</span>
+              <div><strong>마이크로 프론트엔드:</strong> 13개 서비스 독립 배포로 장애 완벽 격리</div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- NATIVE HTML5 DIALOG MODAL FOR SERVICE DETAILS -->
+  <dialog id="serviceModal" aria-labelledby="modalHeading">
+    <div class="modal-inner">
+      <div class="modal-top-bar">
+        <span class="card-seq" id="modalSeqBadge">Money Report</span>
+        <button class="modal-close-btn" id="modalCloseBtn" aria-label="닫기">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <h3 class="modal-title" id="modalHeading">서비스명</h3>
+      <div class="modal-tagline" id="modalTaglineText">서비스 슬로건</div>
+      <p class="modal-desc" id="modalDescText">상세 설명</p>
+
+      <div class="modal-section-title">주요 혁신 포인트 &amp; 기능</div>
+      <ul class="modal-highlight-list" id="modalHighlightsList">
+        <!-- populated dynamically -->
+      </ul>
+
+      <div class="modal-section-title">핵심 기술 스택</div>
+      <div class="card-pills-row" id="modalTechStackRow">
+        <!-- populated dynamically -->
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn-modal-copy" id="modalCopyBtn">
+          <i class="fa-solid fa-copy"></i> URL 복사
+        </button>
+        <a href="#" target="_blank" rel="noopener" class="btn-modal-primary" id="modalDirectLaunchBtn">
+          <span>사이트 바로 방문</span>
+          <i class="fa-solid fa-arrow-up-right-from-square"></i>
+        </a>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Toast Container -->
+  <div class="toast-region" id="toastRegion"></div>
+
+  <!-- Application Footer -->
+  <footer class="app-footer">
+    <div class="footer-meta">
+      DR. BROOKS SERVICES ARCHITECTURAL REPORT • 2026 PRODUCTION EDITION
+    </div>
+    <p>Powered by 3D Chrono-Spatial Chain Engine, Modern Web Standards &amp; Antigravity Agent Platform.</p>
+  </footer>
+
+  <!-- SCRIPT: 3D CHRONO-SPATIAL CHAIN & ORBIT ENGINE (ULTRA-SLOW & WHEEL-ISOLATED) -->
+  <script>
+    // --- 1. Master Services Catalog with 3D Celestial Planet Specifications ---
+    const RAW_SERVICES = [
+      {
+        id: 1,
+        seq: "환율 NOW",
+        era: "2026.Q1 (과거·태동)",
+        title: "환율 NOW",
+        tagline: "실시간 교차환율 계산기 및 통화 리포트 PWA",
+        description: "THB, USD, VND, PHP, KRW 등 주요 아시아 통화를 실시간으로 교차 계산하고 인터랙티브 차트 및 통화 리포트를 제공하는 모던 금융 웹앱입니다.",
+        category: "finance",
+        categoryLabel: "금융 & 통화",
+        url: "https://drbrookskim.github.io/exchangenow/",
+        domain: "drbrookskim.github.io",
+        tech: ["JavaScript", "Chart.js", "PWA", "HTML5/CSS3"],
+        highlights: [
+          "실시간 주요 통화 교차 환율 연동",
+          "사칙연산 지원 커스텀 키패드 내장",
+          "오프라인 및 모바일 최적화 PWA"
+        ],
+        accent: "#0E9080",
+        planet: {
+          type: "oceanic",
+          base: "#0E9080",
+          shadow: "#022924",
+          highlight: "#6ee7b7",
+          atmosphere: "#34d399",
+          hasRings: false,
+          moons: 0,
+          radius: 15
+        }
+      },
+      {
+        id: 2,
+        seq: "오늘의 위스키",
+        era: "2026.Q1 (과거·태동)",
+        title: "오늘의 위스키",
+        tagline: "MBTI & 바이오리듬 맞춤형 위스키 큐레이션 엔진",
+        description: "MBTI 성향과 오늘의 감정 상태, 바이오리듬을 정밀 분석하여 개인에게 가장 완벽한 주류 한 잔과 시세/리뷰 정보를 추천하는 큐레이션 서비스입니다.",
+        category: "knowledge",
+        categoryLabel: "라이프스타일 & AI",
+        url: "https://drbrookskim.github.io/todayswhisky/",
+        domain: "drbrookskim.github.io",
+        tech: ["React 18", "Tailwind CSS", "Babel", "Lucide Icons"],
+        highlights: [
+          "MBTI + 당일 감정 상태 결합 매칭 알고리즘",
+          "33종 엄선 위스키 스펙트럼 및 풍미 프로파일",
+          "네이버 AI 시세 및 실시간 리뷰 연계"
+        ],
+        accent: "#c8962a",
+        planet: {
+          type: "gas_giant",
+          base: "#d97706",
+          shadow: "#451a03",
+          highlight: "#fde68a",
+          atmosphere: "#f59e0b",
+          hasRings: true,
+          ringColor: "rgba(251, 191, 36, 0.45)",
+          moons: 1,
+          radius: 17
+        }
+      },
+      {
+        id: 3,
+        seq: "SIGNNITH",
+        era: "2026.Q1 (과거·기틀)",
+        title: "SIGNNITH",
+        tagline: "실시간 주식 시장 시그널 & 수급 인텔리전스 대시보드",
+        description: "한국 및 글로벌 증시의 시장 수급, 핵심 지표, 다차원 센티먼트 데이터를 통합 집계하여 투자자에게 실시간 시장 시그널을 제공하는 대시보드입니다.",
+        category: "finance",
+        categoryLabel: "시장 인텔리전스",
+        url: "https://drbrookskim.github.io/signnith/",
+        domain: "drbrookskim.github.io",
+        tech: ["Supabase", "Chart.js", "D3.js", "Space Grotesk"],
+        highlights: [
+          "실시간 시장 핵심 수급 시그널 수집",
+          "D3 기반 인터랙티브 데이터 시각화",
+          "고대비 다크모드 인텔리전스 UI"
+        ],
+        accent: "#00d4aa",
+        planet: {
+          type: "plasma",
+          base: "#00d4aa",
+          shadow: "#064e3b",
+          highlight: "#a7f3d0",
+          atmosphere: "#00f0ff",
+          hasRings: false,
+          moons: 1,
+          radius: 16
+        }
+      },
+      {
+        id: 4,
+        seq: "EquiSense",
+        era: "2026.Q1 (과거·기틀)",
+        title: "EquiSense",
+        tagline: "펀더멘털 · 해자 · 정성적 · 기술적 4단계 주식 분석 플랫폼",
+        description: "쉬운 한 줄 요약으로 시작해 기업의 펀더멘털, 경제적 해자, 정성적 가치, 기술적 지표까지 4단계로 깊이 있게 파고드는 주식 분석 서비스입니다.",
+        category: "finance",
+        categoryLabel: "주식 심층 분석",
+        url: "https://drbrookskim.github.io/equisense/",
+        domain: "drbrookskim.github.io",
+        tech: ["Next.js", "Turbopack", "Tailwind CSS", "4-Layer Engine"],
+        highlights: [
+          "4-Layer 계층형 주식 분석 모델",
+          "펀더멘털 및 경제적 해자 정밀 진단",
+          "직관적인 시각적 리포트와 북마크 관리"
+        ],
+        accent: "#e2a03f",
+        planet: {
+          type: "aurora_terra",
+          base: "#ea580c",
+          shadow: "#431407",
+          highlight: "#fed7aa",
+          atmosphere: "#fb923c",
+          hasRings: true,
+          ringColor: "rgba(251, 146, 60, 0.4)",
+          moons: 1,
+          radius: 16
+        }
+      },
+      {
+        id: 5,
+        seq: "Thoughts",
+        era: "2026.Q2 (지식망 확장)",
+        title: "Dr. Brooks Thoughts",
+        tagline: "브런치 연동 지식 네트워크 그래프 & 생각 아카이브",
+        description: "브런치 연재 글과 지식 노드를 옵시디언 스타일의 인터랙티브 네트워크 맵(Vis.js)으로 시각화하고 동기화하는 생각의 궤적 아카이브입니다.",
+        category: "knowledge",
+        categoryLabel: "지식 그래프 & 아카이브",
+        url: "https://drbrookskim.github.io/thoughts/",
+        domain: "drbrookskim.github.io",
+        tech: ["Vis.js Network", "Marked.js", "Canvas Particles", "FontAwesome"],
+        highlights: [
+          "Obsidian 스타일 인터랙티브 3D 지식 그래프",
+          "브런치 새 글 실시간 알림 및 동기화 수집 배너",
+          "초고속 클라이언트 마크다운 파서 및 검색"
+        ],
+        accent: "#38bdf8",
+        planet: {
+          type: "ice_sapphire",
+          base: "#0284c7",
+          shadow: "#082f49",
+          highlight: "#bae6fd",
+          atmosphere: "#38bdf8",
+          hasRings: true,
+          ringColor: "rgba(56, 189, 248, 0.45)",
+          moons: 2,
+          radius: 17
+        }
+      },
+      {
+        id: 6,
+        seq: "News Finder",
+        era: "2026.Q2 (지식망 확장)",
+        title: "Signnith News Finder",
+        tagline: "On-Demand AI 실시간 금융/산업 뉴스 브리핑 검색 엔진",
+        description: "온디맨드 AI와 연동하여 글로벌 증시 및 주요 산업의 최신 뉴스를 실시간으로 요약 브리핑하고 분석 이력을 관리하는 검색 도구입니다.",
+        category: "ai",
+        categoryLabel: "AI 뉴스 & 검색",
+        url: "https://drbrookskim.github.io/newsfinder/",
+        domain: "drbrookskim.github.io",
+        tech: ["Vite", "ES Modules", "AI Integration", "i18n Multi-language"],
+        highlights: [
+          "AI 기반 실시간 핵심 뉴스 요약 브리핑",
+          "KO / EN 다국어 즉각 스위칭 지원",
+          "최근 분석 이력 드로어 및 원클릭 검색"
+        ],
+        accent: "#818cf8",
+        planet: {
+          type: "pulsar_orb",
+          base: "#6366f1",
+          shadow: "#1e1b4b",
+          highlight: "#e0e7ff",
+          atmosphere: "#818cf8",
+          hasRings: false,
+          moons: 1,
+          radius: 15
+        }
+      },
+      {
+        id: 7,
+        seq: "PITL",
+        era: "2026.Q2 (기획 워크스페이스)",
+        title: "PITL",
+        tagline: "Starbucks Design System 기반 자율 제품 기획 워크스페이스",
+        description: "아이디어 발상부터 요구사항 정의, 기능 명세 및 로드맵 설계까지 자율형 에이전트와 함께 완결하는 제품 기획 전용 인터랙티브 워크스페이스입니다.",
+        category: "productivity",
+        categoryLabel: "기획 & 생산성",
+        url: "https://drbrookskim.github.io/pitl/",
+        domain: "drbrookskim.github.io",
+        tech: ["Starbucks Design System", "Marked.js", "CSS Grid", "FontAwesome"],
+        highlights: [
+          "스타벅스 공식 하우스 그린 디자인 시스템 적용",
+          "다차원 제품 기획 및 요구사항 명세 캔버스",
+          "마크다운 실시간 렌더링 및 로드맵 가시화"
+        ],
+        accent: "#00754A",
+        planet: {
+          type: "emerald_flora",
+          base: "#059669",
+          shadow: "#022c22",
+          highlight: "#a7f3d0",
+          atmosphere: "#10e79d",
+          hasRings: false,
+          moons: 1,
+          radius: 16
+        }
+      },
+      {
+        id: 8,
+        seq: "gitmark",
+        era: "2026.Q2 (개발 인프라)",
+        title: "gitmark",
+        tagline: "GitHub 기반 지능형 북마크 & 아카이브 피드 PWA",
+        description: "유용한 개발 자료, 기술 아티클, 저장소를 체계적으로 아카이빙하고 Supabase 및 GitHub와 연동하여 스마트 피드로 관리하는 고성능 PWA입니다.",
+        category: "productivity",
+        categoryLabel: "개발자 툴 & 북마크",
+        url: "https://drbrookskim.github.io/gitmark/",
+        domain: "drbrookskim.github.io",
+        tech: ["PWA", "Supabase JS", "Tabler Icons", "JetBrains Mono"],
+        highlights: [
+          "오프라인 캐싱 및 설치형 웹앱(PWA) 지원",
+          "Supabase 실시간 클라우드 북마크 동기화",
+          "모던 피드 카드 UI"
+        ],
+        accent: "#10e79d",
+        planet: {
+          type: "techno_ring",
+          base: "#10b981",
+          shadow: "#064e3b",
+          highlight: "#d1fae5",
+          atmosphere: "#6ee7b7",
+          hasRings: true,
+          ringColor: "rgba(16, 231, 157, 0.5)",
+          moons: 1,
+          radius: 15
+        }
+      },
+      {
+        id: 9,
+        seq: "SkillBoard",
+        era: "2026.Q3 (에이전틱 도약)",
+        title: "NELCOME.md (SkillBoard)",
+        tagline: "AI 에이전트 스킬 & 프롬프트 커스터마이징 툴킷 대시보드",
+        description: "Claude Code 및 Antigravity 에이전트가 사용하는 전문 스킬, 시스템 프롬프트, 도구 번들을 체계적으로 열람하고 다운로드/관리하는 스킬 보드입니다.",
+        category: "ai",
+        categoryLabel: "에이전트 스킬 & 툴킷",
+        url: "https://drbrookskim.github.io/skillboard/",
+        domain: "drbrookskim.github.io",
+        tech: ["JSZip", "Space Grotesk", "Starbucks UI Tokens", "Vanilla JS"],
+        highlights: [
+          "원클릭 스킬 ZIP 아카이브 자동 생성 및 다운로드",
+          "카테고리별 에이전트 스킬 카드 갤러리",
+          "프롬프트 템플릿 즉각 복사 및 커스터마이징 가이드"
+        ],
+        accent: "#10e79d",
+        planet: {
+          type: "cyber_hab",
+          base: "#0d9488",
+          shadow: "#042f2e",
+          highlight: "#99f6e4",
+          atmosphere: "#2dd4bf",
+          hasRings: true,
+          ringColor: "rgba(45, 212, 191, 0.45)",
+          moons: 2,
+          radius: 17
+        }
+      },
+      {
+        id: 10,
+        seq: "Chart Deep Dive",
+        era: "2026.Q3 (기술적 분석)",
+        title: "Chart Deep Dive",
+        tagline: "종목 캔들 차트 기반 지표 · 패턴 · 고급 기술적 분석 엔진",
+        description: "한국(KR) 및 미국(US) 증시 종목을 검색하고 캔들 차트 위에 이동평균선, 보조지표, 차트 패턴을 겹쳐서 다차원 기술적 분석을 수행하는 엔진입니다.",
+        category: "finance",
+        categoryLabel: "차트 기술적 분석",
+        url: "https://chartdeepdive.vercel.app/",
+        domain: "chartdeepdive.vercel.app",
+        tech: ["Next.js 14", "Vercel", "Turbopack", "Canvas Chart Engine"],
+        highlights: [
+          "KR(국내) 및 US(해외) 시장 원클릭 통합 검색",
+          "캔들 차트 기반 지표 및 패턴 오버레이 분석",
+          "초고속 Next.js Turbopack 아키텍처"
+        ],
+        accent: "#00f0ff",
+        planet: {
+          type: "cyan_ice_giant",
+          base: "#0284c7",
+          shadow: "#0c4a6e",
+          highlight: "#e0f2fe",
+          atmosphere: "#00f0ff",
+          hasRings: true,
+          ringColor: "rgba(0, 240, 255, 0.55)",
+          moons: 2,
+          radius: 18
+        }
+      },
+      {
+        id: 11,
+        seq: "Buy the Dip",
+        era: "2026.Q3 (전략 시뮬레이션)",
+        title: "NOSTOS: Buy the Dip",
+        tagline: "눌림목 매수 & 다각적 매도 전략 AI 백테스팅 시뮬레이터",
+        description: "주식 눌림목 매수와 트레일링 스탑, 타임컷, 손익비 기반의 다양한 청산 전략을 시각화하고 실시간 백테스팅 성과를 분석하는 전략 웹 대시보드입니다.",
+        category: "finance",
+        categoryLabel: "전략 시뮬레이션",
+        url: "https://drbrookskim.github.io/buythedip/",
+        domain: "drbrookskim.github.io",
+        tech: ["Chart.js", "Chart.js Zoom/Annotation", "FontAwesome 6", "IBM Plex Mono"],
+        highlights: [
+          "트레일링 스탑 · 타임컷 · 손익비 복합 매도 시뮬레이션",
+          "인터랙티브 차트 줌/팬 및 전략 진입점 시각화",
+          "시뮬레이션 매매 이력 로그 및 KPI 분석"
+        ],
+        accent: "#ffb020",
+        planet: {
+          type: "saturnian_gold",
+          base: "#f59e0b",
+          shadow: "#78350f",
+          highlight: "#fef3c7",
+          atmosphere: "#fbbf24",
+          hasRings: true,
+          ringColor: "rgba(251, 191, 36, 0.65)",
+          moons: 2,
+          radius: 19
+        }
+      },
+      {
+        id: 12,
+        seq: "Money & Knowledge Report",
+        era: "2026.Production (현재·최신)",
+        title: "Dr. Brooks Money & Knowledge Report",
+        tagline: "산업 핵심 시그널 & 밸류체인 심층 분석 리포트 아카이브",
+        description: "거시경제, 산업 밸류체인, 핵심 투자 시그널을 심층 분석한 리포트를 HTML 형식으로 발행·관리하며 GitHub 동기화 및 즉각적인 열람을 제공하는 아카이브입니다.",
+        category: "finance",
+        categoryLabel: "산업 리포트 아카이브",
+        url: "https://drbrooks-moneyreport.pages.dev/",
+        domain: "drbrooks-moneyreport.pages.dev",
+        tech: ["Cloudflare Pages", "GitHub API Sync", "HTML Signal Viewer", "Security PIN"],
+        highlights: [
+          "Cloudflare Pages 기반 글로벌 엣지 초고속 배포",
+          "보안 PIN 기반 GitHub 리포지토리 자동 동기화",
+          "산업 밸류체인 리포트 전용 팝업 뷰어"
+        ],
+        accent: "#9d4edd",
+        planet: {
+          type: "amethyst_crown",
+          base: "#7c3aed",
+          shadow: "#2e1065",
+          highlight: "#f3e8ff",
+          atmosphere: "#c084fc",
+          hasRings: true,
+          ringColor: "rgba(192, 132, 252, 0.6)",
+          moons: 2,
+          radius: 20
+        }
+      },
+      {
+        id: 13,
+        seq: "EpochWave",
+        era: "2026.Production (현재·최신)",
+        title: "EpochWave",
+        tagline: "1955 → 2026 역사와 시장의 파동 인터랙티브 아카이브",
+        description: "영화 〈백 투 더 퓨처〉 시간 지평인 1955년부터 2026년까지 70년간의 한국사·세계사 48개 대사건과 한·미 4대 증시(코스피·코스닥·나스닥·다우)의 궤적을 레트로 퓨처리즘 타임서킷으로 탐색하는 인터랙티브 시계열 아카이브입니다.",
+        category: "market",
+        categoryLabel: "역사 & 시장 파동",
+        url: "https://epochwave.pages.dev/",
+        domain: "epochwave.pages.dev",
+        tech: ["Cloudflare Pages", "Cloudflare Workers", "Retro Futurism UI", "Interactive Canvas Chart", "Time Circuits"],
+        highlights: [
+          "1955~2026년 70년 한국사·세계사 48대 사건과 증시 맥락 연결",
+          "코스피 · 코스닥 · 나스닥 · 다우 4대 증시 공식 시계열 데이터",
+          "영화 〈백 투 더 퓨처〉 레트로 퓨처리즘 타임서킷 UI 인터랙션"
+        ],
+        accent: "#f97316",
+        planet: {
+          type: "solar_chronos",
+          base: "#ea580c",
+          shadow: "#7c2d12",
+          highlight: "#ffedd5",
+          atmosphere: "#fdba74",
+          hasRings: true,
+          ringColor: "rgba(251, 146, 60, 0.65)",
+          moons: 3,
+          radius: 21
+        }
+      },
+      // Future Expansion Horizon Node
+      {
+        id: 99,
+        seq: "Autonomous Swarm",
+        era: "2026+ (미래 확장 지평)",
+        title: "Autonomous Multi-Agent Swarm",
+        tagline: "실시간 자율 퀀트 탐색 & 자가 진화형 웹 인텔리전스 매트릭스",
+        description: "인간의 개입 없이 거시경제 시그널을 24/7 자동 수집·백테스팅하고 스스로 분석 리포트와 새로운 마이크로 웹 서비스를 생성 및 배포하는 무한 자율 에이전트 지평입니다.",
+        category: "future",
+        categoryLabel: "미래 확장 지평",
+        url: "https://drbrooks.pages.dev/",
+        domain: "autonomous.swarm.matrix",
+        tech: ["Antigravity Multi-Agent", "Autonomous Pipelines", "Live Quant Oracles"],
+        highlights: [
+          "24/7 글로벌 시그널 자동 스캐닝 & 자율 리포트 생성",
+          "클라우드플레어 워커 기반 마이크로 에이전트 스웜",
+          "인간-AI 공생형 투자 인텔리전스 완성"
+        ],
+        accent: "#f43f5e",
+        isFuture: true,
+        planet: {
+          type: "pulsar_singularity",
+          base: "#e11d48",
+          shadow: "#4c0519",
+          highlight: "#ffe4e6",
+          atmosphere: "#fb7185",
+          hasRings: true,
+          ringColor: "rgba(251, 113, 133, 0.75)",
+          moons: 3,
+          radius: 24
+        }
+      }
+    ];
+
+    // --- 2. 3D COSMIC ORBIT SPACE & PLANETARY CHAIN ENGINE ---
+    const canvas = document.getElementById('chronoCanvas');
+    const ctx = canvas.getContext('2d');
+    const viewportBox = document.getElementById('viewport3d');
+    const hudTooltip = document.getElementById('hudTooltip');
+    const camControlsGroup = document.getElementById('camControlsGroup');
+
+    let width = 0;
+    let height = 0;
+    let dpr = window.devicePixelRatio || 1;
+
+    // Full 3D Camera Rig with Orbit & Presets
+    let camera = {
+      rotX: 0.28,
+      rotY: -0.45,
+      targetRotX: 0.28,
+      targetRotY: -0.45,
+      zoom: 1.05,
+      targetZoom: 1.05,
+      panX: 0,
+      panY: -20,
+      targetPanX: 0,
+      targetPanY: -20
+    };
+
+    // Chain Nodes State (0.0 ~ 4.0 Super Spacious Cosmic Runway)
+    const N_NODES = RAW_SERVICES.length;
+    const chainNodes = RAW_SERVICES.map((item, idx) => ({
+      ...item,
+      baseU: (idx / (N_NODES - 1)) * 4.0,
+      currentU: (idx / (N_NODES - 1)) * 4.0,
+      targetU: (idx / (N_NODES - 1)) * 4.0
+    }));
+
+    let timelineOffset = 0;
+    let timelineVelocity = 0;
+
+    // Drag Interaction State
+    let isDragging = false;
+    let isNodeDragging = false;
+    let draggedNodeIndex = -1;
+    let lastMouseX = 0;
+    let lastMouseY = 0;
+    let mousePos = { x: -1000, y: -1000 };
+    let hoveredNode = null;
+
+    // 3D Rail Parametric Curve: Gravitational Spacetime Warp
+    function get3DRailPoint(u) {
+      const s = u * 0.25; // Normalized progression 0.0 to 1.0
+      const x = -750 + 1500 * s + 120 * Math.sin(s * Math.PI * 1.5);
+      const y = 150 - 300 * s + 60 * Math.cos(s * Math.PI * 2);
+      const z = -1400 + 3200 * s;
+      return { x, y, z };
+    }
+
+    // 3D Perspective Projection Function
+    const FOV = 480;
+    function project3D(x, y, z) {
+      const cosY = Math.cos(camera.rotY);
+      const sinY = Math.sin(camera.rotY);
+      let x1 = (x + camera.panX) * cosY - z * sinY;
+      let z1 = z * cosY + (x + camera.panX) * sinY;
+
+      const cosX = Math.cos(camera.rotX);
+      const sinX = Math.sin(camera.rotX);
+      let y2 = (y + camera.panY) * cosX - z1 * sinX;
+      let z2 = z1 * cosX + (y + camera.panY) * sinX;
+
+      let z3 = z2 * camera.zoom + 700;
+      if (z3 <= 40) z3 = 40;
+
+      const scale = (FOV / z3) * camera.zoom;
+      const screenX = width / 2 + x1 * scale;
+      const screenY = height / 2 + y2 * scale;
+
+      return {
+        screenX,
+        screenY,
+        scale,
+        depth: z3,
+        visible: z3 > 50
+      };
+    }
+
+    // Camera Presets
+    const CAM_PRESETS = {
+      orbit: { rotX: 0.28, rotY: -0.45, zoom: 1.05, panX: 0, panY: -20 },
+      journey: { rotX: 0.15, rotY: -1.2, zoom: 1.25, panX: -80, panY: -10 },
+      horizon: { rotX: 0.08, rotY: 0.75, zoom: 1.35, panX: -180, panY: 20 }
+    };
+
+    camControlsGroup.addEventListener('click', (e) => {
+      const btn = e.target.closest('.btn-cam-preset');
+      if (!btn) return;
+
+      camControlsGroup.querySelectorAll('.btn-cam-preset').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const view = btn.dataset.view;
+      const target = CAM_PRESETS[view];
+      if (target) {
+        camera.targetRotX = target.rotX;
+        camera.targetRotY = target.rotY;
+        camera.targetZoom = target.zoom;
+        camera.targetPanX = target.panX;
+        camera.targetPanY = target.panY;
+      }
+    });
+
+    // --- COSMIC ENVIRONMENT: NEBULAE, MULTI-SPECTRAL STARS & SPACE DUST ---
+    // 1. Deep Space Nebulae
+    const nebulae = [
+      { x: -800, y: -250, z: 600, color1: "rgba(157, 78, 221, 0.16)", color2: "rgba(157, 78, 221, 0)", radius: 680 },
+      { x: 900, y: 150, z: -300, color1: "rgba(0, 240, 255, 0.14)", color2: "rgba(0, 240, 255, 0)", radius: 620 },
+      { x: -450, y: 350, z: -600, color1: "rgba(16, 231, 157, 0.12)", color2: "rgba(16, 231, 157, 0)", radius: 560 },
+      { x: 550, y: -300, z: 1500, color1: "rgba(244, 63, 94, 0.15)", color2: "rgba(244, 63, 94, 0)", radius: 750 }
+    ];
+
+    // 2. Multi-Spectral 3D Stars
+    const NUM_STARS = 260;
+    const starColors = ["#ffffff", "#93c5fd", "#fde047", "#fda4af", "#c084fc", "#6ee7b7"];
+    const stars = [];
+    for (let i = 0; i < NUM_STARS; i++) {
+      stars.push({
+        x: (Math.random() - 0.5) * 2800,
+        y: (Math.random() - 0.5) * 1800,
+        z: (Math.random() - 0.5) * 2600,
+        size: Math.random() * 2.2 + 0.6,
+        color: starColors[Math.floor(Math.random() * starColors.length)],
+        twinkleSpeed: Math.random() * 2.5 + 1.0,
+        phase: Math.random() * Math.PI * 2,
+        hasSpike: Math.random() < 0.14
+      });
+    }
+
+    // 3. Floating Space Dust Particles
+    const NUM_DUST = 75;
+    const dustParticles = [];
+    for (let i = 0; i < NUM_DUST; i++) {
+      dustParticles.push({
+        x: (Math.random() - 0.5) * 2200,
+        y: (Math.random() - 0.5) * 1400,
+        z: (Math.random() - 0.5) * 2400,
+        size: Math.random() * 1.5 + 0.4,
+        speedX: (Math.random() - 0.5) * 0.2,
+        speedY: (Math.random() - 0.5) * 0.2
+      });
+    }
+
+    function resizeCanvas() {
+      const rect = viewportBox.getBoundingClientRect();
+      width = rect.width;
+      height = rect.height;
+      canvas.width = width * dpr;
+      canvas.height = height * dpr;
+      ctx.scale(dpr, dpr);
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    // --- MOUSE & TOUCH CONTROLS (ULTRA-SLOW PRECISION TUNING) ---
+    viewportBox.addEventListener('mousedown', (e) => {
+      isDragging = true;
+      lastMouseX = e.clientX;
+      lastMouseY = e.clientY;
+
+      if (hoveredNode) {
+        isNodeDragging = true;
+        draggedNodeIndex = chainNodes.findIndex(n => n.id === hoveredNode.id);
+        viewportBox.classList.add('is-node-drag');
+      } else {
+        isNodeDragging = false;
+        draggedNodeIndex = -1;
+      }
+    });
+
+    window.addEventListener('mouseup', () => {
+      isDragging = false;
+      isNodeDragging = false;
+      draggedNodeIndex = -1;
+      viewportBox.classList.remove('is-node-drag');
+    });
+
+    window.addEventListener('mousemove', (e) => {
+      const rect = viewportBox.getBoundingClientRect();
+      mousePos.x = e.clientX - rect.left;
+      mousePos.y = e.clientY - rect.top;
+
+      if (isDragging) {
+        const deltaX = e.clientX - lastMouseX;
+        const deltaY = e.clientY - lastMouseY;
+
+        if (isNodeDragging) {
+          // Extremely slow & delicate node chain pulling
+          const pullAmount = (deltaX * 0.00028 - deltaY * 0.00028);
+          timelineVelocity += pullAmount;
+        } else {
+          // Ultra-slow smooth orbit
+          camera.targetRotY += deltaX * 0.00065;
+          camera.targetRotX = Math.max(-0.6, Math.min(0.85, camera.targetRotX + deltaY * 0.00065));
+        }
+
+        lastMouseX = e.clientX;
+        lastMouseY = e.clientY;
+      }
+    });
+
+    // 3D Space Isolated Wheel Scroll (Ultra-slow & smooth)
+    viewportBox.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      if (e.altKey || e.ctrlKey || e.metaKey) {
+        camera.targetZoom = Math.max(0.55, Math.min(2.5, camera.targetZoom - e.deltaY * 0.00015));
+      } else {
+        // Ultra-slow high-precision timeline glide
+        timelineVelocity -= e.deltaY * 0.000055;
+      }
+    }, { passive: false });
+
+    // Touch Support (Ultra-slow & smooth)
+    let lastTouchX = 0;
+    let lastTouchY = 0;
+    viewportBox.addEventListener('touchstart', (e) => {
+      if (e.touches.length === 1) {
+        isDragging = true;
+        lastTouchX = e.touches[0].clientX;
+        lastTouchY = e.touches[0].clientY;
+
+        if (hoveredNode) {
+          isNodeDragging = true;
+          draggedNodeIndex = chainNodes.findIndex(n => n.id === hoveredNode.id);
+        } else {
+          isNodeDragging = false;
+        }
+      }
+    }, { passive: true });
+
+    // --- DYNAMIC PLANET-COLOR RAIL GRADIENT INTERPOLATOR ---
+    function hexToRgb(hex) {
+      hex = hex.replace('#', '');
+      if (hex.length === 3) {
+        hex = hex.split('').map(c => c + c).join('');
+      }
+      const num = parseInt(hex, 16);
+      return {
+        r: (num >> 16) & 255,
+        g: (num >> 8) & 255,
+        b: num & 255
+      };
+    }
+
+    function interpolateColorRgb(color1, color2, t) {
+      const c1 = hexToRgb(color1);
+      const c2 = hexToRgb(color2);
+      // Smoothstep easing for silky natural transitions between planetary hues
+      const sT = t * t * (3 - 2 * t);
+      const r = Math.round(c1.r + (c2.r - c1.r) * sT);
+      const g = Math.round(c1.g + (c2.g - c1.g) * sT);
+      const b = Math.round(c1.b + (c2.b - c1.b) * sT);
+      return { r, g, b };
+    }
+
+    function getRailColorAtU(u, alpha = 1) {
+      const sorted = [...chainNodes].sort((a, b) => a.currentU - b.currentU);
+      
+      if (u <= sorted[0].currentU) {
+        const rgb = hexToRgb(sorted[0].accent);
+        return alpha === 1 ? `rgb(${rgb.r}, ${rgb.g}, ${rgb.b})` : `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${alpha})`;
+      }
+      if (u >= sorted[sorted.length - 1].currentU) {
+        const rgb = hexToRgb(sorted[sorted.length - 1].accent);
+        return alpha === 1 ? `rgb(${rgb.r}, ${rgb.g}, ${rgb.b})` : `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${alpha})`;
+      }
+
+      for (let i = 0; i < sorted.length - 1; i++) {
+        const uA = sorted[i].currentU;
+        const uB = sorted[i + 1].currentU;
+        if (u >= uA && u <= uB) {
+          const range = Math.max(0.0001, uB - uA);
+          const t = Math.max(0, Math.min(1, (u - uA) / range));
+          const rgb = interpolateColorRgb(sorted[i].accent, sorted[i + 1].accent, t);
+          return alpha === 1 ? `rgb(${rgb.r}, ${rgb.g}, ${rgb.b})` : `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${alpha})`;
+        }
+      }
+
+      const defRgb = hexToRgb(chainNodes[0].accent);
+      return alpha === 1 ? `rgb(${defRgb.r}, ${defRgb.g}, ${defRgb.b})` : `rgba(${defRgb.r}, ${defRgb.g}, ${defRgb.b}, ${alpha})`;
+    }
+
+    viewportBox.addEventListener('touchmove', (e) => {
+      if (isDragging && e.touches.length === 1) {
+        const deltaX = e.touches[0].clientX - lastTouchX;
+        const deltaY = e.touches[0].clientY - lastTouchY;
+
+        if (isNodeDragging) {
+          timelineVelocity += (deltaX * 0.00028 - deltaY * 0.00028);
+        } else {
+          camera.targetRotY += deltaX * 0.00065;
+          camera.targetRotX = Math.max(-0.6, Math.min(0.85, camera.targetRotX + deltaY * 0.00065));
+        }
+
+        lastTouchX = e.touches[0].clientX;
+        lastTouchY = e.touches[0].clientY;
+      }
+    }, { passive: true });
+
+    viewportBox.addEventListener('touchend', () => {
+      isDragging = false;
+      isNodeDragging = false;
+    });
+
+    // Double-click on planet opens modal
+    viewportBox.addEventListener('dblclick', () => {
+      if (hoveredNode && hoveredNode.id !== 99) {
+        openServiceModal(hoveredNode.id);
+      }
+    });
+
+    // --- 3D CELESTIAL PLANET RENDERER ---
+    function drawPlanet(node, proj, isHovered, time) {
+      const p = node.planet;
+      const R = Math.max(9, (node.isFuture ? 24 : p.radius) * proj.scale * (isHovered ? 1.25 : 1.0));
+
+      ctx.save();
+      ctx.translate(proj.screenX, proj.screenY);
+
+      // 1. Atmospheric Corona / Haze Glow (대기권 발광 글로우)
+      const atmoRad = R * (isHovered ? 3.4 : 2.5);
+      const atmoGrad = ctx.createRadialGradient(0, 0, R * 0.65, 0, 0, atmoRad);
+      atmoGrad.addColorStop(0, p.atmosphere + (isHovered ? "cc" : "66"));
+      atmoGrad.addColorStop(0.5, p.atmosphere + (isHovered ? "44" : "18"));
+      atmoGrad.addColorStop(1, p.atmosphere + "00");
+      ctx.fillStyle = atmoGrad;
+      ctx.beginPath();
+      ctx.arc(0, 0, atmoRad, 0, Math.PI * 2);
+      ctx.fill();
+
+      // 2. Back Half of Planetary Ring (if hasRings)
+      if (p.hasRings) {
+        ctx.save();
+        ctx.rotate(-0.4);
+        ctx.scale(1, 0.32);
+
+        const rInner = R * 1.5;
+        const rOuter = R * 2.8;
+
+        ctx.strokeStyle = p.ringColor || "rgba(255, 255, 255, 0.4)";
+        ctx.lineWidth = (rOuter - rInner);
+        ctx.beginPath();
+        ctx.arc(0, 0, (rInner + rOuter) * 0.5, Math.PI, Math.PI * 2);
+        ctx.stroke();
+        ctx.restore();
+      }
+
+      // 3. 3D Planet Sphere with Dynamic 3D Spherical Shading
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(0, 0, R, 0, Math.PI * 2);
+      ctx.clip();
+
+      // Spherical Lighting Gradient (Sunlight angle from upper-left)
+      const sphereGrad = ctx.createRadialGradient(-R * 0.38, -R * 0.38, R * 0.05, -R * 0.1, -R * 0.1, R * 1.15);
+      sphereGrad.addColorStop(0, p.highlight || "#ffffff");
+      sphereGrad.addColorStop(0.25, p.base);
+      sphereGrad.addColorStop(0.7, p.shadow);
+      sphereGrad.addColorStop(1, "#020308");
+      ctx.fillStyle = sphereGrad;
+      ctx.fill();
+
+      // Surface Details / Atmospheric Bands / Storm Clouds
+      ctx.fillStyle = "rgba(255, 255, 255, 0.08)";
+      for (let b = -3; b <= 3; b++) {
+        const by = (b * R * 0.28) + (Math.sin(time * 0.8 + b) * 2);
+        if (Math.abs(by) < R) {
+          ctx.fillRect(-R, by, R * 2, R * 0.12);
+        }
+      }
+
+      // Night-side City / Energy Grid Lights on shadow hemisphere
+      ctx.fillStyle = isHovered ? "#00f0ff" : p.highlight;
+      for (let l = 0; l < 4; l++) {
+        const lx = R * 0.2 + (l * R * 0.15);
+        const ly = R * 0.1 + ((l % 2 === 0 ? 1 : -1) * R * 0.25);
+        ctx.fillRect(lx, ly, 1.6, 1.6);
+      }
+      ctx.restore(); // end clip
+
+      // 4. Front Half of Planetary Ring (Passes over the front of the sphere)
+      if (p.hasRings) {
+        ctx.save();
+        ctx.rotate(-0.4);
+        ctx.scale(1, 0.32);
+
+        const rInner = R * 1.5;
+        const rOuter = R * 2.8;
+
+        ctx.strokeStyle = p.ringColor || "rgba(255, 255, 255, 0.4)";
+        ctx.lineWidth = (rOuter - rInner);
+        ctx.beginPath();
+        ctx.arc(0, 0, (rInner + rOuter) * 0.5, 0, Math.PI);
+        ctx.stroke();
+
+        // Ring Cassini Division Gap
+        ctx.strokeStyle = "rgba(3, 5, 12, 0.75)";
+        ctx.lineWidth = 1.6;
+        ctx.beginPath();
+        ctx.arc(0, 0, (rInner + rOuter) * 0.52, 0, Math.PI);
+        ctx.stroke();
+        ctx.restore();
+      }
+
+      // 5. Orbiting Moons / Satellites
+      if (p.moons > 0) {
+        for (let m = 0; m < p.moons; m++) {
+          const mAngle = time * (1.2 / (m + 1)) + m * (Math.PI * 0.8) + node.id;
+          const mDistX = R * (2.2 + m * 0.9);
+          const mDistY = R * (0.7 + m * 0.3);
+          const mx = Math.cos(mAngle) * mDistX;
+          const my = Math.sin(mAngle) * mDistY;
+          const moonR = Math.max(2, 3.2 * proj.scale);
+
+          ctx.fillStyle = (Math.sin(mAngle) > 0) ? p.highlight : "#64748b";
+          ctx.beginPath();
+          ctx.arc(mx, my, moonR, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+
+      // 6. Holographic Planetary Name Plate
+      ctx.shadowBlur = 0;
+      const fontSize = Math.max(10, 12 * proj.scale);
+      ctx.font = `700 ${fontSize}px 'Space Grotesk', sans-serif`;
+      const textWidth = ctx.measureText(node.seq).width;
+      const badgeH = fontSize + 8;
+      const badgeW = textWidth + 22;
+      const badgeY = -R - (p.hasRings ? R * 0.9 : R * 0.5) - 16;
+
+      ctx.fillStyle = isHovered ? "rgba(11, 16, 29, 0.96)" : "rgba(5, 7, 13, 0.88)";
+      ctx.strokeStyle = isHovered ? node.accent : "rgba(255, 255, 255, 0.16)";
+      ctx.lineWidth = isHovered ? 1.5 : 1;
+      ctx.beginPath();
+      ctx.roundRect(-badgeW / 2, badgeY - badgeH / 2, badgeW, badgeH, 6);
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.fillStyle = isHovered ? "#ffffff" : "rgba(240, 244, 252, 0.92)";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText(node.seq, 0, badgeY);
+
+      ctx.restore();
+    }
+
+    // --- 3D RENDER LOOP (DEEP SPACE COSMOS & PLANETARY RUNWAY) ---
+    let time = 0;
+    let calloutAnimProgress = 0;
+    let activeCalloutGeom = null;
+    function render3D() {
+      time += 0.006;
+
+      // 1. Camera Smooth Damping (Cinematic Ultra-Slow Smooth Glide)
+      camera.rotX += (camera.targetRotX - camera.rotX) * 0.02;
+      camera.rotY += (camera.targetRotY - camera.rotY) * 0.02;
+      camera.zoom += (camera.targetZoom - camera.zoom) * 0.02;
+      camera.panX += (camera.targetPanX - camera.panX) * 0.02;
+      camera.panY += (camera.targetPanY - camera.panY) * 0.02;
+
+      // 2. Timeline Offset & Viscous Inertia Damping (Gentle, deliberate, and controlled)
+      timelineOffset += timelineVelocity;
+      timelineVelocity *= 0.94;
+
+      // Soft spring boundaries for chain (Reduced recoil & soft cushion)
+      if (timelineOffset > 2.2) {
+        timelineVelocity -= (timelineOffset - 2.2) * 0.012;
+        timelineVelocity *= 0.90;
+      }
+      if (timelineOffset < -2.2) {
+        timelineVelocity -= (timelineOffset - (-2.2)) * 0.012;
+        timelineVelocity *= 0.90;
+      }
+
+      // Sequential propagation: Dragging a planet propagates down the chain ultra-slowly and majestically
+      for (let i = 0; i < N_NODES; i++) {
+        const node = chainNodes[i];
+        node.targetU = node.baseU + timelineOffset;
+        
+        const pivot = draggedNodeIndex >= 0 ? draggedNodeIndex : (N_NODES - 1);
+        const distanceToPivot = Math.abs(i - pivot);
+        const followSpeed = Math.max(0.008, 0.022 - distanceToPivot * 0.0014);
+
+        node.currentU += (node.targetU - node.currentU) * followSpeed;
+      }
+
+      // Deep Void Background Fill
+      ctx.fillStyle = "#020308";
+      ctx.fillRect(0, 0, width, height);
+
+      // 3. Draw Volumetric Deep Space Nebulae
+      for (const neb of nebulae) {
+        const p = project3D(neb.x, neb.y, neb.z);
+        if (p.visible) {
+          const nebR = neb.radius * p.scale;
+          const grad = ctx.createRadialGradient(p.screenX, p.screenY, 0, p.screenX, p.screenY, nebR);
+          grad.addColorStop(0, neb.color1);
+          grad.addColorStop(1, neb.color2);
+          ctx.fillStyle = grad;
+          ctx.beginPath();
+          ctx.arc(p.screenX, p.screenY, nebR, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+
+      // 4. Draw Multi-Spectral 3D Starfield with Lens Flares
+      for (const star of stars) {
+        const p = project3D(star.x, star.y, star.z);
+        if (p.visible && p.screenX >= 0 && p.screenX <= width && p.screenY >= 0 && p.screenY <= height) {
+          const twinkle = (Math.sin(time * star.twinkleSpeed + star.phase) * 0.35 + 0.65) * Math.min(1, p.scale * 1.3);
+          const starR = Math.max(0.6, star.size * p.scale);
+
+          ctx.fillStyle = star.color;
+          ctx.globalAlpha = twinkle * 0.85;
+          ctx.beginPath();
+          ctx.arc(p.screenX, p.screenY, starR, 0, Math.PI * 2);
+          ctx.fill();
+
+          // 4-point diffraction spike flare for bright stars
+          if (star.hasSpike && starR > 1.2) {
+            ctx.strokeStyle = star.color;
+            ctx.lineWidth = 0.75;
+            ctx.beginPath();
+            ctx.moveTo(p.screenX - starR * 3.5, p.screenY);
+            ctx.lineTo(p.screenX + starR * 3.5, p.screenY);
+            ctx.moveTo(p.screenX, p.screenY - starR * 3.5);
+            ctx.lineTo(p.screenX, p.screenY + starR * 3.5);
+            ctx.stroke();
+          }
+          ctx.globalAlpha = 1.0;
+        }
+      }
+
+      // 5. Draw Floating Parallax Space Dust
+      for (const dust of dustParticles) {
+        dust.x += dust.speedX;
+        dust.y += dust.speedY;
+        const p = project3D(dust.x, dust.y, dust.z);
+        if (p.visible && p.screenX >= 0 && p.screenX <= width && p.screenY >= 0 && p.screenY <= height) {
+          ctx.fillStyle = "rgba(200, 230, 255, 0.35)";
+          ctx.beginPath();
+          ctx.arc(p.screenX, p.screenY, Math.max(0.4, dust.size * p.scale), 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+
+      // 6. Draw Gravitational Spacetime Warp Floor Grid
+      const gridY = 180;
+      ctx.strokeStyle = "rgba(0, 240, 255, 0.035)";
+      ctx.lineWidth = 1;
+      for (let gx = -1100; gx <= 1100; gx += 180) {
+        const pStart = project3D(gx, gridY, -1600);
+        const pEnd = project3D(gx, gridY, 2000);
+        if (pStart.visible && pEnd.visible) {
+          ctx.beginPath();
+          ctx.moveTo(pStart.screenX, pStart.screenY);
+          ctx.lineTo(pEnd.screenX, pEnd.screenY);
+          ctx.stroke();
+        }
+      }
+      for (let gz = -1600; gz <= 2000; gz += 180) {
+        const pStart = project3D(-1100, gridY, gz);
+        const pEnd = project3D(1100, gridY, gz);
+        if (pStart.visible && pEnd.visible) {
+          ctx.beginPath();
+          ctx.moveTo(pStart.screenX, pStart.screenY);
+          ctx.lineTo(pEnd.screenX, pEnd.screenY);
+          ctx.stroke();
+        }
+      }
+
+      // 7. Draw 3D Multi-Layered Cosmic Gravitational Highway with Dynamic Planetary Gradients
+      const RAIL_SEGMENTS = 110;
+
+      // 7-A. Outer Cosmic Plasma Aurora Tube (노드별 고유 컬러로 자연스럽게 채워지는 오로라 관)
+      ctx.save();
+      for (let s = 0; s < RAIL_SEGMENTS; s++) {
+        const u1 = -0.6 + (s / RAIL_SEGMENTS) * 5.2;
+        const u2 = -0.6 + ((s + 1) / RAIL_SEGMENTS) * 5.2;
+
+        const pt1 = get3DRailPoint(u1);
+        const pt2 = get3DRailPoint(u2);
+
+        const proj1 = project3D(pt1.x, pt1.y, pt1.z);
+        const proj2 = project3D(pt2.x, pt2.y, pt2.z);
+
+        if (proj1.visible && proj2.visible) {
+          const colorA = getRailColorAtU(u1, 0.32);
+          const colorB = getRailColorAtU(u2, 0.32);
+
+          const grad = ctx.createLinearGradient(proj1.screenX, proj1.screenY, proj2.screenX, proj2.screenY);
+          grad.addColorStop(0, colorA);
+          grad.addColorStop(1, colorB);
+
+          ctx.strokeStyle = grad;
+          ctx.lineWidth = Math.max(8, 22 * proj1.scale);
+          ctx.beginPath();
+          ctx.moveTo(proj1.screenX, proj1.screenY);
+          ctx.lineTo(proj2.screenX, proj2.screenY);
+          ctx.stroke();
+        }
+      }
+      ctx.restore();
+
+      // 7-B. Double Helical Stardust Energy Vortex (노드 컬러에 반응하는 이중 나선 와류)
+      ctx.save();
+      const HELIX_SEGMENTS = 85;
+      const helixRadius = 36;
+      for (let h = 0; h < 2; h++) {
+        const phaseOffset = h * Math.PI;
+        for (let s = 0; s < HELIX_SEGMENTS; s++) {
+          const u1 = -0.6 + (s / HELIX_SEGMENTS) * 5.2;
+          const u2 = -0.6 + ((s + 1) / HELIX_SEGMENTS) * 5.2;
+
+          const basePt1 = get3DRailPoint(u1);
+          const basePt2 = get3DRailPoint(u2);
+
+          const angle1 = u1 * 4.5 + time * 2.2 + phaseOffset;
+          const angle2 = u2 * 4.5 + time * 2.2 + phaseOffset;
+
+          const hPt1 = {
+            x: basePt1.x + Math.cos(angle1) * helixRadius,
+            y: basePt1.y + Math.sin(angle1) * helixRadius * 0.7,
+            z: basePt1.z + Math.sin(angle1) * helixRadius * 0.7
+          };
+          const hPt2 = {
+            x: basePt2.x + Math.cos(angle2) * helixRadius,
+            y: basePt2.y + Math.sin(angle2) * helixRadius * 0.7,
+            z: basePt2.z + Math.sin(angle2) * helixRadius * 0.7
+          };
+
+          const p1 = project3D(hPt1.x, hPt1.y, hPt1.z);
+          const p2 = project3D(hPt2.x, hPt2.y, hPt2.z);
+
+          if (p1.visible && p2.visible) {
+            const hColorA = getRailColorAtU(u1, h === 0 ? 0.55 : 0.4);
+            const hColorB = getRailColorAtU(u2, h === 0 ? 0.55 : 0.4);
+            const hGrad = ctx.createLinearGradient(p1.screenX, p1.screenY, p2.screenX, p2.screenY);
+            hGrad.addColorStop(0, hColorA);
+            hGrad.addColorStop(1, hColorB);
+
+            ctx.strokeStyle = hGrad;
+            ctx.lineWidth = Math.max(1.2, 2.4 * p1.scale);
+            ctx.beginPath();
+            ctx.moveTo(p1.screenX, p1.screenY);
+            ctx.lineTo(p2.screenX, p2.screenY);
+            ctx.stroke();
+          }
+        }
+      }
+      ctx.restore();
+
+      // 7-C. Core Gravitational Singularity Fiber (노드 진입 시 완벽히 일치하는 초고휘도 코어선)
+      ctx.save();
+      for (let s = 0; s < RAIL_SEGMENTS; s++) {
+        const u1 = -0.6 + (s / RAIL_SEGMENTS) * 5.2;
+        const u2 = -0.6 + ((s + 1) / RAIL_SEGMENTS) * 5.2;
+
+        const pt1 = get3DRailPoint(u1);
+        const pt2 = get3DRailPoint(u2);
+
+        const proj1 = project3D(pt1.x, pt1.y, pt1.z);
+        const proj2 = project3D(pt2.x, pt2.y, pt2.z);
+
+        if (proj1.visible && proj2.visible) {
+          const colorA = getRailColorAtU(u1, 1.0);
+          const colorB = getRailColorAtU(u2, 1.0);
+
+          const grad = ctx.createLinearGradient(proj1.screenX, proj1.screenY, proj2.screenX, proj2.screenY);
+          grad.addColorStop(0, colorA);
+          grad.addColorStop(1, colorB);
+
+          ctx.strokeStyle = grad;
+          ctx.lineWidth = Math.max(2.0, 4.2 * proj1.scale);
+          ctx.shadowColor = colorA;
+          ctx.shadowBlur = 16;
+
+          ctx.beginPath();
+          ctx.moveTo(proj1.screenX, proj1.screenY);
+          ctx.lineTo(proj2.screenX, proj2.screenY);
+          ctx.stroke();
+        }
+      }
+      ctx.restore();
+
+      // 7-D. Flowing Quantum Stardust Photons & Comet Streaks (노드 통과 시 컬러가 물드는 광자들)
+      ctx.save();
+      const NUM_PHOTONS = 30;
+      for (let k = 0; k < NUM_PHOTONS; k++) {
+        const rawU = ((time * 0.35 + (k / NUM_PHOTONS) * 5.2) % 5.2) - 0.6;
+        const pt = get3DRailPoint(rawU);
+        const p = project3D(pt.x, pt.y, pt.z);
+
+        if (p.visible && p.screenX >= 0 && p.screenX <= width && p.screenY >= 0 && p.screenY <= height) {
+          const photonR = Math.max(1.8, 4.2 * p.scale);
+          const isComet = (k % 6 === 0);
+          const photonColor = getRailColorAtU(rawU, 1.0);
+
+          ctx.fillStyle = isComet ? "#ffffff" : photonColor;
+          ctx.shadowColor = photonColor;
+          ctx.shadowBlur = isComet ? 22 : 14;
+
+          ctx.beginPath();
+          ctx.arc(p.screenX, p.screenY, photonR * (isComet ? 1.6 : 1.0), 0, Math.PI * 2);
+          ctx.fill();
+
+          // Comet Trail Streak tinted with planetary colors
+          if (isComet) {
+            const tailPt = get3DRailPoint(rawU - 0.08);
+            const tailP = project3D(tailPt.x, tailPt.y, tailPt.z);
+            if (tailP.visible) {
+              const tailGrad = ctx.createLinearGradient(p.screenX, p.screenY, tailP.screenX, tailP.screenY);
+              tailGrad.addColorStop(0, "rgba(255, 255, 255, 0.85)");
+              tailGrad.addColorStop(0.5, getRailColorAtU(rawU - 0.04, 0.6));
+              tailGrad.addColorStop(1, "rgba(0, 0, 0, 0)");
+              ctx.strokeStyle = tailGrad;
+              ctx.lineWidth = photonR * 1.5;
+              ctx.beginPath();
+              ctx.moveTo(p.screenX, p.screenY);
+              ctx.lineTo(tailP.screenX, tailP.screenY);
+              ctx.stroke();
+            }
+          }
+        }
+      }
+      ctx.restore();
+
+      // 8. Project Current 3D Position of Each Kinetic Planet
+      const projectedNodes = chainNodes.map(node => {
+        const pt3D = get3DRailPoint(node.currentU);
+        const proj = project3D(pt3D.x, pt3D.y, pt3D.z);
+        return {
+          ...node,
+          pt3D,
+          proj
+        };
+      });
+
+      // Sort by depth for correct 3D occlusion
+      projectedNodes.sort((a, b) => b.proj.depth - a.proj.depth);
+
+      // 9. Draw Drop-Lines from Planets to Floor Grid
+      for (const node of projectedNodes) {
+        if (!node.proj.visible) continue;
+        const floorP = project3D(node.pt3D.x, 180, node.pt3D.z);
+        if (floorP.visible) {
+          ctx.strokeStyle = `rgba(255, 255, 255, 0.08)`;
+          ctx.lineWidth = 1;
+          ctx.setLineDash([2, 4]);
+          ctx.beginPath();
+          ctx.moveTo(node.proj.screenX, node.proj.screenY);
+          ctx.lineTo(floorP.screenX, floorP.screenY);
+          ctx.stroke();
+          ctx.setLineDash([]);
+
+          ctx.fillStyle = node.accent + "22";
+          ctx.beginPath();
+          ctx.ellipse(floorP.screenX, floorP.screenY, 14 * floorP.scale, 6 * floorP.scale, 0, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+
+      // 10. Raycast Hit Testing for Mouse Hover
+      let closestNode = null;
+      let minDistance = 30;
+
+      for (const node of projectedNodes) {
+        if (!node.proj.visible) continue;
+        const dx = mousePos.x - node.proj.screenX;
+        const dy = mousePos.y - node.proj.screenY;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        const radius = Math.max(10, (node.isFuture ? 24 : node.planet.radius) * node.proj.scale);
+
+        if (dist < radius + 18 && dist < minDistance) {
+          closestNode = node;
+          minDistance = dist;
+        }
+      }
+
+      hoveredNode = closestNode;
+
+      // 11. Update Floating Side HUD Tooltip Coordinates & Callout Geometry
+      if (hoveredNode && hoveredNode.proj.visible) {
+        calloutAnimProgress = Math.min(1.0, calloutAnimProgress + 0.035);
+        hudTooltip.classList.add('active');
+        hudTooltip.style.setProperty('--hud-accent', hoveredNode.accent);
+
+        const px = hoveredNode.proj.screenX;
+        const py = hoveredNode.proj.screenY;
+        const planetR = Math.max(10, (hoveredNode.isFuture ? 24 : hoveredNode.planet.radius) * hoveredNode.proj.scale);
+
+        // Determine left vs right positioning based on canvas center
+        const isRightSide = (px < width * 0.52);
+        const sideDir = isRightSide ? 1 : -1;
+
+        if (isRightSide) {
+          hudTooltip.classList.add('hud-dir-right');
+          hudTooltip.classList.remove('hud-dir-left');
+        } else {
+          hudTooltip.classList.add('hud-dir-left');
+          hudTooltip.classList.remove('hud-dir-right');
+        }
+        
+        const lineLenX = 70;
+        const lineLenY = -40;
+
+        const startX = px + sideDir * (planetR + 6);
+        const startY = py;
+        const kneeX = startX + sideDir * 32;
+        const kneeY = py + lineLenY;
+        const endX = kneeX + sideDir * lineLenX;
+        const endY = kneeY;
+
+        const tooltipW = 310;
+        const tooltipH = 190;
+        
+        // Popup box starts right from the line end and unfolds outward
+        let targetLeft = isRightSide ? (endX + 6) : (endX - tooltipW - 6);
+        let targetTop = endY - (tooltipH * 0.5);
+
+        // Keep strictly inside canvas boundary
+        targetLeft = Math.max(16, Math.min(width - tooltipW - 16, targetLeft));
+        targetTop = Math.max(16, Math.min(height - tooltipH - 16, targetTop));
+
+        hudTooltip.style.left = `${targetLeft}px`;
+        hudTooltip.style.top = `${targetTop}px`;
+
+        const anchorX = isRightSide ? targetLeft : (targetLeft + tooltipW);
+        const anchorY = Math.max(targetTop + 16, Math.min(targetTop + tooltipH - 16, endY));
+
+        activeCalloutGeom = {
+          start: { x: startX, y: startY },
+          knee: { x: kneeX, y: kneeY },
+          end: { x: anchorX, y: anchorY },
+          color: hoveredNode.accent
+        };
+
+        document.getElementById('hudBadge').textContent = hoveredNode.seq;
+        document.getElementById('hudBadge').style.borderColor = hoveredNode.accent;
+        document.getElementById('hudBadge').style.color = hoveredNode.accent;
+        document.getElementById('hudEra').textContent = hoveredNode.era;
+        document.getElementById('hudTitle').textContent = hoveredNode.title;
+        document.getElementById('hudTagline').textContent = hoveredNode.tagline;
+        document.getElementById('hudDesc').textContent = hoveredNode.description;
+        document.getElementById('hudTech').textContent = hoveredNode.tech[0] || "Edge Deployment";
+      } else {
+        calloutAnimProgress = Math.max(0.0, calloutAnimProgress - 0.048);
+        hudTooltip.classList.remove('active');
+        // We preserve hud-dir-right / hud-dir-left so CSS can animate the exit transition in reverse direction!
+      }
+
+      // 12. Draw Sci-Fi Callout Leader Line with Growth and Reverse Retraction Interpolation
+      if (activeCalloutGeom && calloutAnimProgress > 0.01) {
+        ctx.save();
+        ctx.strokeStyle = activeCalloutGeom.color;
+        ctx.shadowColor = activeCalloutGeom.color;
+        ctx.shadowBlur = 12 * calloutAnimProgress;
+        ctx.lineWidth = 1.6;
+        ctx.globalAlpha = Math.min(1.0, calloutAnimProgress * 1.25);
+
+        // Target Reticle Pin at planet contact point
+        ctx.beginPath();
+        ctx.arc(activeCalloutGeom.start.x, activeCalloutGeom.start.y, 3.5 * Math.min(1, calloutAnimProgress * 2.2), 0, Math.PI * 2);
+        ctx.fillStyle = activeCalloutGeom.color;
+        ctx.fill();
+
+        // Calculate 2-segment path: Segment 1 (0 to 0.45), Segment 2 (0.45 to 1.0)
+        let curKneeX = activeCalloutGeom.start.x;
+        let curKneeY = activeCalloutGeom.start.y;
+        let curEndX = activeCalloutGeom.start.x;
+        let curEndY = activeCalloutGeom.start.y;
+
+        if (calloutAnimProgress <= 0.45) {
+          const t1 = calloutAnimProgress / 0.45;
+          curKneeX = activeCalloutGeom.start.x + (activeCalloutGeom.knee.x - activeCalloutGeom.start.x) * t1;
+          curKneeY = activeCalloutGeom.start.y + (activeCalloutGeom.knee.y - activeCalloutGeom.start.y) * t1;
+
+          ctx.beginPath();
+          ctx.moveTo(activeCalloutGeom.start.x, activeCalloutGeom.start.y);
+          ctx.lineTo(curKneeX, curKneeY);
+          ctx.stroke();
+        } else {
+          const t2 = (calloutAnimProgress - 0.45) / 0.55;
+          curKneeX = activeCalloutGeom.knee.x;
+          curKneeY = activeCalloutGeom.knee.y;
+          curEndX = activeCalloutGeom.knee.x + (activeCalloutGeom.end.x - activeCalloutGeom.knee.x) * t2;
+          curEndY = activeCalloutGeom.knee.y + (activeCalloutGeom.end.y - activeCalloutGeom.knee.y) * t2;
+
+          ctx.beginPath();
+          ctx.moveTo(activeCalloutGeom.start.x, activeCalloutGeom.start.y);
+          ctx.lineTo(activeCalloutGeom.knee.x, activeCalloutGeom.knee.y);
+          ctx.lineTo(curEndX, curEndY);
+          ctx.stroke();
+
+          // Anchor Pin at HUD box
+          if (t2 > 0.8) {
+            ctx.beginPath();
+            ctx.arc(curEndX, curEndY, 3 * ((t2 - 0.8) / 0.2), 0, Math.PI * 2);
+            ctx.fillStyle = "#ffffff";
+            ctx.fill();
+          }
+        }
+
+        // Moving starlight photon along the active line
+        if (calloutAnimProgress > 0.25) {
+          const pulseT = (time * 2.8) % 1.0;
+          const photonProg = pulseT * calloutAnimProgress;
+          let pulseX, pulseY;
+          if (photonProg <= 0.45) {
+            const tSeg = photonProg / 0.45;
+            pulseX = activeCalloutGeom.start.x + (activeCalloutGeom.knee.x - activeCalloutGeom.start.x) * tSeg;
+            pulseY = activeCalloutGeom.start.y + (activeCalloutGeom.knee.y - activeCalloutGeom.start.y) * tSeg;
+          } else {
+            const tSeg = (photonProg - 0.45) / 0.55;
+            pulseX = activeCalloutGeom.knee.x + (activeCalloutGeom.end.x - activeCalloutGeom.knee.x) * tSeg;
+            pulseY = activeCalloutGeom.knee.y + (activeCalloutGeom.end.y - activeCalloutGeom.knee.y) * tSeg;
+          }
+          ctx.fillStyle = "#ffffff";
+          ctx.shadowColor = "#ffffff";
+          ctx.shadowBlur = 10;
+          ctx.beginPath();
+          ctx.arc(pulseX, pulseY, 2.5, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        ctx.restore();
+      }
+
+      // 13. Draw 3D Celestial Planets (with Spherical Shading, Coronas, Rings, and Moons)
+      for (const node of projectedNodes) {
+        if (!node.proj.visible) continue;
+        const isHovered = (hoveredNode && hoveredNode.id === node.id);
+        drawPlanet(node, node.proj, isHovered, time);
+      }
+
+      requestAnimationFrame(render3D);
+    }
+
+    requestAnimationFrame(render3D);
+
+
+    // --- 3. MATRIX CATALOG & MODAL LOGIC ---
+    let currentCategory = 'all';
+    let searchQuery = '';
+    let selectedService = null;
+
+    const gridContainer = document.getElementById('matrixGridContainer');
+    const filterRibbon = document.getElementById('filterRibbon');
+    const searchInput = document.getElementById('serviceSearch');
+    const modal = document.getElementById('serviceModal');
+    const modalCloseBtn = document.getElementById('modalCloseBtn');
+    const progressBar = document.getElementById('progressBar');
+
+    // Scroll Progress
+    window.addEventListener('scroll', () => {
+      const winScroll = document.documentElement.scrollTop || document.body.scrollTop;
+      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const scrolled = (winScroll / height) * 100;
+      progressBar.style.width = scrolled + '%';
+    });
+
+    // Render Matrix Cards
+    function renderCards() {
+      const filtered = RAW_SERVICES.filter(s => !s.isFuture).filter(service => {
+        const matchesCategory = currentCategory === 'all' || service.category === currentCategory;
+        const matchesSearch = searchQuery === '' || 
+          service.title.toLowerCase().includes(searchQuery) ||
+          service.tagline.toLowerCase().includes(searchQuery) ||
+          service.description.toLowerCase().includes(searchQuery) ||
+          service.tech.some(t => t.toLowerCase().includes(searchQuery));
+        return matchesCategory && matchesSearch;
+      });
+
+      if (filtered.length === 0) {
+        gridContainer.innerHTML = `
+          <div style="grid-column: 1 / -1; text-align: center; padding: 64px 20px; background: rgba(11, 16, 29, 0.6); border-radius: var(--radius-lg); border: 1px dashed var(--border-glass);">
+            <i class="fa-solid fa-magnifying-glass" style="font-size: 2rem; color: var(--text-dim); margin-bottom: 16px;"></i>
+            <h3 style="font-size: 1.2rem; margin-bottom: 8px; color: var(--text-pure);">일치하는 서비스가 없습니다</h3>
+            <p style="color: var(--text-muted); font-size: 0.9rem;">검색어를 변경하거나 다른 필터를 선택해보세요.</p>
+          </div>
+        `;
+        return;
+      }
+
+      gridContainer.innerHTML = filtered.map(item => `
+        <article class="matrix-card" style="--card-accent: ${item.accent};" data-id="${item.id}">
+          <div>
+            <div class="card-head">
+              <span class="card-seq">${item.seq}</span>
+              <span class="card-domain-badge">${item.domain}</span>
+            </div>
+
+            <div class="card-title-group">
+              <h3 class="card-main-title">${item.title}</h3>
+              <div class="card-tagline">${item.tagline}</div>
+            </div>
+
+            <p class="card-body-desc">${item.description}</p>
+          </div>
+
+          <div>
+            <div class="card-pills-row">
+              ${item.tech.map(t => `<span class="tech-chip">${t}</span>`).join('')}
+            </div>
+
+            <div class="card-foot-actions">
+              <a href="${item.url}" target="_blank" rel="noopener" class="btn-launch-site" onclick="event.stopPropagation();">
+                <span>방문하기</span>
+                <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.75rem;"></i>
+              </a>
+              <button class="btn-detail-trigger" data-detail="${item.id}">
+                <i class="fa-solid fa-circle-info"></i>
+                <span>상세 스펙</span>
+              </button>
+            </div>
+          </div>
+        </article>
+      `).join('');
+
+      // Attach Card Click & Modal Triggers
+      document.querySelectorAll('.matrix-card').forEach(card => {
+        card.addEventListener('click', () => {
+          const id = parseInt(card.dataset.id, 10);
+          openServiceModal(id);
+        });
+      });
+
+      document.querySelectorAll('[data-detail]').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const id = parseInt(btn.dataset.detail, 10);
+          openServiceModal(id);
+        });
+      });
+    }
+
+    // Modal Control using Native <dialog>
+    function openServiceModal(id) {
+      const item = RAW_SERVICES.find(s => s.id === id);
+      if (!item) return;
+      selectedService = item;
+
+      document.getElementById('modalSeqBadge').textContent = item.seq;
+      document.getElementById('modalHeading').textContent = item.title;
+      document.getElementById('modalTaglineText').textContent = item.tagline;
+      document.getElementById('modalDescText').textContent = item.description;
+
+      document.getElementById('modalHighlightsList').innerHTML = item.highlights
+        .map(h => `<li><i class="fa-solid fa-check"></i> <span>${h}</span></li>`).join('');
+
+      document.getElementById('modalTechStackRow').innerHTML = item.tech
+        .map(t => `<span class="tech-chip">${t}</span>`).join('');
+
+      document.getElementById('modalDirectLaunchBtn').href = item.url;
+
+      modal.showModal();
+    }
+
+    modalCloseBtn.addEventListener('click', () => modal.close());
+
+    // Light Dismiss: Click backdrop to close
+    modal.addEventListener('click', (e) => {
+      const rect = modal.getBoundingClientRect();
+      const isInDialog = (
+        rect.top <= e.clientY &&
+        e.clientY <= rect.top + rect.height &&
+        rect.left <= e.clientX &&
+        e.clientX <= rect.left + rect.width
+      );
+      if (!isInDialog) {
+        modal.close();
+      }
+    });
+
+    // Copy URL Action
+    document.getElementById('modalCopyBtn').addEventListener('click', () => {
+      if (selectedService) {
+        navigator.clipboard.writeText(selectedService.url).then(() => {
+          showToast(`${selectedService.title} URL이 클립보드에 복사되었습니다.`);
+        });
+      }
+    });
+
+    // Toast Function
+    function showToast(text) {
+      const region = document.getElementById('toastRegion');
+      const toast = document.createElement('div');
+      toast.className = 'toast-message';
+      toast.innerHTML = `<i class="fa-solid fa-circle-check" style="color: var(--aurora-emerald);"></i> <span>${text}</span>`;
+      region.appendChild(toast);
+
+      setTimeout(() => {
+        toast.style.transition = 'opacity 0.3s, transform 0.3s';
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(10px) scale(0.9)';
+        setTimeout(() => toast.remove(), 320);
+      }, 2600);
+    }
+
+    // Filter Chips Event
+    filterRibbon.addEventListener('click', (e) => {
+      const chip = e.target.closest('.filter-chip');
+      if (!chip) return;
+
+      filterRibbon.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      currentCategory = chip.dataset.filter;
+      renderCards();
+    });
+
+    // Search Input Event
+    searchInput.addEventListener('input', (e) => {
+      searchQuery = e.target.value.toLowerCase().trim();
+      renderCards();
+    });
+
+    // Global Key Shortcut: '/' to focus search
+    window.addEventListener('keydown', (e) => {
+      if (e.key === '/' && document.activeElement !== searchInput) {
+        e.preventDefault();
+        searchInput.focus();
+      }
+    });
+
+    // Initialize
+    renderCards();
+  </script>
+</body>
+</html>

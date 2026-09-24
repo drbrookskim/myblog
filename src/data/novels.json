@@ -1,0 +1,44 @@
+[
+  {
+    "id": "chogang-mapae",
+    "title": "초강마패",
+    "type": "장편",
+    "badge": "장편 웹소설",
+    "genre": ["현대판타지", "SF", "추리"],
+    "summary": "의문의 '마패'를 손에 넣은 흙수저 취준생이 초월적인 마패의 능력으로 부자가 된다.",
+    "description": "치열한 현실과 초월적 상상력의 만남. 의문의 마패를 손에 쥔 주인공이 한계를 돌파하며 부와 새로운 질서를 일궈나가는 흡인력 있는 현대판타지 서사.",
+    "url": "https://www.munpia.com/novel/detail/530809",
+    "cover": "https://cdn1.munpia.com/v2/files/cover/2026/0103/22/FDhUSfvXMAA",
+    "platform": "문피아",
+    "episodes": "25화 연재중",
+    "tags": ["현대판타지", "SF", "대체역사", "추리", "노력가", "성장"]
+  },
+  {
+    "id": "co2-organization",
+    "title": "이산화탄소 조직",
+    "type": "단편",
+    "badge": "직장 드라마",
+    "genre": ["일반소설", "오피스 드라마"],
+    "summary": "경력직이 새로운 조직에 합류한 뒤, 낯선 환경 속에서 겪게 되는 따돌림을 극복하며 자신만의 자리를 찾아가는 이야기.",
+    "description": "12년차 기획자의 날카로운 관찰력이 돋보이는 소설. 보이지 않는 배제와 질식할 것 같은 조직 분위기(이산화탄소) 속에서 스스로의 전문성과 단단함으로 길을 찾는 경력직의 현실적 극복기.",
+    "url": "https://www.munpia.com/novel/detail/606595",
+    "cover": "https://cdn1.munpia.com/v2/files/tcover/2026/0924/23/FYxApCbV8AA",
+    "platform": "문피아",
+    "episodes": "3화 완독",
+    "tags": ["오피스", "경력직", "조직심리", "인간관계", "리얼리즘"]
+  },
+  {
+    "id": "oubliette-watcher",
+    "title": "우블리에트의 파수꾼",
+    "type": "단편",
+    "badge": "감각 추리 미스터리",
+    "genre": ["추리", "미스터리", "현대판타지"],
+    "summary": "우연히 발견한 지하 창고에서 시각이 단절된 채, 청각만을 통해 사건을 해결해 나가는 형사의 이야기입니다.",
+    "description": "인간의 한계 상황에 대한 집요한 탐구. 빛 하나 들지 않는 '우블리에트(잊혀진 지하 감옥)'에서 오직 귀로 전달되는 소리의 파동과 단서만으로 어둠 속 진실을 꿰뚫는 감각적 하드보일드 미스터리.",
+    "url": "https://www.munpia.com/novel/detail/606594",
+    "cover": "https://cdn1.munpia.com/v2/files/tcover/2026/0924/23/FYw--wmdcAA",
+    "platform": "문피아",
+    "episodes": "3화 완독",
+    "tags": ["추리", "감각단절", "형사물", "심리미스터리", "인간의 한계"]
+  }
+]

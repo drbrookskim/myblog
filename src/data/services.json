@@ -1,0 +1,50 @@
+[
+  {
+    "id": "drbrooks-portal",
+    "name": "Dr. Brooks Services",
+    "tagline": "금융, 투자, AI, 생산성을 위한 인터랙티브 웹 서비스 모음",
+    "description": "복잡한 데이터와 금융/AI 모델을 직관적인 UI로 재해석하여, 사용자가 능동적으로 인사이트를 도출할 수 있도록 돕는 지능형 웹 애플리케이션 포털입니다.",
+    "category": "Interactive Portal",
+    "badge": "대표 서비스 포털",
+    "url": "https://drbrooks.pages.dev/services/",
+    "features": [
+      "금융 데이터 및 투자 시나리오 분석 도구",
+      "AI 모델 기반 인텔리전스 및 추론 어시스턴트",
+      "반응형 인터랙티브 차트 및 시뮬레이션 환경",
+      "경량 자립형 웹 아키텍처 (Cloudflare Pages 기반)"
+    ],
+    "techStack": ["Autonomous Web Architecture", "Cloudflare Pages", "Vanilla JS", "Tailwind CSS", "Interactive Canvas/Charts"],
+    "links": {
+      "live": "https://drbrooks.pages.dev/services/",
+      "about": "https://drbrooks.pages.dev/services/about.html"
+    }
+  },
+  {
+    "id": "investment-intelligence",
+    "name": "Financial & Investment Studio",
+    "tagline": "의사결정자를 위한 정밀 재무/투자 시뮬레이터",
+    "description": "12년차 기획자의 사용자 경험 설계가 투영된 금융 데이터 분석 툴킷. 인간의 인지적 편향을 보완하고 데이터에 기반한 합리적 판단을 유도합니다.",
+    "category": "Fintech & Data",
+    "badge": "투자 인텔리전스",
+    "url": "https://drbrooks.pages.dev/services/",
+    "features": ["포트폴리오 스트레스 테스트", "수익률 다각도 시각화", "투자 가설 검증 샌드박스"],
+    "techStack": ["Interactive Visualization", "Real-time Metrics", "Web Worker"],
+    "links": {
+      "live": "https://drbrooks.pages.dev/services/"
+    }
+  },
+  {
+    "id": "productivity-agents",
+    "name": "Productivity & AI Tools",
+    "tagline": "기획자의 시간과 집중력을 극대화하는 생산성 유틸리티",
+    "description": "기획의 본질에 집중할 수 있도록 반복 작업을 자동화하고, 사고의 확장을 돕는 인터랙티브 워크스페이스 유틸리티 모음입니다.",
+    "category": "AI & Productivity",
+    "badge": "생산성 도구",
+    "url": "https://drbrooks.pages.dev/services/",
+    "features": ["텍스트 및 아이디어 구조화", "빠른 프로토타이핑 워크플로우", "인터페이스 테스트 툴킷"],
+    "techStack": ["Modern Web APIs", "Markdown Engine", "Local Persistence"],
+    "links": {
+      "live": "https://drbrooks.pages.dev/services/"
+    }
+  }
+]

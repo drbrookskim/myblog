@@ -1,0 +1,22 @@
+{
+  "name": "닥터브룩스",
+  "englishName": "Dr. Brooks Kim",
+  "avatar": "http://t1.daumcdn.net/brunch/service/user/4XCX/image/ZwU9Gubgwzh5Ofks9tJJ6vuqnwY.png",
+  "title": "12년차 제품기획자 · 소설가 · 웹 서비스 빌더",
+  "headline": "기획의 ‘본질’, 사용자의 ‘관점’, 그리고 인간의 ‘한계’에 대해 관심이 많습니다.",
+  "subheadline": "그에 관한 글도, 소설도, 웹 서비스도 만듭니다.",
+  "bio": "복잡한 비즈니스와 기술 환경 속에서 본질적인 가치를 발굴하는 12년차 제품기획자이자, 인간의 내면과 결핍을 탐구하는 이야기 작가, 그리고 유용한 도구를 직접 만들어 배포하는 웹 서비스 빌더입니다.",
+  "links": {
+    "brunch": "https://brunch.co.kr/@drbrooks",
+    "services": "https://drbrooks.pages.dev/services/",
+    "tistory": "https://drbrooks.tistory.com/",
+    "twitter": "https://x.com/drbrookskim"
+  },
+  "stats": {
+    "careerYears": 12,
+    "brunchArticles": 193,
+    "publishedNovels": 3,
+    "servicesBuilt": "Interactive Suite"
+  },
+  "keywords": ["기획의 본질", "사용자 관점", "인간의 한계", "현대소설", "SF/미스터리", "인텔리전스 웹"]
+}

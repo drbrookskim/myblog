@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dr. Brooks Services</title>
+  <meta name="description" content="Dr. Brooks Kim의 웹 서비스 및 애플리케이션 포털">
+  
+  <!-- Open Graph -->
+  <meta property="og:title" content="Dr. Brooks Services">
+  <meta property="og:description" content="금융, 투자, AI, 생산성을 위한 인터랙티브 웹 서비스 모음">
+  <meta property="og:type" content="website">
+
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚀</text></svg>">
+
+  <!-- Google Fonts: Inter & Noto Sans KR -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome 6 CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="style.css?v=20260917_01">
+</head>
+<body>
+
+  <!-- Ambient Glow Background Canvas -->
+  <div class="ambient-glow" aria-hidden="true">
+    <div class="glow-sphere sphere-1"></div>
+    <div class="glow-sphere sphere-2"></div>
+    <div class="glow-sphere sphere-3"></div>
+  </div>
+
+  <!-- Main App Shell -->
+  <div class="app-layout">
+    
+    <!-- Top Navigation Header -->
+    <header class="site-header">
+      <div class="header-container">
+        <div class="brand-group">
+          <div class="brand-logo">
+            <span class="logo-icon"><i class="fa-solid fa-shapes"></i></span>
+          </div>
+          <div class="brand-meta">
+            <h1 class="brand-title">DR. BROOKS <span>SERVICES</span></h1>
+          </div>
+        </div>
+
+        <div class="header-actions">
+          <a href="about.html" class="btn-about-service" title="About Dr. Brooks Services">
+            <i class="fa-solid fa-circle-info"></i>
+            <span>About Dr. Brooks Services</span>
+          </a>
+          <button id="themeToggleBtn" class="btn-theme-toggle" aria-label="테마 전환" title="다크/라이트 테마 전환">
+            <i class="fa-solid fa-moon icon-dark"></i>
+            <i class="fa-solid fa-sun icon-light"></i>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <div class="hero-content">
+        <h2 class="hero-title">
+          Dr. Brooks Services
+        </h2>
+        <p class="hero-desc">
+          금융, 투자 분석, 인텔리전스, 생산성을 위한 인터랙티브 웹 애플리케이션
+        </p>
+      </div>
+    </section>
+
+    <!-- Interactive Control Bar -->
+    <section class="control-section">
+      <div class="control-container">
+        
+        <!-- Category Filter Tabs -->
+        <div class="filter-tabs-scroll">
+          <div class="filter-tabs" id="categoryFilterGroup" role="tablist">
+            <button class="filter-tab active" data-category="all" role="tab" aria-selected="true">
+              전체
+            </button>
+            <button class="filter-tab" data-category="finance" role="tab" aria-selected="false">
+              <i class="fa-solid fa-coins"></i> 금융/외환
+            </button>
+            <button class="filter-tab" data-category="stock" role="tab" aria-selected="false">
+              <i class="fa-solid fa-chart-pie"></i> 주식/차트분석
+            </button>
+            <button class="filter-tab" data-category="market" role="tab" aria-selected="false">
+              <i class="fa-solid fa-satellite-dish"></i> 시장/시그널
+            </button>
+            <button class="filter-tab" data-category="ai" role="tab" aria-selected="false">
+              <i class="fa-solid fa-wand-magic-sparkles"></i> AI/에이전트
+            </button>
+            <button class="filter-tab" data-category="productivity" role="tab" aria-selected="false">
+              <i class="fa-solid fa-compass-drafting"></i> 기획/생산성
+            </button>
+            <button class="filter-tab" data-category="knowledge" role="tab" aria-selected="false">
+              <i class="fa-solid fa-diagram-project"></i> 지식/아카이브
+            </button>
+            <button class="filter-tab" data-category="lifestyle" role="tab" aria-selected="false">
+              <i class="fa-solid fa-whiskey-glass"></i> 라이프스타일
+            </button>
+          </div>
+        </div>
+
+        <!-- View Mode Toggle Buttons -->
+        <div class="view-toggle-group">
+          <button id="viewTimelineBtn" class="btn-view-toggle active" data-view="timeline" title="타임라인 뷰">
+            <i class="fa-solid fa-timeline"></i>
+            <span class="view-label">타임라인</span>
+          </button>
+          <button id="viewGridBtn" class="btn-view-toggle" data-view="grid" title="그리드 뷰">
+            <i class="fa-solid fa-grip"></i>
+            <span class="view-label">그리드</span>
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Active Filter Status & Result Count -->
+    <div class="results-bar-container">
+      <div class="results-bar">
+        <div class="results-count">
+          <span id="filteredCount">13</span>개의 서비스
+        </div>
+        <div class="results-actions">
+          <button id="resetFiltersBtn" class="btn-reset-filters hidden">
+            <i class="fa-solid fa-rotate-left"></i> 필터 초기화
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content Area: Timeline View or Grid View Container -->
+    <main class="main-showcase-container">
+      
+      <!-- 1. Timeline View Container (Default) -->
+      <section id="timelineViewSection" class="timeline-section active">
+        <div class="timeline-track"></div>
+        <div class="timeline-items" id="timelineItemsContainer">
+          <!-- Timeline Cards rendered by app.js -->
+        </div>
+      </section>
+
+      <!-- 2. Grid View Container -->
+      <section id="gridViewSection" class="grid-section">
+        <div class="services-grid" id="gridItemsContainer">
+          <!-- Grid Cards rendered by app.js -->
+        </div>
+      </section>
+
+      <!-- Empty State -->
+      <div id="emptyStateContainer" class="empty-state hidden">
+        <div class="empty-icon"><i class="fa-solid fa-magnifying-glass"></i></div>
+        <h3>검색 결과가 없습니다</h3>
+        <p>다른 검색어나 카테고리 필터를 선택해 보세요.</p>
+        <button id="emptyResetBtn" class="btn btn-primary">전체 서비스 보기</button>
+      </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+      <div class="footer-container">
+        <div class="footer-brand">
+          <div class="footer-logo">
+            <i class="fa-solid fa-shapes"></i>
+            <span>DR. BROOKS SERVICES</span>
+          </div>
+          <p class="footer-desc">
+            Autonomous Web Architecture &amp; Interactive Intelligent Platforms.
+          </p>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2026 Dr. Brooks Kim. All rights reserved.</p>
+        <button id="backToTopBtn" class="btn-back-to-top" title="맨 위로 이동">
+          <i class="fa-solid fa-arrow-up"></i> Top
+        </button>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- Service Detail Modal -->
+  <div id="serviceDetailModal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-backdrop" id="modalBackdrop"></div>
+    <div class="modal-card">
+      
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <div class="modal-badge-group">
+          <span class="modal-category-badge" id="modalCategoryBadge">Finance</span>
+        </div>
+        <button class="modal-close-btn" id="modalCloseBtn" aria-label="닫기">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="modal-body">
+        <div class="modal-hero-info">
+          <div class="modal-icon-wrap" id="modalIconWrap">
+            <i class="fa-solid fa-coins" id="modalIcon"></i>
+          </div>
+          <div class="modal-titles">
+            <h3 class="modal-title" id="modalTitle">서비스명</h3>
+            <p class="modal-tagline" id="modalTagline">서비스 슬로건</p>
+          </div>
+        </div>
+
+        <p class="modal-description" id="modalDesc">상세 설명</p>
+
+        <!-- Highlights Section -->
+        <div class="modal-section">
+          <h4 class="modal-section-title"><i class="fa-solid fa-star"></i> 주요 기능</h4>
+          <ul class="modal-highlights-list" id="modalHighlights">
+            <!-- Rendered by JS -->
+          </ul>
+        </div>
+
+        <!-- Tech Stack Section -->
+        <div class="modal-section">
+          <h4 class="modal-section-title"><i class="fa-solid fa-code"></i> 기술 스택</h4>
+          <div class="modal-tech-stack" id="modalTechStack">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+
+        <!-- Meta Info Grid -->
+        <div class="modal-meta-grid">
+          <div class="modal-meta-item">
+            <span class="meta-lbl">도메인</span>
+            <span class="meta-val" id="modalDomain">drbrookskim.github.io</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="modalCopyUrlBtn">
+          <i class="fa-solid fa-link"></i> 링크 복사
+        </button>
+        <a href="#" target="_blank" rel="noopener" class="btn btn-primary" id="modalLaunchBtn">
+          <span>사이트 방문</span>
+          <i class="fa-solid fa-arrow-up-right-from-square"></i>
+        </a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toastContainer" class="toast-container" aria-live="polite"></div>
+
+  <!-- Application Logic -->
+  <script src="app.js?v=20260917_01"></script>
+</body>
+</html>
