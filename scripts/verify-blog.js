@@ -38,8 +38,11 @@ const checks = [
   { name: 'JS contains fallback data for offline/file:// mode', pass: js.includes('INITIAL_DATA') && js.includes('chogang-mapae') },
   { name: 'JS has dark mode persistence via localStorage', pass: js.includes('drbrooks-theme') && js.includes('localStorage') },
   { name: 'CSS has [data-theme="dark"] tokens', pass: css.includes('[data-theme="dark"]') },
-  { name: 'CSS has timeline spine, node, and card styling', pass: css.includes('.timeline-spine') && css.includes('.timeline-node') && css.includes('.timeline-item') },
-  { name: 'CSS has responsive media queries for mobile', pass: css.includes('@media (max-width: 640px)') },
+  { name: 'CSS has stem spine line penetrating transparent circular nodes (줄기 관통 표현)', pass: css.includes('.timeline-spine') && css.includes('background-color: transparent') && css.includes('left: 44px') },
+  { name: 'CSS has responsive media queries for mobile', pass: css.includes('@media (max-width: 640px)') && css.includes('left: 29px') },
+  { name: 'Top-right nav brunch link cleanly removed', pass: !html.includes('class="nav-link-btn"') && !html.includes('브런치 가기 &rarr;') },
+  { name: 'Essays on the Essence links directly to Brunch', pass: html.includes('href="https://brunch.co.kr/@drbrooks"') && html.includes('data-pillar="essays"') },
+  { name: 'Web Services links directly to Dr. Brooks Services', pass: html.includes('href="./services/"') && html.includes('data-pillar="services"') },
   { name: '7 Anthropic & MCP Certifications registered with Skilljar URLs', pass: certifications.length === 7 && certifications.every(c => c.url.startsWith('https://verify.skilljar.com/c/')) && js.includes('https://verify.skilljar.com/c/') },
   { name: 'Drag-to-show English popup completely removed', pass: !js.includes('SelectionTranslator') && !css.includes('.translation-tooltip') && !html.includes('드래그 시 영어 버전') },
   { name: 'LinkedIn links cleanly removed from profile, html, and js', pass: !profile.links.linkedin && !html.includes('linkedin.com') && !js.includes('linkedin.com') }

@@ -45,9 +45,6 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
           </svg>
         </button>
-        <a href="https://brunch.co.kr/@drbrooks" target="_blank" rel="noopener noreferrer" class="nav-link-btn">
-          브런치 가기 &rarr;
-        </a>
       </div>
     </div>
   </header>
@@ -67,24 +64,24 @@
     <!-- Connected Node Timeline Section (Mockup Design) -->
     <section class="timeline-section" aria-label="닥터브룩스 핵심 작업 타임라인">
       <div class="timeline-container">
-        <!-- Connecting Vertical Spine Line -->
+        <!-- Connecting Vertical Stem Spine Line (줄기) -->
         <div class="timeline-spine" aria-hidden="true"></div>
 
-        <!-- Node 1: Essays on the Essence -->
-        <article class="timeline-item" data-pillar="essays" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Essays on the Essence 상세 팝업 열기">
+        <!-- Node 1: Essays on the Essence (Direct to Brunch) -->
+        <a href="https://brunch.co.kr/@drbrooks" target="_blank" rel="noopener noreferrer" class="timeline-item" data-pillar="essays" aria-label="Essays on the Essence — 브런치 블로그 바로가기">
           <div class="timeline-node" aria-hidden="true"></div>
           <div class="timeline-body">
             <div class="timeline-header">
               <h2 class="timeline-title">Essays on the Essence</h2>
-              <span class="timeline-badge">상세보기 &rarr;</span>
+              <span class="timeline-badge">브런치 바로가기 &nearr;</span>
             </div>
             <p class="timeline-text">
               12년 동안 다양한 IT 프로덕트를 기획하고 이끌며 수많은 기술과 트렌드의 명멸을 목격했습니다. 화려한 프레임워크나 복잡한 기능보다 중요한 것은 &apos;사용자가 진정으로 해결하고자 하는 결핍&apos;에 닿아있는가입니다. 기획의 본질에 대해 치열하게 고민하고 그 과정에서 얻은 인사이트를 브런치와 블로그에 정제된 글로 남깁니다.
             </p>
           </div>
-        </article>
+        </a>
 
-        <!-- Node 2: Novels -->
+        <!-- Node 2: Novels (Detail Modal Popup) -->
         <article class="timeline-item" data-pillar="novels" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Novels 상세 팝업 열기">
           <div class="timeline-node" aria-hidden="true"></div>
           <div class="timeline-body">
@@ -98,21 +95,21 @@
           </div>
         </article>
 
-        <!-- Node 3: Web Services -->
-        <article class="timeline-item" data-pillar="services" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Web Services 상세 팝업 열기">
+        <!-- Node 3: Web Services (Direct to Dr. Brooks Services) -->
+        <a href="./services/" class="timeline-item" data-pillar="services" aria-label="Web Services — Dr. Brooks Services 바로가기">
           <div class="timeline-node" aria-hidden="true"></div>
           <div class="timeline-body">
             <div class="timeline-header">
               <h2 class="timeline-title">Web Services</h2>
-              <span class="timeline-badge">상세보기 &rarr;</span>
+              <span class="timeline-badge">Dr. Brooks Services &rarr;</span>
             </div>
             <p class="timeline-text">
               생각에만 머물지 않고 실제로 작동하는 프로덕트를 만듭니다. Cloudflare 기반의 현대적인 인터랙티브 웹 아키텍처를 기반으로, 금융 분석, 투자 시뮬레이션, 인텔리전스 및 생산성을 돕는 웹 서비스를 직접 구축하여 서비스하고 있습니다.
             </p>
           </div>
-        </article>
+        </a>
 
-        <!-- Node 4: Certifications (from Anthropic) -->
+        <!-- Node 4: Certifications (Detail Modal Popup) -->
         <article class="timeline-item" data-pillar="certifications" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Certifications 상세 팝업 열기">
           <div class="timeline-node" aria-hidden="true"></div>
           <div class="timeline-body">
@@ -185,7 +182,7 @@
             <ul class="footer-list">
               <li><a href="https://x.com/drbrookskim" target="_blank" rel="noopener noreferrer">트위터 / X (@drbrookskim)</a></li>
               <li><a href="#certifications" onclick="window.blogApp && window.blogApp.openModal('certifications')">공인 AI 자격증 (Anthropic 7종)</a></li>
-              <li><a href="#services" onclick="window.blogApp && window.blogApp.openModal('services')">웹 서비스 모음</a></li>
+              <li><a href="services/">웹 서비스 허브 (Dr. Brooks Services)</a></li>
             </ul>
           </div>
         </div>

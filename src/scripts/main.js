@@ -326,16 +326,18 @@ class BlogApp {
       this.themeToggleBtn.addEventListener("click", () => this.toggleTheme());
     }
 
-    // Timeline item click & keydown handlers
+    // Timeline item click & keydown handlers (Novels & Certifications open modals, Essays & Services are direct links)
     this.timelineItems.forEach(item => {
       const pillar = item.getAttribute("data-pillar");
-      item.addEventListener("click", () => this.openModal(pillar));
-      item.addEventListener("keydown", (e) => {
-        if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault();
-          this.openModal(pillar);
-        }
-      });
+      if (pillar === "novels" || pillar === "certifications") {
+        item.addEventListener("click", () => this.openModal(pillar));
+        item.addEventListener("keydown", (e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            this.openModal(pillar);
+          }
+        });
+      }
     });
 
     // Modal close events
@@ -382,7 +384,11 @@ class BlogApp {
 
   handleInitialHash() {
     const hash = window.location.hash.replace("#", "");
-    if (["essays", "novels", "services", "certifications"].includes(hash)) {
+    if (hash === "essays") {
+      window.open("https://brunch.co.kr/@drbrooks", "_blank", "noopener,noreferrer");
+    } else if (hash === "services") {
+      window.location.href = "./services/";
+    } else if (["novels", "certifications"].includes(hash)) {
       this.openModal(hash, false);
     }
   }
