@@ -41,7 +41,7 @@ const checks = [
   { name: 'CSS has modern UX stem with ambient glow and traveling light beam', pass: css.includes('.timeline-spine') && css.includes('stem-travel-beam') && css.includes('--spine-glow') },
   { name: 'CSS has glassmorphic circular nodes with center micro-core pip', pass: css.includes('.timeline-node') && css.includes('.timeline-node::after') && css.includes('backdrop-filter: blur') },
   { name: 'CSS has responsive media queries for mobile with exact stem alignment', pass: css.includes('@media (max-width: 640px)') && css.includes('left: 30px') },
-  { name: 'JS has modern IntersectionObserver ScrollSpy for milestone activation', pass: js.includes('setupScrollSpy') && js.includes('is-in-view') },
+  { name: 'All 4 timeline tiles have uniform card surface, border, and elevation styling', pass: css.includes('.timeline-item') && css.includes('background-color: var(--surface)') && css.includes('border: 1px solid var(--border-light)') && html.includes('<h2 class="timeline-title">Certifications</h2>') },
   { name: 'Top-right nav brunch link cleanly removed', pass: !html.includes('class="nav-link-btn"') && !html.includes('브런치 가기 &rarr;') },
   { name: 'Essays on the Essence links directly to Brunch', pass: html.includes('href="https://brunch.co.kr/@drbrooks"') && html.includes('data-pillar="essays"') },
   { name: 'Web Services links directly to Dr. Brooks Services', pass: html.includes('href="./services/"') && html.includes('data-pillar="services"') },

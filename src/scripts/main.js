@@ -269,7 +269,6 @@ class BlogApp {
     this.initTheme();
     this.initElements();
     this.bindEvents();
-    this.setupScrollSpy();
     this.loadData();
     this.handleInitialHash();
   }
@@ -361,26 +360,6 @@ class BlogApp {
     });
 
     window.addEventListener("hashchange", () => this.handleInitialHash());
-  }
-
-  setupScrollSpy() {
-    if (!("IntersectionObserver" in window) || !this.timelineItems || !this.timelineItems.length) return;
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("is-in-view");
-        } else {
-          entry.target.classList.remove("is-in-view");
-        }
-      });
-    }, {
-      root: null,
-      rootMargin: "-15% 0px -25% 0px",
-      threshold: 0.2
-    });
-
-    this.timelineItems.forEach(item => observer.observe(item));
   }
 
   async loadData() {
