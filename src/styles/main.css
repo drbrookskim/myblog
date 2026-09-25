@@ -273,19 +273,22 @@ img {
   position: relative;
 }
 
-/* Vertical Connecting Stem Line (써클을 관통하는 최신 앰비언트 글로우 줄기) */
+/* Vertical Connecting Stem Line (배경 저 뒤쪽에서 오는 깊이감 있는 줄기 라인) */
 .timeline-spine {
   position: absolute;
   left: 45px;
   transform: translateX(-50%);
-  top: -32px;
-  bottom: -32px;
-  width: 3px;
+  top: -64px;
+  bottom: -40px;
+  width: 2.5px;
   background: linear-gradient(
     180deg,
     transparent 0%,
-    var(--spine-base) 4%,
-    var(--spine-base) 96%,
+    rgba(148, 163, 184, 0.08) 8%,
+    rgba(148, 163, 184, 0.35) 20%,
+    var(--spine-base) 40%,
+    var(--spine-base) 88%,
+    rgba(148, 163, 184, 0.2) 95%,
     transparent 100%
   );
   border-radius: 999px;
@@ -294,36 +297,36 @@ img {
   pointer-events: none;
 }
 
-/* Ambient Diffuse Glow behind the Core Stem Line */
+/* Ambient Diffuse Depth Glow behind the Core Line (원거리 배경 글로우) */
 .timeline-spine::before {
   content: "";
   position: absolute;
   top: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: 9px;
+  width: 14px;
   height: 100%;
   background: linear-gradient(
     180deg,
     transparent 0%,
-    var(--spine-glow) 8%,
-    var(--spine-glow) 92%,
+    var(--spine-glow) 15%,
+    var(--spine-glow) 85%,
     transparent 100%
   );
-  filter: blur(4px);
-  opacity: 0.65;
+  filter: blur(8px);
+  opacity: 0.55;
   pointer-events: none;
 }
 
-/* Dynamic Traveling Light Beam (미래지향적 인터랙티브 펄스 빔) */
+/* Dynamic Traveling Light Beam (써클 아래를 통과하는 깊이감 있는 펄스 빔) */
 .timeline-spine::after {
   content: "";
   position: absolute;
-  top: -80px;
+  top: -90px;
   left: 50%;
   transform: translateX(-50%);
-  width: 3px;
-  height: 130px;
+  width: 2.5px;
+  height: 140px;
   background: linear-gradient(
     180deg,
     transparent 0%,
@@ -333,13 +336,13 @@ img {
   border-radius: 999px;
   filter: drop-shadow(0 0 8px var(--accent-primary));
   opacity: 0.85;
-  animation: stem-travel-beam 7.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  animation: stem-travel-beam 8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
   pointer-events: none;
 }
 
 @keyframes stem-travel-beam {
   0% {
-    top: -80px;
+    top: -90px;
     opacity: 0;
   }
   12% {
@@ -364,6 +367,7 @@ img {
 /* Timeline Item (Clickable Row / Direct Link with Uniform Card Styling) */
 .timeline-item {
   position: relative;
+  z-index: 2;
   display: flex;
   align-items: flex-start;
   gap: 26px;
@@ -388,21 +392,24 @@ img {
   transform: translateY(-2px);
 }
 
-/* Circular Node on Timeline (최신 글래스모피즘 렌즈 + 써클 관통) */
+/* Circular Node on Timeline (세로선 위에 위치하는 솔리드 노드 - 세로선이 써클 아래로 통과) */
 .timeline-node {
   position: relative;
-  z-index: 2;
+  z-index: 3;
   width: 38px;
   height: 38px;
   border-radius: var(--radius-full);
-  border: 2px solid var(--node-border);
-  background-color: var(--node-bg);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  border: 2.5px solid var(--node-border);
+  background-color: var(--surface);
   flex-shrink: 0;
   margin-top: 3px;
-  transition: transform var(--transition-spring), border-color var(--transition-normal), background-color var(--transition-normal), box-shadow var(--transition-normal);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.07), 0 1px 3px rgba(0, 0, 0, 0.05);
+  transition: transform var(--transition-spring), border-color var(--transition-normal), box-shadow var(--transition-normal);
   box-sizing: border-box;
+}
+
+[data-theme="dark"] .timeline-node {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
 /* Center Micro-Core Pip on Stem Axis (줄기 중심점 마이크로 코어 노드) */
@@ -420,13 +427,13 @@ img {
   box-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
 }
 
-/* Hover & Focus State */
+/* Hover & Focus State (써클은 세로선 위에 불투명하게 유지되며 발광) */
 .timeline-item:hover .timeline-node,
 .timeline-item:focus-visible .timeline-node {
   border-color: var(--accent-primary);
-  background-color: rgba(37, 99, 235, 0.08);
-  transform: scale(1.15);
-  box-shadow: 0 0 0 6px var(--accent-subtle), 0 0 20px var(--spine-glow);
+  background-color: var(--surface);
+  transform: scale(1.12);
+  box-shadow: 0 0 0 6px var(--accent-subtle), 0 6px 16px rgba(0, 0, 0, 0.12);
 }
 
 .timeline-item:hover .timeline-node::after,
