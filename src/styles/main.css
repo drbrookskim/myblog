@@ -273,20 +273,17 @@ img {
   position: relative;
 }
 
-/* Vertical Connecting Stem Line (배경 저 뒤쪽에서 오는 깊이감 있는 줄기 라인) */
+/* Vertical Connecting Stem Line (배경 저 뒤쪽에서 원을 그리며 들어오는 깊이감 있는 줄기 라인) */
 .timeline-spine {
   position: absolute;
   left: 45px;
   transform: translateX(-50%);
-  top: -64px;
+  top: 27px;
   bottom: -40px;
   width: 2.5px;
   background: linear-gradient(
     180deg,
-    transparent 0%,
-    rgba(148, 163, 184, 0.08) 8%,
-    rgba(148, 163, 184, 0.35) 20%,
-    var(--spine-base) 40%,
+    var(--spine-base) 0%,
     var(--spine-base) 88%,
     rgba(148, 163, 184, 0.2) 95%,
     transparent 100%
@@ -295,6 +292,44 @@ img {
   z-index: 1;
   transition: background var(--transition-normal);
   pointer-events: none;
+  overflow: visible;
+}
+
+/* Circular Entrance Arc from Deep Background (원을 그리듯이 진입하는 원호 SVG) */
+.timeline-entrance-arc {
+  position: absolute;
+  top: -120px;
+  left: -89px; /* Aligns x=0 precisely with the spine center axis */
+  width: 120px;
+  height: 130px;
+  pointer-events: none;
+  overflow: visible;
+}
+
+/* Traveling Pulse Beam along the circular entrance arc */
+.arc-pulse-path {
+  stroke-dasharray: 55 220;
+  stroke-dashoffset: 55;
+  filter: drop-shadow(0 0 6px var(--accent-primary));
+  animation: arc-travel-beam 8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+@keyframes arc-travel-beam {
+  0% {
+    stroke-dashoffset: 55;
+    opacity: 0;
+  }
+  4% {
+    opacity: 0.95;
+  }
+  16% {
+    stroke-dashoffset: -130;
+    opacity: 0;
+  }
+  100% {
+    stroke-dashoffset: -130;
+    opacity: 0;
+  }
 }
 
 /* Ambient Diffuse Depth Glow behind the Core Line (원거리 배경 글로우) */
@@ -322,7 +357,7 @@ img {
 .timeline-spine::after {
   content: "";
   position: absolute;
-  top: -90px;
+  top: -40px;
   left: 50%;
   transform: translateX(-50%);
   width: 2.5px;
@@ -342,14 +377,15 @@ img {
 
 @keyframes stem-travel-beam {
   0% {
-    top: -90px;
+    top: -40px;
     opacity: 0;
   }
   12% {
-    opacity: 0.9;
+    top: 0px;
+    opacity: 0.95;
   }
   88% {
-    opacity: 0.9;
+    opacity: 0.95;
   }
   100% {
     top: calc(100% - 60px);
@@ -358,7 +394,8 @@ img {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .timeline-spine::after {
+  .timeline-spine::after,
+  .arc-pulse-path {
     animation: none;
     display: none;
   }
@@ -412,6 +449,23 @@ img {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
+/* Concentric Orbital Halo under Node (써클 아래에서 원을 그리며 감싸는 궤도 링) */
+.timeline-node::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 1.5px solid var(--spine-base);
+  box-shadow: 0 0 10px var(--spine-glow);
+  z-index: -1;
+  pointer-events: none;
+  transition: all var(--transition-spring);
+}
+
 /* Center Micro-Core Pip on Stem Axis (줄기 중심점 마이크로 코어 노드) */
 .timeline-node::after {
   content: "";
@@ -434,6 +488,13 @@ img {
   background-color: var(--surface);
   transform: scale(1.12);
   box-shadow: 0 0 0 6px var(--accent-subtle), 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+.timeline-item:hover .timeline-node::before,
+.timeline-item:focus-visible .timeline-node::before {
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 16px var(--accent-primary), 0 0 24px var(--accent-subtle);
+  transform: translate(-50%, -50%) scale(1.15);
 }
 
 .timeline-item:hover .timeline-node::after,
@@ -1038,8 +1099,13 @@ img {
   .timeline-spine {
     left: 30px;
     width: 2.5px;
-    top: -20px;
+    top: 18px;
     bottom: -20px;
+  }
+
+  .timeline-entrance-arc {
+    transform: scale(0.75);
+    transform-origin: 89px 120px;
   }
 
   .timeline-spine::before {
@@ -1062,6 +1128,11 @@ img {
     height: 32px;
     border-width: 2px;
     margin-top: 2px;
+  }
+
+  .timeline-node::before {
+    width: 42px;
+    height: 42px;
   }
 
   .timeline-node::after {

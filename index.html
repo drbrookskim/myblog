@@ -64,8 +64,36 @@
     <!-- Connected Node Timeline Section (Mockup Design) -->
     <section class="timeline-section" aria-label="닥터브룩스 핵심 작업 타임라인">
       <div class="timeline-container">
-        <!-- Connecting Vertical Stem Spine Line (줄기) -->
-        <div class="timeline-spine" aria-hidden="true"></div>
+        <!-- Connecting Stem Spine with Circular Entrance Arc from Deep Background (원을 그리듯이) -->
+        <div class="timeline-spine" aria-hidden="true">
+          <svg class="timeline-entrance-arc" viewBox="-90 -120 120 130" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="orbitDepthGrad" x1="0%" y1="0%" x2="80%" y2="100%">
+                <stop offset="0%" stop-color="var(--spine-base)" stop-opacity="0" />
+                <stop offset="30%" stop-color="var(--spine-base)" stop-opacity="0.18" />
+                <stop offset="70%" stop-color="var(--spine-base)" stop-opacity="0.65" />
+                <stop offset="100%" stop-color="var(--spine-base)" stop-opacity="1" />
+              </linearGradient>
+              <linearGradient id="orbitGlowGrad" x1="0%" y1="0%" x2="80%" y2="100%">
+                <stop offset="0%" stop-color="var(--accent-primary)" stop-opacity="0" />
+                <stop offset="40%" stop-color="var(--accent-primary)" stop-opacity="0.3" />
+                <stop offset="100%" stop-color="var(--accent-primary)" stop-opacity="0.85" />
+              </linearGradient>
+              <filter id="distantArcGlow" x="-40%" y="-40%" width="180%" height="180%">
+                <feGaussianBlur stdDeviation="4" />
+              </filter>
+            </defs>
+            <!-- Ambient Diffuse Glow Arc: Sweeping circular arc from deep background -->
+            <path class="arc-glow-path" d="M -50 -90 C -70 -55 0 -25 0 0" 
+                  stroke="url(#orbitGlowGrad)" stroke-width="8" stroke-linecap="round" filter="url(#distantArcGlow)" opacity="0.65" />
+            <!-- Core Circular Arc (원호): Sweeps from background depth into center axis -->
+            <path class="arc-core-path" d="M -50 -90 C -70 -55 0 -25 0 0" 
+                  stroke="url(#orbitDepthGrad)" stroke-width="2.5" stroke-linecap="round" />
+            <!-- Traveling Pulse Beam along the circular arc -->
+            <path class="arc-pulse-path" d="M -50 -90 C -70 -55 0 -25 0 0" 
+                  stroke="var(--accent-primary)" stroke-width="2.5" stroke-linecap="round" opacity="0.9" />
+          </svg>
+        </div>
 
         <!-- Node 1: Essays on the Essence (Direct to Brunch) -->
         <a href="https://brunch.co.kr/@drbrooks" target="_blank" rel="noopener noreferrer" class="timeline-item" data-pillar="essays" aria-label="Essays on the Essence — 브런치 블로그 바로가기">
