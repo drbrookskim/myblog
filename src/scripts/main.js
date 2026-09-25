@@ -17,13 +17,13 @@ const INITIAL_DATA = {
       brunch: "https://brunch.co.kr/@drbrooks",
       services: "https://drbrooks.pages.dev/services/",
       tistory: "https://drbrooks.tistory.com/",
-      twitter: "https://x.com/drbrookskim",
-      linkedin: "https://www.linkedin.com/in/donghyun-kim-68ab2523/details/certifications/"
+      twitter: "https://x.com/drbrookskim"
     },
     stats: {
       careerYears: 12,
       brunchArticles: 193,
       publishedNovels: 3,
+      certifications: 7,
       servicesBuilt: "Interactive Suite"
     },
     keywords: ["기획의 본질", "사용자 관점", "인간의 한계", "현대소설", "SF/미스터리", "인텔리전스 웹"]
@@ -182,6 +182,78 @@ const INITIAL_DATA = {
       url: "https://brunch.co.kr/@drbrooks",
       platform: "브런치",
       featured: false
+    }
+  ],
+  certifications: [
+    {
+      id: "claude-code-in-action",
+      title: "Claude Code in Action",
+      issuer: "Anthropic",
+      recipient: "Douglas KIM",
+      category: "Agentic Coding & AI",
+      badge: "Agentic AI",
+      description: "Anthropic의 차세대 에이전틱 코딩 CLI 도구 Claude Code의 실무 워크플로우 및 자동화 개발 역량 인증",
+      url: "https://verify.skilljar.com/c/yqhchan89t2o"
+    },
+    {
+      id: "mcp-advanced",
+      title: "Model Context Protocol: Advanced Topics",
+      issuer: "Anthropic",
+      recipient: "Douglas KIM",
+      category: "MCP Architecture",
+      badge: "Advanced MCP",
+      description: "Model Context Protocol의 고급 아키텍처, 서버-클라이언트 통신, 분산 컨텍스트 및 보안 통합 역량 인증",
+      url: "https://verify.skilljar.com/c/e3hgwrzowgy4"
+    },
+    {
+      id: "mcp-intro",
+      title: "Introduction to Model Context Protocol",
+      issuer: "Anthropic",
+      recipient: "Douglas KIM",
+      category: "MCP Architecture",
+      badge: "Core Protocol",
+      description: "LLM과 외부 도구/데이터 소스를 표준 규격으로 연결하는 Model Context Protocol의 핵심 메커니즘 인증",
+      url: "https://verify.skilljar.com/c/wvt9rqqkjhyo"
+    },
+    {
+      id: "ai-fluency-foundations",
+      title: "AI Fluency: Framework & Foundations",
+      issuer: "Anthropic",
+      recipient: "Douglas KIM",
+      category: "AI Fluency",
+      badge: "Core Framework",
+      description: "학계 전문가와 공동 설계한 4D AI Fluency 프레임워크 및 안전하고 윤리적인 AI 상호작용 역량 인증",
+      url: "https://verify.skilljar.com/c/m5rvbzv8icbk"
+    },
+    {
+      id: "teaching-ai-fluency",
+      title: "Teaching AI Fluency",
+      issuer: "Anthropic",
+      recipient: "Douglas KIM",
+      category: "AI Education",
+      badge: "Pedagogy",
+      description: "조직과 학습자에게 AI 역량(Fluency)을 체계적으로 전파하고 교육하기 위한 실전 교수법 인증",
+      url: "https://verify.skilljar.com/c/q7zp293pij42"
+    },
+    {
+      id: "ai-fluency-educators",
+      title: "AI Fluency for educators",
+      issuer: "Anthropic",
+      recipient: "Douglas KIM",
+      category: "AI Education",
+      badge: "Educator",
+      description: "교육 현장에서의 책임감 있는 AI 협업 설계, 교육과정 통합 및 비판적 사고 유도 역량 인증",
+      url: "https://verify.skilljar.com/c/sdqvigevzabf"
+    },
+    {
+      id: "ai-fluency-students",
+      title: "AI Fluency for students",
+      issuer: "Anthropic",
+      recipient: "Douglas KIM",
+      category: "AI Fluency",
+      badge: "Applied Learning",
+      description: "학업 성취 및 커리어 설계를 위한 실용적인 AI 도구 활용 및 문제 해결 협업 역량 인증",
+      url: "https://verify.skilljar.com/c/mmu4jytqzemu"
     }
   ]
 };
@@ -547,18 +619,20 @@ class BlogApp {
   async loadData() {
     try {
       // Attempt to load live JSON files if hosted on a web server
-      const [profileRes, novelsRes, servicesRes, articlesRes, transRes] = await Promise.all([
+      const [profileRes, novelsRes, servicesRes, articlesRes, transRes, certsRes] = await Promise.all([
         fetch("src/data/profile.json").then(r => r.ok ? r.json() : null),
         fetch("src/data/novels.json").then(r => r.ok ? r.json() : null),
         fetch("src/data/services.json").then(r => r.ok ? r.json() : null),
         fetch("src/data/articles.json").then(r => r.ok ? r.json() : null),
-        fetch("src/data/translations.json").then(r => r.ok ? r.json() : null)
+        fetch("src/data/translations.json").then(r => r.ok ? r.json() : null),
+        fetch("src/data/certifications.json").then(r => r.ok ? r.json() : null)
       ]);
 
       if (profileRes) this.data.profile = profileRes;
       if (novelsRes) this.data.novels = novelsRes;
       if (servicesRes) this.data.services = servicesRes;
       if (articlesRes) this.data.articles = articlesRes;
+      if (certsRes) this.data.certifications = certsRes;
       if (transRes) {
         this.translations = transRes;
         if (this.translator) this.translator.translations = transRes;
@@ -736,17 +810,36 @@ class BlogApp {
             Cloudflare Pages와 현대적인 인터랙티브 웹 아키텍처를 기반으로, 금융 분석, 투자 시뮬레이션, 인텔리전스 및 생산성을 돕는 웹 서비스를 직접 구축하여 서비스하고 있습니다.
           </p>
 
-          <h3>4. 전문 자격 & 역량 (Certifications & Career)</h3>
+          <h3>4. 공인 AI & MCP 자격증 (Anthropic & Model Context Protocol)</h3>
           <p>
-            12년차 제품기획자로서 글로벌 표준 프로젝트 관리, 데이터 분석 및 클라우드 기술 역량을 지속적으로 연마하고 검증받고 있습니다.
-            취득한 전문 자격증 및 공인 인증 내역은 LinkedIn에서 확인하실 수 있습니다.
+            Anthropic의 최신 에이전틱 AI 코딩, Model Context Protocol(MCP) 분산 아키텍처 및 4D AI Fluency 프레임워크를 공식 이수하고 검증받은 전문 인증 목록입니다. (총 7건)
           </p>
+
+          <div class="certifications-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin: 20px 0 28px 0;">
+            ${(this.data.certifications || []).map(cert => `
+              <div class="cert-card" style="background: var(--surface-card); border: 1px solid var(--border-light); border-radius: var(--radius-lg); padding: 18px; display: flex; flex-direction: column; justify-content: space-between; gap: 12px; transition: transform var(--transition-fast), border-color var(--transition-fast);">
+                <div>
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <span style="font-size: 0.75rem; font-weight: 700; color: var(--accent-primary); background: var(--accent-subtle); padding: 3px 8px; border-radius: var(--radius-full); text-transform: uppercase;">${cert.badge}</span>
+                    <span style="font-size: 0.78rem; color: var(--text-muted); font-weight: 500;">${cert.issuer}</span>
+                  </div>
+                  <h4 style="font-size: 1.02rem; font-weight: 700; margin: 0 0 6px 0; color: var(--text-primary); line-height: 1.35;">${cert.title}</h4>
+                  <p style="font-size: 0.84rem; color: var(--text-secondary); margin: 0; line-height: 1.5;">${cert.description}</p>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 10px; border-top: 1px dashed var(--border-light);">
+                  <span style="font-size: 0.78rem; color: var(--text-dim);">수료: ${cert.recipient}</span>
+                  <a href="${cert.url}" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; gap: 4px; font-size: 0.82rem; font-weight: 600; color: var(--accent-primary); text-decoration: none;" title="Skilljar 공식 인증서 검증">
+                    공식 인증 검증 ↗
+                  </a>
+                </div>
+              </div>
+            `).join("")}
+          </div>
 
           <div style="margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--border-light); display: flex; gap: 16px; flex-wrap: wrap;">
             <a href="https://brunch.co.kr/@drbrooks" target="_blank" rel="noopener noreferrer" class="btn-primary-sm">브런치 바로가기</a>
             <a href="https://drbrooks.pages.dev/services/" target="_blank" rel="noopener noreferrer" class="btn-primary-sm" style="background-color: var(--surface-alt); color: var(--text-primary); border: 1px solid var(--border-subtle);">웹 서비스 포털</a>
             <a href="https://www.munpia.com/novel/detail/530809" target="_blank" rel="noopener noreferrer" class="btn-primary-sm" style="background-color: var(--surface-alt); color: var(--text-primary); border: 1px solid var(--border-subtle);">초강마패 보러가기</a>
-            <a href="https://www.linkedin.com/in/donghyun-kim-68ab2523/details/certifications/" target="_blank" rel="noopener noreferrer" class="btn-primary-sm" style="background-color: var(--surface-alt); color: var(--text-primary); border: 1px solid var(--border-subtle);">LinkedIn 자격 & 이력</a>
           </div>
         </div>
       </div>

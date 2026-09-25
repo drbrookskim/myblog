@@ -8,7 +8,20 @@
 - **GitHub 저장소:** [https://github.com/drbrookskim/myblog.git](https://github.com/drbrookskim/myblog.git)
 - **13개 웹 서비스 허브:** [https://drbrooks.pages.dev/services/](https://drbrooks.pages.dev/services/)
 - **브런치 블로그:** [https://brunch.co.kr/@drbrooks](https://brunch.co.kr/@drbrooks)
-- **LinkedIn 자격증 & 이력:** [https://www.linkedin.com/in/donghyun-kim-68ab2523/details/certifications/](https://www.linkedin.com/in/donghyun-kim-68ab2523/details/certifications/)
+
+---
+
+## 🎓 공인 AI & MCP 자격증 (Anthropic & Model Context Protocol)
+
+| 자격증명 (Certification) | 발급 기관 (Issuer) | 수료자 (Recipient) | 공인 검증 링크 (Verify) |
+|:---|:---:|:---:|:---|
+| **Claude Code in Action** | Anthropic | Douglas KIM | [공식 인증 검증](https://verify.skilljar.com/c/yqhchan89t2o) |
+| **Model Context Protocol: Advanced Topics** | Anthropic | Douglas KIM | [공식 인증 검증](https://verify.skilljar.com/c/e3hgwrzowgy4) |
+| **Introduction to Model Context Protocol** | Anthropic | Douglas KIM | [공식 인증 검증](https://verify.skilljar.com/c/wvt9rqqkjhyo) |
+| **AI Fluency: Framework & Foundations** | Anthropic | Douglas KIM | [공식 인증 검증](https://verify.skilljar.com/c/m5rvbzv8icbk) |
+| **Teaching AI Fluency** | Anthropic | Douglas KIM | [공식 인증 검증](https://verify.skilljar.com/c/q7zp293pij42) |
+| **AI Fluency for educators** | Anthropic | Douglas KIM | [공식 인증 검증](https://verify.skilljar.com/c/sdqvigevzabf) |
+| **AI Fluency for students** | Anthropic | Douglas KIM | [공식 인증 검증](https://verify.skilljar.com/c/mmu4jytqzemu) |
 
 ---
 

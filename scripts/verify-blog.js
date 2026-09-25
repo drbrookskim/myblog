@@ -15,10 +15,12 @@ const novels = JSON.parse(fs.readFileSync(path.join(ROOT_DIR, 'src/data/novels.j
 const services = JSON.parse(fs.readFileSync(path.join(ROOT_DIR, 'src/data/services.json'), 'utf-8'));
 const articles = JSON.parse(fs.readFileSync(path.join(ROOT_DIR, 'src/data/articles.json'), 'utf-8'));
 const translations = JSON.parse(fs.readFileSync(path.join(ROOT_DIR, 'src/data/translations.json'), 'utf-8'));
+const certifications = JSON.parse(fs.readFileSync(path.join(ROOT_DIR, 'src/data/certifications.json'), 'utf-8'));
 
 console.log(`  - Profile loaded: ${profile.name} (${profile.title})`);
 console.log(`  - Novels loaded: ${novels.length} works (${novels.map(n => n.title).join(', ')})`);
 console.log(`  - Services loaded: ${services.length} services (${services.map(s => s.name).join(', ')})`);
+console.log(`  - Certifications loaded: ${certifications.length} credentials (${certifications.map(c => c.title).join(', ')})`);
 console.log(`  - Articles loaded: ${articles.length} posts`);
 console.log(`  - Translations loaded: ${Object.keys(translations.exactMatches).length} exact matches, ${Object.keys(translations.keywords).length} keywords`);
 
@@ -41,7 +43,8 @@ const checks = [
   { name: 'CSS has [data-theme="dark"] tokens', pass: css.includes('[data-theme="dark"]') },
   { name: 'CSS has .translation-tooltip styles', pass: css.includes('.translation-tooltip') },
   { name: 'CSS has responsive media queries for mobile', pass: css.includes('@media (max-width: 640px)') },
-  { name: 'Profile, HTML and JS link to LinkedIn Certifications', pass: Boolean(profile.links && profile.links.linkedin && html.includes('details/certifications/') && js.includes('details/certifications/')) }
+  { name: '7 Anthropic & MCP Certifications registered with Skilljar URLs', pass: certifications.length === 7 && certifications.every(c => c.url.startsWith('https://verify.skilljar.com/c/')) && js.includes('https://verify.skilljar.com/c/') },
+  { name: 'LinkedIn links cleanly removed from profile, html, and js', pass: !profile.links.linkedin && !html.includes('linkedin.com') && !js.includes('linkedin.com') }
 ];
 
 checks.forEach(c => {

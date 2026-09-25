@@ -10,13 +10,13 @@
     "brunch": "https://brunch.co.kr/@drbrooks",
     "services": "https://drbrooks.pages.dev/services/",
     "tistory": "https://drbrooks.tistory.com/",
-    "twitter": "https://x.com/drbrookskim",
-    "linkedin": "https://www.linkedin.com/in/donghyun-kim-68ab2523/details/certifications/"
+    "twitter": "https://x.com/drbrookskim"
   },
   "stats": {
     "careerYears": 12,
     "brunchArticles": 193,
     "publishedNovels": 3,
+    "certifications": 7,
     "servicesBuilt": "Interactive Suite"
   },
   "keywords": ["기획의 본질", "사용자 관점", "인간의 한계", "현대소설", "SF/미스터리", "인텔리전스 웹"]

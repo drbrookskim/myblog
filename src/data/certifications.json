@@ -1,0 +1,72 @@
+[
+  {
+    "id": "claude-code-in-action",
+    "title": "Claude Code in Action",
+    "issuer": "Anthropic",
+    "recipient": "Douglas KIM",
+    "category": "Agentic Coding & AI",
+    "badge": "Agentic AI",
+    "description": "Anthropic의 차세대 에이전틱 코딩 CLI 도구 Claude Code의 실무 워크플로우 및 자동화 개발 역량 인증",
+    "url": "https://verify.skilljar.com/c/yqhchan89t2o"
+  },
+  {
+    "id": "mcp-advanced",
+    "title": "Model Context Protocol: Advanced Topics",
+    "issuer": "Anthropic",
+    "recipient": "Douglas KIM",
+    "category": "MCP Architecture",
+    "badge": "Advanced MCP",
+    "description": "Model Context Protocol의 고급 아키텍처, 서버-클라이언트 통신, 분산 컨텍스트 및 보안 통합 역량 인증",
+    "url": "https://verify.skilljar.com/c/e3hgwrzowgy4"
+  },
+  {
+    "id": "mcp-intro",
+    "title": "Introduction to Model Context Protocol",
+    "issuer": "Anthropic",
+    "recipient": "Douglas KIM",
+    "category": "MCP Architecture",
+    "badge": "Core Protocol",
+    "description": "LLM과 외부 도구/데이터 소스를 표준 규격으로 연결하는 Model Context Protocol의 핵심 메커니즘 인증",
+    "url": "https://verify.skilljar.com/c/wvt9rqqkjhyo"
+  },
+  {
+    "id": "ai-fluency-foundations",
+    "title": "AI Fluency: Framework & Foundations",
+    "issuer": "Anthropic",
+    "recipient": "Douglas KIM",
+    "category": "AI Fluency",
+    "badge": "Core Framework",
+    "description": "학계 전문가와 공동 설계한 4D AI Fluency 프레임워크 및 안전하고 윤리적인 AI 상호작용 역량 인증",
+    "url": "https://verify.skilljar.com/c/m5rvbzv8icbk"
+  },
+  {
+    "id": "teaching-ai-fluency",
+    "title": "Teaching AI Fluency",
+    "issuer": "Anthropic",
+    "recipient": "Douglas KIM",
+    "category": "AI Education",
+    "badge": "Pedagogy",
+    "description": "조직과 학습자에게 AI 역량(Fluency)을 체계적으로 전파하고 교육하기 위한 실전 교수법 인증",
+    "url": "https://verify.skilljar.com/c/q7zp293pij42"
+  },
+  {
+    "id": "ai-fluency-educators",
+    "title": "AI Fluency for educators",
+    "issuer": "Anthropic",
+    "recipient": "Douglas KIM",
+    "category": "AI Education",
+    "badge": "Educator",
+    "description": "교육 현장에서의 책임감 있는 AI 협업 설계, 교육과정 통합 및 비판적 사고 유도 역량 인증",
+    "url": "https://verify.skilljar.com/c/sdqvigevzabf"
+  },
+  {
+    "id": "ai-fluency-students",
+    "title": "AI Fluency for students",
+    "issuer": "Anthropic",
+    "recipient": "Douglas KIM",
+    "category": "AI Fluency",
+    "badge": "Applied Learning",
+    "description": "학업 성취 및 커리어 설계를 위한 실용적인 AI 도구 활용 및 문제 해결 협업 역량 인증",
+    "url": "https://verify.skilljar.com/c/mmu4jytqzemu"
+  }
+]
