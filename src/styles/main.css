@@ -32,6 +32,13 @@
   --card-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05), 0 2px 6px -1px rgba(15, 23, 42, 0.03);
   --card-shadow-hover: 0 12px 30px -4px rgba(15, 23, 42, 0.08), 0 4px 12px -2px rgba(15, 23, 42, 0.05);
 
+  /* Modern Timeline Stem UX Tokens */
+  --spine-base: #cbd5e1;
+  --spine-glow: rgba(2, 132, 199, 0.35);
+  --node-border: #94a3b8;
+  --node-core: #64748b;
+  --node-bg: rgba(255, 255, 255, 0.45);
+
   --font-sans: -apple-system, BlinkMacSystemFont, "Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", "Segoe UI", Roboto, sans-serif;
   --font-serif: "Noto Serif KR", Georgia, "Times New Roman", serif;
 
@@ -74,6 +81,13 @@
 
   --card-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.4);
   --card-shadow-hover: 0 12px 32px -4px rgba(0, 0, 0, 0.6);
+
+  /* Modern Timeline Stem UX Tokens */
+  --spine-base: #334155;
+  --spine-glow: rgba(56, 189, 248, 0.45);
+  --node-border: #475569;
+  --node-core: #94a3b8;
+  --node-bg: rgba(15, 23, 42, 0.55);
 }
 
 /* ==========================================================================
@@ -259,34 +273,103 @@ img {
   position: relative;
 }
 
-/* Vertical Connecting Spine Line (줄기처럼 써클을 관통) */
+/* Vertical Connecting Stem Line (써클을 관통하는 최신 앰비언트 글로우 줄기) */
 .timeline-spine {
   position: absolute;
-  left: 44px;
+  left: 45px;
   transform: translateX(-50%);
-  top: -24px;
-  bottom: -24px;
+  top: -32px;
+  bottom: -32px;
   width: 3px;
-  background-color: #64748b;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    var(--spine-base) 4%,
+    var(--spine-base) 96%,
+    transparent 100%
+  );
   border-radius: 999px;
   z-index: 1;
-  transition: background-color var(--transition-normal);
+  transition: background var(--transition-normal);
   pointer-events: none;
 }
 
-[data-theme="dark"] .timeline-spine {
-  background-color: #475569;
+/* Ambient Diffuse Glow behind the Core Stem Line */
+.timeline-spine::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 9px;
+  height: 100%;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    var(--spine-glow) 8%,
+    var(--spine-glow) 92%,
+    transparent 100%
+  );
+  filter: blur(4px);
+  opacity: 0.65;
+  pointer-events: none;
 }
 
-/* Timeline Item (Clickable Row / Direct Link) */
+/* Dynamic Traveling Light Beam (미래지향적 인터랙티브 펄스 빔) */
+.timeline-spine::after {
+  content: "";
+  position: absolute;
+  top: -80px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 3px;
+  height: 130px;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    var(--accent-primary) 50%,
+    transparent 100%
+  );
+  border-radius: 999px;
+  filter: drop-shadow(0 0 8px var(--accent-primary));
+  opacity: 0.85;
+  animation: stem-travel-beam 7.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  pointer-events: none;
+}
+
+@keyframes stem-travel-beam {
+  0% {
+    top: -80px;
+    opacity: 0;
+  }
+  12% {
+    opacity: 0.9;
+  }
+  88% {
+    opacity: 0.9;
+  }
+  100% {
+    top: calc(100% - 60px);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .timeline-spine::after {
+    animation: none;
+    display: none;
+  }
+}
+
+/* Timeline Item (Clickable Row / Direct Link with Glassmorphism Hover) */
 .timeline-item {
   position: relative;
   display: flex;
   align-items: flex-start;
   gap: 26px;
-  padding: 22px 26px;
+  padding: 24px 26px;
   border-radius: var(--radius-lg);
-  margin-bottom: 20px;
+  margin-bottom: 22px;
   cursor: pointer;
   border: 1px solid transparent;
   transition: background-color var(--transition-normal), border-color var(--transition-normal), box-shadow var(--transition-normal);
@@ -296,37 +379,61 @@ img {
 }
 
 .timeline-item:hover,
-.timeline-item:focus-visible {
+.timeline-item:focus-visible,
+.timeline-item.is-in-view {
   background-color: var(--surface-hover);
-  border-color: var(--border-light);
-  box-shadow: var(--card-shadow);
+  border-color: rgba(14, 165, 233, 0.18);
+  box-shadow: var(--card-shadow-hover);
 }
 
-/* Circular Node on Timeline (써클을 관통하도록 투명 내부 + 정확한 중심 정렬) */
+/* Circular Node on Timeline (최신 글래스모피즘 렌즈 + 써클 관통) */
 .timeline-node {
   position: relative;
   z-index: 2;
-  width: 36px;
-  height: 36px;
+  width: 38px;
+  height: 38px;
   border-radius: var(--radius-full);
-  border: 2.5px solid #64748b;
-  background-color: transparent;
+  border: 2px solid var(--node-border);
+  background-color: var(--node-bg);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   flex-shrink: 0;
   margin-top: 3px;
   transition: transform var(--transition-spring), border-color var(--transition-normal), background-color var(--transition-normal), box-shadow var(--transition-normal);
   box-sizing: border-box;
 }
 
-[data-theme="dark"] .timeline-node {
-  border-color: #94a3b8;
+/* Center Micro-Core Pip on Stem Axis (줄기 중심점 마이크로 코어 노드) */
+.timeline-node::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--node-core);
+  transition: all var(--transition-spring);
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
 }
 
+/* Hover & Active / In-View State */
 .timeline-item:hover .timeline-node,
-.timeline-item:focus-visible .timeline-node {
+.timeline-item:focus-visible .timeline-node,
+.timeline-item.is-in-view .timeline-node {
   border-color: var(--accent-primary);
   background-color: rgba(37, 99, 235, 0.08);
   transform: scale(1.15);
-  box-shadow: 0 0 0 6px var(--accent-subtle);
+  box-shadow: 0 0 0 6px var(--accent-subtle), 0 0 20px var(--spine-glow);
+}
+
+.timeline-item:hover .timeline-node::after,
+.timeline-item:focus-visible .timeline-node::after,
+.timeline-item.is-in-view .timeline-node::after {
+  background-color: var(--accent-primary);
+  transform: translate(-50%, -50%) scale(1.25);
+  box-shadow: 0 0 10px var(--accent-primary), 0 0 18px var(--accent-primary);
 }
 
 .timeline-body {
@@ -336,7 +443,7 @@ img {
 
 .timeline-item:hover .timeline-body,
 .timeline-item:focus-visible .timeline-body {
-  transform: translateX(4px);
+  transform: translateX(6px);
 }
 
 .timeline-header {
@@ -978,10 +1085,19 @@ img {
   }
 
   .timeline-spine {
-    left: 29px;
+    left: 30px;
     width: 2.5px;
-    top: -16px;
-    bottom: -16px;
+    top: -20px;
+    bottom: -20px;
+  }
+
+  .timeline-spine::before {
+    width: 7px;
+  }
+
+  .timeline-spine::after {
+    width: 2.5px;
+    height: 100px;
   }
 
   .timeline-item {
@@ -991,10 +1107,15 @@ img {
   }
 
   .timeline-node {
-    width: 30px;
-    height: 30px;
+    width: 32px;
+    height: 32px;
     border-width: 2px;
     margin-top: 2px;
+  }
+
+  .timeline-node::after {
+    width: 7px;
+    height: 7px;
   }
 
   .timeline-title {
