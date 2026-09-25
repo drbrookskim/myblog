@@ -8,6 +8,7 @@
 - **GitHub 저장소:** [https://github.com/drbrookskim/myblog.git](https://github.com/drbrookskim/myblog.git)
 - **13개 웹 서비스 허브:** [https://drbrooks.pages.dev/services/](https://drbrooks.pages.dev/services/)
 - **브런치 블로그:** [https://brunch.co.kr/@drbrooks](https://brunch.co.kr/@drbrooks)
+- **LinkedIn 자격증 & 이력:** [https://www.linkedin.com/in/donghyun-kim-68ab2523/details/certifications/](https://www.linkedin.com/in/donghyun-kim-68ab2523/details/certifications/)
 
 ---
 

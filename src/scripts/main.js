@@ -17,7 +17,8 @@ const INITIAL_DATA = {
       brunch: "https://brunch.co.kr/@drbrooks",
       services: "https://drbrooks.pages.dev/services/",
       tistory: "https://drbrooks.tistory.com/",
-      twitter: "https://x.com/drbrookskim"
+      twitter: "https://x.com/drbrookskim",
+      linkedin: "https://www.linkedin.com/in/donghyun-kim-68ab2523/details/certifications/"
     },
     stats: {
       careerYears: 12,
@@ -735,10 +736,17 @@ class BlogApp {
             Cloudflare Pages와 현대적인 인터랙티브 웹 아키텍처를 기반으로, 금융 분석, 투자 시뮬레이션, 인텔리전스 및 생산성을 돕는 웹 서비스를 직접 구축하여 서비스하고 있습니다.
           </p>
 
+          <h3>4. 전문 자격 & 역량 (Certifications & Career)</h3>
+          <p>
+            12년차 제품기획자로서 글로벌 표준 프로젝트 관리, 데이터 분석 및 클라우드 기술 역량을 지속적으로 연마하고 검증받고 있습니다.
+            취득한 전문 자격증 및 공인 인증 내역은 LinkedIn에서 확인하실 수 있습니다.
+          </p>
+
           <div style="margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--border-light); display: flex; gap: 16px; flex-wrap: wrap;">
             <a href="https://brunch.co.kr/@drbrooks" target="_blank" rel="noopener noreferrer" class="btn-primary-sm">브런치 바로가기</a>
             <a href="https://drbrooks.pages.dev/services/" target="_blank" rel="noopener noreferrer" class="btn-primary-sm" style="background-color: var(--surface-alt); color: var(--text-primary); border: 1px solid var(--border-subtle);">웹 서비스 포털</a>
             <a href="https://www.munpia.com/novel/detail/530809" target="_blank" rel="noopener noreferrer" class="btn-primary-sm" style="background-color: var(--surface-alt); color: var(--text-primary); border: 1px solid var(--border-subtle);">초강마패 보러가기</a>
+            <a href="https://www.linkedin.com/in/donghyun-kim-68ab2523/details/certifications/" target="_blank" rel="noopener noreferrer" class="btn-primary-sm" style="background-color: var(--surface-alt); color: var(--text-primary); border: 1px solid var(--border-subtle);">LinkedIn 자격 & 이력</a>
           </div>
         </div>
       </div>

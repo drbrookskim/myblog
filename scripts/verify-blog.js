@@ -40,7 +40,8 @@ const checks = [
   { name: 'JS has dark mode persistence via localStorage', pass: js.includes('drbrooks-theme') && js.includes('localStorage') },
   { name: 'CSS has [data-theme="dark"] tokens', pass: css.includes('[data-theme="dark"]') },
   { name: 'CSS has .translation-tooltip styles', pass: css.includes('.translation-tooltip') },
-  { name: 'CSS has responsive media queries for mobile', pass: css.includes('@media (max-width: 640px)') }
+  { name: 'CSS has responsive media queries for mobile', pass: css.includes('@media (max-width: 640px)') },
+  { name: 'Profile, HTML and JS link to LinkedIn Certifications', pass: Boolean(profile.links && profile.links.linkedin && html.includes('details/certifications/') && js.includes('details/certifications/')) }
 ];
 
 checks.forEach(c => {
