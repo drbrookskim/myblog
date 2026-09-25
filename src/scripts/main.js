@@ -1,9 +1,10 @@
 /**
- * Dr. Brooks Blog & Portal - Main Controller & Selection Translation Engine
- * Zero-dependency, accessible, responsive client script
+ * Dr. Brooks Blog & Portal - Core Application Logic
+ * 
+ * Main UI: Connected Node Editorial Timeline matching design specification
+ * Feature Detail Popups: Apple-style fluid modal dialogs for Essays, Novels, Web Services, and Certifications
  */
 
-// Embedded Fallback Data (Enables local file:// opening without CORS restrictions)
 const INITIAL_DATA = {
   profile: {
     name: "닥터브룩스",
@@ -138,45 +139,45 @@ const INITIAL_DATA = {
     {
       id: "user-perspective",
       title: "사용자의 관점: 기획자의 편견을 깨는 질문들",
-      category: "사용자의 관점",
-      excerpt: "사용자는 우리가 의도한 논리대로 움직이지 않는다. 인터페이스 너머 실제 인간이 느끼는 인지적 마찰과 감정의 흐름을 관찰하는 법.",
-      date: "2026-07-02",
+      category: "사용자 관점",
+      excerpt: "내부 회의실에서 완벽해 보였던 가설은 왜 실제 사용자 앞에서는 무너지는가. 사용자의 침묵과 망설임 속에서 진짜 의도를 읽어내는 관찰의 기술.",
+      date: "2026-07-28",
       readTime: "8 min",
-      tags: ["사용자경험", "UX", "고객관점", "행동심리"],
+      tags: ["사용자경험", "UX", "고객관점", "인터뷰"],
       url: "https://brunch.co.kr/@drbrooks",
       platform: "브런치",
       featured: true
     },
     {
       id: "human-limits",
-      title: "인간의 한계와 인터페이스: 결핍이 만드는 새로운 세계",
+      title: "인간의 한계: 피로와 감정, 그리고 시스템의 설계",
       category: "인간의 한계",
-      excerpt: "시각이 차단된 지하 창고의 형사, 보이지 않는 이산화탄소에 질식하는 조직. 인간의 신체적·심리적 한계는 소설의 모티프이자 서비스 설계의 출발점이 된다.",
-      date: "2026-05-19",
+      excerpt: "실수는 개인의 부주의가 아니라 시스템의 결함이다. 인지적 과부하 상태에 놓인 인간의 심리와 이를 지탱하는 안전한 아키텍처에 관하여.",
+      date: "2026-06-19",
       readTime: "7 min",
-      tags: ["인간의한계", "심리", "소설과기획", "스토리텔링"],
+      tags: ["인간공학", "심리학", "한계", "시스템"],
       url: "https://brunch.co.kr/@drbrooks",
       platform: "브런치",
       featured: true
     },
     {
-      id: "writing-and-building",
-      title: "글을 쓰고, 소설을 짓고, 웹 서비스를 만드는 이유",
-      category: "에세이",
-      excerpt: "텍스트로 사유를 정제하고, 소설로 인간의 심연을 직조하며, 코드로 실체화된 도구를 완성하는 삼각 순환의 창작론.",
-      date: "2026-03-10",
+      id: "fiction-and-reality",
+      title: "기획자가 소설을 쓰는 이유: 허구 속에서 만나는 가장 순수한 인간",
+      category: "소설과 기획",
+      excerpt: "데이터와 지표가 말해주지 않는 인간의 결핍과 욕망. 소설이라는 렌즈를 통해 인간을 깊이 이해할 때, 비로소 살아 숨쉬는 서비스를 만들 수 있다.",
+      date: "2026-05-11",
       readTime: "5 min",
-      tags: ["창작", "소설가", "기획자", "웹빌더"],
+      tags: ["소설", "창작", "글쓰기", "사유"],
       url: "https://brunch.co.kr/@drbrooks",
       platform: "브런치",
       featured: false
     },
     {
-      id: "ten-years-reflection",
-      title: "12년차 기획자가 깨달은 '오래 남는 제품'의 조건",
-      category: "일과 직업",
-      excerpt: "유행하는 프레임워크나 툴보다 더 중요한 것은 흔들리지 않는 중심축이다. 12년의 여정 동안 축적된 시행착오와 배움의 기록.",
-      date: "2026-01-28",
+      id: "twelve-years-retrospect",
+      title: "12년의 기획, 기술의 유행이 지나간 자리에 남는 것",
+      category: "기획의 본질",
+      excerpt: "웹 2.0부터 모바일 혁명, 그리고 생성형 AI까지. 수많은 파도 속에서 변하지 않는 것은 결국 '사람의 문제를 해결한다'는 가장 단순하고 명쾌한 원칙이었다.",
+      date: "2026-04-03",
       readTime: "10 min",
       tags: ["커리어", "회고", "12년차", "일의태도"],
       url: "https://brunch.co.kr/@drbrooks",
@@ -258,347 +259,66 @@ const INITIAL_DATA = {
   ]
 };
 
-// Bilingual Translations Corpus for Text Selection
-const INITIAL_TRANSLATIONS = {
-  exactMatches: {
-    "닥터브룩스": "Dr. Brooks",
-    "안녕하세요. 닥터브룩스입니다.": "Hello, I am Dr. Brooks.",
-    "12년차 제품기획자": "12-Year Product Manager",
-    "소설가": "Novelist / Fiction Writer",
-    "웹 서비스 빌더": "Web Service Builder",
-    "기획의 ‘본질’, 사용자의 ‘관점’, 그리고 인간의 ‘한계’에 대해 관심이 많습니다.": "I am deeply intrigued by the 'essence' of product planning, the user's 'perspective', and the 'limits' of humanity.",
-    "기획의 ‘본질’, 사용자의 ‘관점’, 그리고 인간의 ‘한계' 에 대해 관심이 많습니다.": "I am deeply intrigued by the 'essence' of product planning, the user's 'perspective', and the 'limits' of humanity.",
-    "그에 관한 글도, 소설도, 웹 서비스도 만듭니다.": "I write essays, author novels, and build web services exploring these themes.",
-    "제품기획 경력": "Product Management Experience",
-    "브런치 연재 글": "Essays Serialized on Brunch",
-    "문피아 연재 소설": "Novels Serialized on Munpia",
-    "웹 서비스 모음": "Interactive Web Services Suite",
-    "글 (Essays)": "Essays & Thoughts",
-    "기획의 본질과 사용자 경험, 일과 심리에 관한 깊이 있는 사유. 카카오 브런치에서 193편의 글을 연재하고 있습니다.": "Deep reflections on product essence, UX, career, and psychology. Serializing 193 essays on Kakao Brunch.",
-    "브런치 블로그 방문 →": "Visit Brunch Blog →",
-    "소설 (Novels)": "Novels & Stories",
-    "인간의 한계와 감각, 조직의 역학을 다룬 이야기. 장편 《초강마패》, 단편 《이산화탄소 조직》, 《우블리에트의 파수꾼》을 집필했습니다.": "Stories delving into human limits, sensory perception, and corporate dynamics. Authored the full-length novel 'Chogang Mapae' and short stories 'CO2 Organization' and 'The Watcher of the Oubliette'.",
-    "작품 쇼케이스 보기 →": "View Novel Showcase →",
-    "웹 서비스 (Services)": "Web Services & Products",
-    "생각을 구현한 실체. 금융 분석, 투자 시나리오, AI 생산성 툴 등 실제 사용자의 편익을 창출하는 지능형 웹 애플리케이션 모음입니다.": "Tangible realization of ideas. A suite of intelligent web applications delivering real user utility across financial analysis, investment scenarios, and AI productivity.",
-    "Dr. Brooks Services →": "Explore Dr. Brooks Services →",
-    "초강마패": "Chogang Mapae (The Transcendental Royal Badge)",
-    "장편 웹소설": "Full-Length Web Novel",
-    "의문의 '마패'를 손에 넣은 흙수저 취준생이 초월적인 마패의 능력으로 부자가 된다.": "An underprivileged job seeker obtains a mysterious royal badge ('Mapae') and rises to wealth through its transcendental powers.",
-    "치열한 현실과 초월적 상상력의 만남. 의문의 마패를 손에 쥔 주인공이 한계를 돌파하며 부와 새로운 질서를 일궈나가는 흡인력 있는 현대판타지 서사.": "Where stark reality meets transcendental imagination. A compelling modern fantasy narrative of a protagonist breaking boundaries to forge wealth and a new order.",
-    "작품 읽기 →": "Read on Munpia →",
-    "이산화탄소 조직": "CO2 Organization (The Carbon Dioxide Workplace)",
-    "직장 드라마": "Office Drama",
-    "경력직이 새로운 조직에 합류한 뒤, 낯선 환경 속에서 겪게 되는 따돌림을 극복하며 자신만의 자리를 찾아가는 이야기.": "A story of an experienced hire overcoming ostracization in an unfamiliar corporate environment to carve out their own rightful place.",
-    "12년차 기획자의 날카로운 관찰력이 돋보이는 소설. 보이지 않는 배제와 질식할 것 같은 조직 분위기(이산화탄소) 속에서 스스로의 전문성과 단단함으로 길을 찾는 경력직의 현실적 극복기.": "A novel shaped by the sharp observation of a 12-year PM. A realistic survival tale of an experienced recruit navigating invisible exclusion and a suffocating corporate climate (carbon dioxide) with quiet resilience and expertise.",
-    "우블리에트의 파수꾼": "The Watcher of the Oubliette",
-    "감각 추리 미스터리": "Sensory Mystery / Whodunit",
-    "우연히 발견한 지하 창고에서 시각이 단절된 채, 청각만을 통해 사건을 해결해 나가는 형사의 이야기입니다.": "A gripping tale of a detective trapped in a subterranean vault without sight, solving an intricate crime relying purely on auditory senses.",
-    "인간의 한계 상황에 대한 집요한 탐구. 빛 하나 들지 않는 '우블리에트(잊혀진 지하 감옥)'에서 오직 귀로 전달되는 소리의 파동과 단서만으로 어둠 속 진실을 꿰뚫는 감각적 하드보일드 미스터리.": "A relentless exploration of extreme human constraints. A hard-boiled sensory mystery penetrating the truth in pitch-black darkness relying solely on sound waves and auditory clues.",
-    "금융, 투자, AI, 생산성을 위한 인터랙티브 웹 서비스 모음": "An interactive suite of web services for finance, investment, AI, and productivity.",
-    "복잡한 데이터와 금융/AI 모델을 직관적인 UI로 재해석하여, 사용자가 능동적으로 인사이트를 도출할 수 있도록 돕는 지능형 웹 애플리케이션 플랫폼입니다.": "An intelligent web application platform reinterpreting complex financial/AI data into intuitive UIs, empowering users to actively extract insights.",
-    "대표 서비스 포털": "Flagship Portal",
-    "서비스 방문 →": "Visit Live Service →",
-    "기획의 본질: 기능의 나열이 아니라 가치의 발견": "Essence of Planning: Discovering Value, Not Listing Features",
-    "사용자의 관점: 기획자의 편견을 깨는 질문들": "User's Perspective: Questions That Break the Planner's Bias",
-    "인간의 한계와 인터페이스: 결핍이 만드는 새로운 세계": "Human Limits & Interfaces: The New Worlds Born from Scarcity",
-    "글을 쓰고, 소설을 짓고, 웹 서비스를 만드는 이유": "Why I Write Essays, Craft Novels, and Build Web Services",
-    "12년차 기획자가 깨달은 '오래 남는 제품'의 조건": "Conditions of Enduring Products: Reflections from a 12-Year PM",
-    "전체 (All)": "All",
-    "글 & 생각 (Essays)": "Essays & Thoughts",
-    "소설 (Novels)": "Novels & Stories",
-    "웹서비스 (Services)": "Web Services",
-    "소개 (About)": "About"
-  },
-  keywords: {
-    "본질": "Essence",
-    "관점": "Perspective",
-    "한계": "Limits / Constraints",
-    "기획": "Product Planning",
-    "기획자": "Product Planner / PM",
-    "사용자": "User",
-    "소설": "Novel / Fiction",
-    "단편": "Short Story",
-    "장편": "Full-Length Novel",
-    "문피아": "Munpia",
-    "브런치": "Brunch",
-    "서비스": "Service / Product",
-    "금융": "Finance",
-    "투자": "Investment",
-    "생산성": "Productivity",
-    "인텔리전스": "Intelligence",
-    "추리": "Mystery / Detective",
-    "형사": "Detective",
-    "창고": "Vault / Storage",
-    "경력직": "Experienced Hire",
-    "조직": "Organization / Workplace",
-    "따돌림": "Ostracization / Exclusion",
-    "마패": "Royal Badge (Mapae)",
-    "취준생": "Job Seeker",
-    "우블리에트": "Oubliette (Underground Dungeon)"
-  }
-};
-
 /**
- * SelectionTranslator
- * Detects user text selection via mouse drag and displays an intelligent floating tooltip with the English translation.
- */
-class SelectionTranslator {
-  constructor(translations) {
-    this.translations = translations || INITIAL_TRANSLATIONS;
-    this.tooltip = null;
-    this.createTooltipElement();
-    this.bindEvents();
-  }
-
-  createTooltipElement() {
-    if (document.getElementById("selectionTooltip")) {
-      this.tooltip = document.getElementById("selectionTooltip");
-      return;
-    }
-
-    this.tooltip = document.createElement("div");
-    this.tooltip.className = "translation-tooltip";
-    this.tooltip.id = "selectionTooltip";
-    this.tooltip.innerHTML = `
-      <div class="tooltip-header">
-        <span class="tooltip-lang-badge">
-          <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" />
-          </svg>
-          EN Version
-        </span>
-        <div class="tooltip-actions">
-          <button class="tooltip-action-btn" id="tooltipCopyBtn" title="영문 복사">
-            <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-            </svg>
-            <span id="tooltipCopyText">복사</span>
-          </button>
-          <button class="tooltip-action-btn" id="tooltipCloseBtn" title="닫기">✕</button>
-        </div>
-      </div>
-      <div class="tooltip-body" id="tooltipTranslatedText"></div>
-      <div class="tooltip-original" id="tooltipOriginalText"></div>
-    `;
-    document.body.appendChild(this.tooltip);
-
-    this.tooltip.querySelector("#tooltipCloseBtn").addEventListener("click", () => this.hideTooltip());
-    this.tooltip.querySelector("#tooltipCopyBtn").addEventListener("click", () => this.copyTranslation());
-  }
-
-  bindEvents() {
-    // Mouse Drag Selection
-    document.addEventListener("mouseup", (e) => {
-      if (this.tooltip && this.tooltip.contains(e.target)) return;
-      setTimeout(() => this.handleSelection(e), 20);
-    });
-
-    // Touch Selection on Mobile Devices
-    document.addEventListener("touchend", (e) => {
-      if (this.tooltip && this.tooltip.contains(e.target)) return;
-      setTimeout(() => this.handleSelection(e), 60);
-    });
-
-    // Close on Outside Click
-    document.addEventListener("mousedown", (e) => {
-      if (this.tooltip && !this.tooltip.contains(e.target)) {
-        const selection = window.getSelection();
-        if (!selection || selection.toString().trim() === "") {
-          this.hideTooltip();
-        }
-      }
-    });
-
-    // Close on Escape Key
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape") this.hideTooltip();
-    });
-  }
-
-  handleSelection(e) {
-    const selection = window.getSelection();
-    if (!selection || selection.rangeCount === 0) {
-      this.hideTooltip();
-      return;
-    }
-
-    const text = selection.toString().trim();
-    if (!text || text.length < 2) {
-      this.hideTooltip();
-      return;
-    }
-
-    const range = selection.getRangeAt(0);
-    const rect = range.getBoundingClientRect();
-
-    if (rect.width === 0 || rect.height === 0) {
-      this.hideTooltip();
-      return;
-    }
-
-    const translation = this.translate(text);
-    if (!translation) {
-      this.hideTooltip();
-      return;
-    }
-
-    this.showTooltip(translation, text, rect);
-  }
-
-  translate(koreanText) {
-    const clean = koreanText.replace(/\s+/g, " ").trim();
-    const normalized = clean.replace(/[‘’]/g, "'").replace(/[“”]/g, '"');
-
-    // 1. Exact Match
-    if (this.translations.exactMatches[clean]) {
-      return this.translations.exactMatches[clean];
-    }
-    if (this.translations.exactMatches[normalized]) {
-      return this.translations.exactMatches[normalized];
-    }
-
-    // 2. Substring or Partial Match
-    for (const [key, val] of Object.entries(this.translations.exactMatches)) {
-      if (clean.length > 5 && key.includes(clean)) {
-        return val;
-      }
-      if (key.length > 5 && clean.includes(key)) {
-        return val;
-      }
-    }
-
-    // 3. Keyword Match
-    if (this.translations.keywords[clean]) {
-      return this.translations.keywords[clean];
-    }
-
-    // 4. Combined Keywords Match
-    let foundKeywords = [];
-    for (const [k, v] of Object.entries(this.translations.keywords)) {
-      if (clean.includes(k) && !foundKeywords.includes(v)) {
-        foundKeywords.push(v);
-      }
-    }
-    if (foundKeywords.length > 0) {
-      return foundKeywords.join(" · ");
-    }
-
-    // 5. Intelligent Fallback for arbitrary phrases
-    return `"${clean}" (English translation will appear here)`;
-  }
-
-  showTooltip(translatedText, originalText, rect) {
-    const translatedEl = this.tooltip.querySelector("#tooltipTranslatedText");
-    const originalEl = this.tooltip.querySelector("#tooltipOriginalText");
-    const copyText = this.tooltip.querySelector("#tooltipCopyText");
-
-    translatedEl.textContent = translatedText;
-    const truncatedOriginal = originalText.length > 38 ? originalText.slice(0, 38) + "..." : originalText;
-    originalEl.textContent = `선택: "${truncatedOriginal}"`;
-    copyText.textContent = "복사";
-
-    const scrollX = window.scrollX || window.pageXOffset;
-    const scrollY = window.scrollY || window.pageYOffset;
-
-    this.tooltip.style.display = "block";
-    this.tooltip.style.visibility = "hidden";
-    
-    // Calculate layout dimensions
-    const tooltipWidth = this.tooltip.offsetWidth;
-    const tooltipHeight = this.tooltip.offsetHeight;
-    this.tooltip.style.visibility = "visible";
-
-    let left = rect.left + scrollX + (rect.width / 2) - (tooltipWidth / 2);
-    // Boundary check for viewport width
-    left = Math.max(16, Math.min(left, window.innerWidth - tooltipWidth - 24));
-
-    // Place tooltip above selection by default
-    let top = rect.top + scrollY - tooltipHeight - 12;
-
-    // Flip below if not enough room on top
-    if (rect.top - tooltipHeight - 12 < 10) {
-      top = rect.bottom + scrollY + 12;
-    }
-
-    this.tooltip.style.left = `${left}px`;
-    this.tooltip.style.top = `${top}px`;
-
-    requestAnimationFrame(() => {
-      this.tooltip.classList.add("show");
-    });
-  }
-
-  hideTooltip() {
-    if (!this.tooltip) return;
-    this.tooltip.classList.remove("show");
-  }
-
-  copyTranslation() {
-    const text = this.tooltip.querySelector("#tooltipTranslatedText").textContent;
-    if (navigator.clipboard) {
-      navigator.clipboard.writeText(text).then(() => {
-        const copyText = this.tooltip.querySelector("#tooltipCopyText");
-        copyText.textContent = "완료!";
-        setTimeout(() => { copyText.textContent = "복사"; }, 2000);
-      });
-    }
-  }
-}
-
-/**
- * BlogApp
- * Main application coordinator managing themes, data, tabs, and translators.
+ * Main application coordinator managing themes, data, and interactive feature detail popups.
  */
 class BlogApp {
   constructor() {
     this.data = INITIAL_DATA;
-    this.translations = INITIAL_TRANSLATIONS;
-    this.currentTab = "all";
+    this.currentModal = null;
     this.initTheme();
     this.initElements();
     this.bindEvents();
     this.loadData();
     this.handleInitialHash();
-    this.translator = new SelectionTranslator(this.translations);
   }
 
   initTheme() {
     const savedTheme = localStorage.getItem("drbrooks-theme");
     const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
     const initialTheme = savedTheme || (prefersDark ? "dark" : "light");
+
     document.documentElement.setAttribute("data-theme", initialTheme);
-    this.updateThemeIcon(initialTheme);
+    this.updateThemeToggleIcon(initialTheme);
   }
 
   toggleTheme() {
-    const currentTheme = document.documentElement.getAttribute("data-theme") || "light";
+    const currentTheme = document.documentElement.getAttribute("data-theme");
     const nextTheme = currentTheme === "dark" ? "light" : "dark";
+
     document.documentElement.setAttribute("data-theme", nextTheme);
     localStorage.setItem("drbrooks-theme", nextTheme);
-    this.updateThemeIcon(nextTheme);
+    this.updateThemeToggleIcon(nextTheme);
   }
 
-  updateThemeIcon(theme) {
-    const btn = document.getElementById("themeToggleBtn");
-    if (!btn) return;
+  updateThemeToggleIcon(theme) {
+    if (!this.themeToggleBtn) return;
     if (theme === "dark") {
-      btn.innerHTML = `<svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-      </svg>`;
-      btn.setAttribute("aria-label", "라이트 모드로 전환");
+      this.themeToggleBtn.innerHTML = `
+        <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+        </svg>
+      `;
+      this.themeToggleBtn.setAttribute("aria-label", "라이트 모드로 전환");
     } else {
-      btn.innerHTML = `<svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-      </svg>`;
-      btn.setAttribute("aria-label", "다크 모드로 전환");
+      this.themeToggleBtn.innerHTML = `
+        <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+        </svg>
+      `;
+      this.themeToggleBtn.setAttribute("aria-label", "다크 모드로 전환");
     }
   }
 
   initElements() {
-    this.feedContainer = document.getElementById("feedContent");
-    this.tabButtons = document.querySelectorAll(".tab-btn");
     this.themeToggleBtn = document.getElementById("themeToggleBtn");
+    this.timelineItems = document.querySelectorAll(".timeline-item");
+    this.modalBackdrop = document.getElementById("detailModalBackdrop");
+    this.modalDialog = document.getElementById("detailModalDialog");
+    this.modalTitle = document.getElementById("modalTitle");
+    this.modalCategoryBadge = document.getElementById("modalCategoryBadge");
+    this.modalBody = document.getElementById("modalBody");
+    this.modalCloseBtn = document.getElementById("modalCloseBtn");
   }
 
   bindEvents() {
@@ -606,11 +326,35 @@ class BlogApp {
       this.themeToggleBtn.addEventListener("click", () => this.toggleTheme());
     }
 
-    this.tabButtons.forEach(btn => {
-      btn.addEventListener("click", (e) => {
-        const tab = e.currentTarget.getAttribute("data-tab");
-        this.switchTab(tab);
+    // Timeline item click & keydown handlers
+    this.timelineItems.forEach(item => {
+      const pillar = item.getAttribute("data-pillar");
+      item.addEventListener("click", () => this.openModal(pillar));
+      item.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          this.openModal(pillar);
+        }
       });
+    });
+
+    // Modal close events
+    if (this.modalCloseBtn) {
+      this.modalCloseBtn.addEventListener("click", () => this.closeModal());
+    }
+
+    if (this.modalBackdrop) {
+      this.modalBackdrop.addEventListener("click", (e) => {
+        if (e.target === this.modalBackdrop) {
+          this.closeModal();
+        }
+      });
+    }
+
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && this.currentModal) {
+        this.closeModal();
+      }
     });
 
     window.addEventListener("hashchange", () => this.handleInitialHash());
@@ -618,13 +362,11 @@ class BlogApp {
 
   async loadData() {
     try {
-      // Attempt to load live JSON files if hosted on a web server
-      const [profileRes, novelsRes, servicesRes, articlesRes, transRes, certsRes] = await Promise.all([
+      const [profileRes, novelsRes, servicesRes, articlesRes, certsRes] = await Promise.all([
         fetch("src/data/profile.json").then(r => r.ok ? r.json() : null),
         fetch("src/data/novels.json").then(r => r.ok ? r.json() : null),
         fetch("src/data/services.json").then(r => r.ok ? r.json() : null),
         fetch("src/data/articles.json").then(r => r.ok ? r.json() : null),
-        fetch("src/data/translations.json").then(r => r.ok ? r.json() : null),
         fetch("src/data/certifications.json").then(r => r.ok ? r.json() : null)
       ]);
 
@@ -633,221 +375,151 @@ class BlogApp {
       if (servicesRes) this.data.services = servicesRes;
       if (articlesRes) this.data.articles = articlesRes;
       if (certsRes) this.data.certifications = certsRes;
-      if (transRes) {
-        this.translations = transRes;
-        if (this.translator) this.translator.translations = transRes;
-      }
     } catch (e) {
       console.log("Using embedded dataset (local environment)");
     }
-    this.render();
   }
 
   handleInitialHash() {
     const hash = window.location.hash.replace("#", "");
-    if (["all", "essays", "novels", "services", "about"].includes(hash)) {
-      this.switchTab(hash, false);
-    } else {
-      this.render();
+    if (["essays", "novels", "services", "certifications"].includes(hash)) {
+      this.openModal(hash, false);
     }
   }
 
-  switchTab(tabName, updateHash = true) {
-    this.currentTab = tabName;
-    this.tabButtons.forEach(b => {
-      const isTarget = b.getAttribute("data-tab") === tabName;
-      b.classList.toggle("active", isTarget);
-      b.setAttribute("aria-selected", isTarget ? "true" : "false");
-    });
+  openModal(pillar, updateHash = true) {
+    if (!this.modalBackdrop || !this.modalBody) return;
+
+    this.currentModal = pillar;
+    let categoryBadgeText = "";
+    let titleText = "";
+    let contentHtml = "";
+
+    switch (pillar) {
+      case "essays":
+        categoryBadgeText = "ESSAYS & THOUGHTS";
+        titleText = "Essays on the Essence (글 & 생각)";
+        contentHtml = this.renderEssaysModal();
+        break;
+
+      case "novels":
+        categoryBadgeText = "LITERATURE & FICTION";
+        titleText = "Novels (소설 작품 쇼케이스)";
+        contentHtml = this.renderNovelsModal();
+        break;
+
+      case "services":
+        categoryBadgeText = "AUTONOMOUS WEB";
+        titleText = "Web Services (지능형 웹 서비스 포털)";
+        contentHtml = this.renderServicesModal();
+        break;
+
+      case "certifications":
+        categoryBadgeText = "ANTHROPIC & MCP CREDENTIALS";
+        titleText = "Certifications (공인 AI & MCP 자격증)";
+        contentHtml = this.renderCertificationsModal();
+        break;
+
+      default:
+        return;
+    }
+
+    this.modalCategoryBadge.textContent = categoryBadgeText;
+    this.modalTitle.textContent = titleText;
+    this.modalBody.innerHTML = contentHtml;
+
+    // Show modal & prevent background scrolling
+    this.modalBackdrop.classList.add("active");
+    this.modalBackdrop.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
 
     if (updateHash) {
-      history.pushState(null, null, `#${tabName}`);
-    }
-
-    this.render();
-  }
-
-  render() {
-    if (!this.feedContainer) return;
-
-    switch (this.currentTab) {
-      case "essays":
-        this.renderEssays();
-        break;
-      case "novels":
-        this.renderNovels();
-        break;
-      case "services":
-        this.renderServices();
-        break;
-      case "about":
-        this.renderAbout();
-        break;
-      case "all":
-      default:
-        this.renderAll();
-        break;
+      history.pushState(null, null, `#${pillar}`);
     }
   }
 
-  renderAll() {
-    const html = `
-      <div class="feed-section">
-        <div class="section-header">
-          <h3 class="section-title">소설 작품 쇼케이스</h3>
-          <p class="section-subtitle">기획자의 관찰력과 인간의 한계를 다룬 문피아 연재 작품</p>
-        </div>
-        <div class="cards-grid" style="margin-bottom: 48px;">
-          ${this.data.novels.map(n => this.createNovelCard(n)).join("")}
-        </div>
+  closeModal() {
+    if (!this.modalBackdrop) return;
 
-        <div class="section-header">
-          <h3 class="section-title">인터랙티브 웹 서비스</h3>
-          <p class="section-subtitle">금융, 투자, AI, 생산성을 위한 지능형 웹 애플리케이션 플랫폼</p>
-        </div>
-        <div class="cards-grid single-col" style="margin-bottom: 48px;">
-          ${this.data.services.slice(0, 1).map(s => this.createServiceCard(s)).join("")}
-        </div>
+    this.modalBackdrop.classList.remove("active");
+    this.modalBackdrop.setAttribute("aria-hidden", "true");
+    document.body.style.overflow = "";
+    this.currentModal = null;
 
-        <div class="section-header">
-          <div style="display: flex; justify-content: space-between; align-items: flex-end;">
-            <div>
-              <h3 class="section-title">생각과 기록 (브런치 아카이브)</h3>
-              <p class="section-subtitle">기획의 본질과 인간의 심연에 대한 193편의 연재 기록</p>
-            </div>
-            <a href="https://brunch.co.kr/@drbrooks" target="_blank" rel="noopener noreferrer" class="pillar-link">
-              브런치 전체보기 &rarr;
-            </a>
-          </div>
-        </div>
-        <div class="cards-grid">
-          ${this.data.articles.slice(0, 4).map(a => this.createArticleCard(a)).join("")}
-        </div>
-      </div>
-    `;
-    this.feedContainer.innerHTML = html;
+    // Clear hash without reloading
+    if (window.location.hash) {
+      history.pushState(null, null, window.location.pathname + window.location.search);
+    }
   }
 
-  renderNovels() {
-    const html = `
-      <div class="feed-section">
-        <div class="section-header">
-          <h3 class="section-title">소설 작품 (Novels & Stories)</h3>
-          <p class="section-subtitle">문피아 연재 장편 및 감각적 리얼리티를 다룬 단편 작품 모음</p>
-        </div>
-        <div class="cards-grid single-col">
-          ${this.data.novels.map(n => this.createNovelCard(n, true)).join("")}
-        </div>
+  renderEssaysModal() {
+    const articles = this.data.articles || [];
+    return `
+      <div class="modal-banner">
+        <p class="modal-banner-desc">
+          기획의 본질과 사용자 경험, 일과 심리에 관한 사유. 카카오 브런치에서 193편의 글을 연재하고 있습니다.
+        </p>
+        <a href="https://brunch.co.kr/@drbrooks" target="_blank" rel="noopener noreferrer" class="btn-primary-sm">
+          브런치 블로그 방문 (@drbrooks) &rarr;
+        </a>
+      </div>
+      <div class="modal-card-list">
+        ${articles.map(article => this.createArticleCard(article)).join("")}
       </div>
     `;
-    this.feedContainer.innerHTML = html;
   }
 
-  renderServices() {
-    const html = `
-      <div class="feed-section">
-        <div class="section-header">
-          <h3 class="section-title">Dr. Brooks Services</h3>
-          <p class="section-subtitle">Autonomous Web Architecture 기반 인터랙티브 인텔리전스 플랫폼</p>
-        </div>
-        <div class="cards-grid single-col">
-          ${this.data.services.map(s => this.createServiceCard(s)).join("")}
-        </div>
+  renderNovelsModal() {
+    const novels = this.data.novels || [];
+    return `
+      <div class="modal-banner">
+        <p class="modal-banner-desc">
+          인간의 한계와 감각, 조직의 역학을 탐구한 문학 작품입니다. 장편 1작품, 단편 2작품을 문피아에서 열람하실 수 있습니다.
+        </p>
+      </div>
+      <div class="modal-card-list">
+        ${novels.map(novel => this.createNovelCard(novel, true)).join("")}
       </div>
     `;
-    this.feedContainer.innerHTML = html;
   }
 
-  renderEssays() {
-    const html = `
-      <div class="feed-section">
-        <div class="section-header">
-          <div style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 12px;">
-            <div>
-              <h3 class="section-title">글과 생각 (Essays & Thoughts)</h3>
-              <p class="section-subtitle">브런치 193편의 글 중 기획과 사용자, 인간의 한계를 다룬 핵심 글 모음</p>
-            </div>
-            <a href="https://brunch.co.kr/@drbrooks" target="_blank" rel="noopener noreferrer" class="btn-primary-sm">
-              브런치 프로필 방문 (193편) &rarr;
-            </a>
-          </div>
-        </div>
-        <div class="cards-grid">
-          ${this.data.articles.map(a => this.createArticleCard(a)).join("")}
+  renderServicesModal() {
+    const services = this.data.services || [];
+    return `
+      <div class="modal-banner">
+        <p class="modal-banner-desc">
+          생각에만 머물지 않고 실제로 작동하는 프로덕트를 만듭니다. Cloudflare Pages 기반의 13개 인터랙티브 웹 서비스 쇼케이스 포털을 탐색해 보세요.
+        </p>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 8px;">
+          <a href="services/" target="_blank" rel="noopener noreferrer" class="btn-primary-sm">
+            Dr. Brooks Services 허브 포털 열기 (/services/) &rarr;
+          </a>
+          <a href="about.html" target="_blank" rel="noopener noreferrer" class="btn-primary-sm" style="background-color: var(--surface-alt); color: var(--text-primary); border: 1px solid var(--border-subtle);">
+            3D 아키텍처 상세 보기 (/about.html) &rarr;
+          </a>
         </div>
       </div>
-    `;
-    this.feedContainer.innerHTML = html;
-  }
-
-  renderAbout() {
-    const html = `
-      <div class="feed-section">
-        <div class="about-card">
-          <h3>안녕하세요. 닥터브룩스입니다.</h3>
-          <div class="about-quote">
-            "12년차 제품기획자. 기획의 ‘본질’, 사용자의 ‘관점’, 그리고 인간의 ‘한계’에 대해 관심이 많습니다.<br>
-            그에 관한 글도, 소설도, 웹 서비스도 만듭니다."
-          </div>
-
-          <h3>1. 기획의 본질 (The Essence)</h3>
-          <p>
-            12년 동안 다양한 IT 프로덕트를 기획하고 이끌며 수많은 기술과 트렌드의 명멸을 목격했습니다.
-            화려한 프레임워크나 복잡한 기능보다 중요한 것은 '사용자가 진정으로 해결하고자 하는 결핍'에 닿아있는가입니다.
-            기획의 본질에 대해 치열하게 고민하고 그 과정에서 얻은 인사이트를 브런치와 블로그에 정제된 글로 남깁니다.
-          </p>
-
-          <h3>2. 인간의 한계와 소설 (The Human Condition)</h3>
-          <p>
-            기획자가 다루는 대상은 결국 불완전하고 감정적인 '인간'입니다.
-            인간의 신체적 한계, 감각의 결핍, 그리고 조직 내에서의 고립과 따돌림 같은 한계 상황을 소설이라는 형식으로 탐구합니다.
-            장편 <초강마패>의 초월적 마패, 단편 <우블리에트의 파수꾼>의 시각 단절 형사, <이산화탄소 조직>의 경력직 생존기는 모두 인간의 조건에 대한 집요한 관찰에서 출발했습니다.
-          </p>
-
-          <h3>3. 사용자의 관점을 실현한 웹 서비스 (Autonomous Web)</h3>
-          <p>
-            생각에만 머물지 않고 실제로 작동하는 프로덕트를 만듭니다.
-            Cloudflare Pages와 현대적인 인터랙티브 웹 아키텍처를 기반으로, 금융 분석, 투자 시뮬레이션, 인텔리전스 및 생산성을 돕는 웹 서비스를 직접 구축하여 서비스하고 있습니다.
-          </p>
-
-          <h3>4. 공인 AI & MCP 자격증 (Anthropic & Model Context Protocol)</h3>
-          <p>
-            Anthropic의 최신 에이전틱 AI 코딩, Model Context Protocol(MCP) 분산 아키텍처 및 4D AI Fluency 프레임워크를 공식 이수하고 검증받은 전문 인증 목록입니다. (총 7건)
-          </p>
-
-          <div class="certifications-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin: 20px 0 28px 0;">
-            ${(this.data.certifications || []).map(cert => `
-              <div class="cert-card" style="background: var(--surface-card); border: 1px solid var(--border-light); border-radius: var(--radius-lg); padding: 18px; display: flex; flex-direction: column; justify-content: space-between; gap: 12px; transition: transform var(--transition-fast), border-color var(--transition-fast);">
-                <div>
-                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                    <span style="font-size: 0.75rem; font-weight: 700; color: var(--accent-primary); background: var(--accent-subtle); padding: 3px 8px; border-radius: var(--radius-full); text-transform: uppercase;">${cert.badge}</span>
-                    <span style="font-size: 0.78rem; color: var(--text-muted); font-weight: 500;">${cert.issuer}</span>
-                  </div>
-                  <h4 style="font-size: 1.02rem; font-weight: 700; margin: 0 0 6px 0; color: var(--text-primary); line-height: 1.35;">${cert.title}</h4>
-                  <p style="font-size: 0.84rem; color: var(--text-secondary); margin: 0; line-height: 1.5;">${cert.description}</p>
-                </div>
-                <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 10px; border-top: 1px dashed var(--border-light);">
-                  <span style="font-size: 0.78rem; color: var(--text-dim);">수료: ${cert.recipient}</span>
-                  <a href="${cert.url}" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; gap: 4px; font-size: 0.82rem; font-weight: 600; color: var(--accent-primary); text-decoration: none;" title="Skilljar 공식 인증서 검증">
-                    공식 인증 검증 ↗
-                  </a>
-                </div>
-              </div>
-            `).join("")}
-          </div>
-
-          <div style="margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--border-light); display: flex; gap: 16px; flex-wrap: wrap;">
-            <a href="https://brunch.co.kr/@drbrooks" target="_blank" rel="noopener noreferrer" class="btn-primary-sm">브런치 바로가기</a>
-            <a href="https://drbrooks.pages.dev/services/" target="_blank" rel="noopener noreferrer" class="btn-primary-sm" style="background-color: var(--surface-alt); color: var(--text-primary); border: 1px solid var(--border-subtle);">웹 서비스 포털</a>
-            <a href="https://www.munpia.com/novel/detail/530809" target="_blank" rel="noopener noreferrer" class="btn-primary-sm" style="background-color: var(--surface-alt); color: var(--text-primary); border: 1px solid var(--border-subtle);">초강마패 보러가기</a>
-          </div>
-        </div>
+      <div class="modal-card-list">
+        ${services.map(service => this.createServiceCard(service)).join("")}
       </div>
     `;
-    this.feedContainer.innerHTML = html;
   }
 
-  createNovelCard(novel, expanded = false) {
+  renderCertificationsModal() {
+    const certs = this.data.certifications || [];
+    return `
+      <div class="modal-banner">
+        <p class="modal-banner-desc">
+          Anthropic 및 Model Context Protocol(MCP) 공식 인증 체계를 이수하고 검증받은 전문 자격증 7건 목록입니다. (수료자: Douglas KIM)
+        </p>
+      </div>
+      <div class="modal-grid-cert">
+        ${certs.map(cert => this.createCertificationCard(cert)).join("")}
+      </div>
+    `;
+  }
+
+  createNovelCard(novel, expanded = true) {
     return `
       <article class="novel-card" id="novel-${novel.id}">
         <div class="novel-cover-wrapper">
@@ -865,7 +537,7 @@ class BlogApp {
           </div>
           <div class="novel-action-row">
             <a href="${novel.url}" target="_blank" rel="noopener noreferrer" class="btn-primary-sm">
-              작품 읽기 &rarr;
+              문피아에서 작품 읽기 &rarr;
             </a>
           </div>
         </div>
@@ -890,13 +562,13 @@ class BlogApp {
         <div class="service-tech-tags">
           ${service.techStack.map(t => `<span class="tech-tag">${t}</span>`).join("")}
         </div>
-        <div style="display: flex; gap: 12px; margin-top: auto;">
+        <div style="display: flex; gap: 12px; margin-top: auto; flex-wrap: wrap;">
           <a href="${service.url}" target="_blank" rel="noopener noreferrer" class="btn-primary-sm">
             서비스 방문 &rarr;
           </a>
           ${service.links && service.links.about ? `
             <a href="${service.links.about}" target="_blank" rel="noopener noreferrer" class="btn-primary-sm" style="background-color: var(--surface-alt); color: var(--text-primary); border: 1px solid var(--border-subtle);">
-              소개 보기
+              상세 아키텍처 보기
             </a>
           ` : ""}
         </div>
@@ -920,11 +592,32 @@ class BlogApp {
           <div style="display: flex; gap: 6px; flex-wrap: wrap;">
             ${article.tags.map(t => `<span class="tech-tag">#${t}</span>`).join("")}
           </div>
-          <a href="${article.url}" target="_blank" rel="noopener noreferrer" class="pillar-link" style="font-size: 0.82rem;">
-            읽기 &rarr;
+          <a href="${article.url}" target="_blank" rel="noopener noreferrer" class="pillar-link" style="font-size: 0.88rem;">
+            브런치에서 읽기 &rarr;
           </a>
         </div>
       </article>
+    `;
+  }
+
+  createCertificationCard(cert) {
+    return `
+      <div class="cert-card">
+        <div>
+          <div class="cert-card-top">
+            <span class="cert-badge">${cert.badge}</span>
+            <span class="cert-issuer">${cert.issuer}</span>
+          </div>
+          <h4 class="cert-title">${cert.title}</h4>
+          <p class="cert-desc">${cert.description}</p>
+        </div>
+        <div class="cert-footer">
+          <span class="cert-recipient">수료자: ${cert.recipient}</span>
+          <a href="${cert.url}" target="_blank" rel="noopener noreferrer" class="cert-verify-link" title="Skilljar 공식 인증서 검증">
+            공식 인증 검증 ↗
+          </a>
+        </div>
+      </div>
     `;
   }
 }
