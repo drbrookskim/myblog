@@ -36,87 +36,153 @@
 </head>
 <body>
 
-  <!-- Autumn Sky & Cumulus Clouds Canvas (화창한 가을하늘 뭉게구름) -->
+  <!-- Autumn Sky & Cumulus Clouds Canvas (화창한 가을하늘 좌->우 뭉게구름) -->
   <div class="autumn-sky-canvas" aria-hidden="true">
     <div class="sky-sun-radiance"></div>
-    <svg class="clouds-svg" viewBox="0 0 1440 1000" preserveAspectRatio="xMidYMin slice" xmlns="http://www.w3.org/2000/svg">
+
+    <!-- Reusable Cloud Gradient & Filter Defs -->
+    <svg class="cloud-defs" width="0" height="0" style="position:absolute;width:0;height:0;overflow:hidden;">
       <defs>
-        <!-- Sunlit Cumulus Cloud Gradient 1 -->
         <linearGradient id="cloudGradSunlit" x1="0%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" stop-color="#ffffff" stop-opacity="0.95" />
-          <stop offset="35%" stop-color="#f8fafc" stop-opacity="0.9" />
-          <stop offset="70%" stop-color="#e0f2fe" stop-opacity="0.75" />
-          <stop offset="100%" stop-color="#bae6fd" stop-opacity="0.45" />
-        </linearGradient>
-
-        <!-- Soft Distant Cloud Gradient -->
-        <linearGradient id="cloudGradDistant" x1="0%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" stop-color="#ffffff" stop-opacity="0.7" />
-          <stop offset="50%" stop-color="#f0f9ff" stop-opacity="0.55" />
-          <stop offset="100%" stop-color="#bae6fd" stop-opacity="0.2" />
-        </linearGradient>
-
-        <!-- Billowing Highlight Gradient -->
-        <radialGradient id="cloudPuffHighlight" cx="45%" cy="30%" r="65%">
           <stop offset="0%" stop-color="#ffffff" stop-opacity="0.98" />
-          <stop offset="60%" stop-color="#f0f9ff" stop-opacity="0.8" />
-          <stop offset="100%" stop-color="#e0f2fe" stop-opacity="0.4" />
+          <stop offset="35%" stop-color="#f8fafc" stop-opacity="0.92" />
+          <stop offset="70%" stop-color="#e0f2fe" stop-opacity="0.8" />
+          <stop offset="100%" stop-color="#bae6fd" stop-opacity="0.5" />
+        </linearGradient>
+        <radialGradient id="cloudPuffHighlight" cx="45%" cy="30%" r="65%">
+          <stop offset="0%" stop-color="#ffffff" stop-opacity="1.0" />
+          <stop offset="60%" stop-color="#f0f9ff" stop-opacity="0.85" />
+          <stop offset="100%" stop-color="#e0f2fe" stop-opacity="0.45" />
         </radialGradient>
-
         <filter id="cloudSoftBlur" x="-20%" y="-20%" width="140%" height="140%">
-          <feGaussianBlur stdDeviation="6" />
-        </filter>
-        <filter id="distantCloudBlur" x="-30%" y="-30%" width="160%" height="160%">
-          <feGaussianBlur stdDeviation="16" />
+          <feGaussianBlur stdDeviation="4.5" />
         </filter>
       </defs>
-
-      <!-- Layer 1: Distant Soft Atmospheric Cloud Banks -->
-      <g filter="url(#distantCloudBlur)" opacity="0.65" class="cloud-layer-distant">
-        <ellipse cx="250" cy="180" rx="320" ry="120" fill="url(#cloudGradDistant)" />
-        <ellipse cx="180" cy="140" rx="180" ry="100" fill="url(#cloudGradDistant)" />
-        <ellipse cx="1200" cy="220" rx="350" ry="140" fill="url(#cloudGradDistant)" />
-        <ellipse cx="1050" cy="160" rx="220" ry="110" fill="url(#cloudGradDistant)" />
-        <ellipse cx="700" cy="450" rx="420" ry="130" fill="url(#cloudGradDistant)" />
-      </g>
-
-      <!-- Layer 2: Main Billowing Cumulus Clouds (뭉게구름) -->
-      <g class="cloud-layer-main" filter="url(#cloudSoftBlur)">
-        <!-- Cloud Cluster A: Top Right Sunny Cumulus Bank -->
-        <g class="cloud-cluster cloud-cluster-1">
-          <circle cx="1250" cy="140" r="110" fill="url(#cloudPuffHighlight)" />
-          <circle cx="1140" cy="160" r="95" fill="url(#cloudPuffHighlight)" />
-          <circle cx="1340" cy="180" r="85" fill="url(#cloudPuffHighlight)" />
-          <circle cx="1060" cy="200" r="75" fill="url(#cloudPuffHighlight)" />
-          <ellipse cx="1200" cy="220" rx="260" ry="85" fill="url(#cloudGradSunlit)" />
-        </g>
-
-        <!-- Cloud Cluster B: Upper-Mid Left Billowing Cloud behind Timeline Entry -->
-        <g class="cloud-cluster cloud-cluster-2">
-          <circle cx="160" cy="260" r="90" fill="url(#cloudPuffHighlight)" />
-          <circle cx="250" cy="220" r="115" fill="url(#cloudPuffHighlight)" />
-          <circle cx="350" cy="250" r="85" fill="url(#cloudPuffHighlight)" />
-          <circle cx="90" cy="290" r="70" fill="url(#cloudPuffHighlight)" />
-          <ellipse cx="220" cy="310" rx="240" ry="80" fill="url(#cloudGradSunlit)" />
-        </g>
-
-        <!-- Cloud Cluster C: Lower Ambient Horizon Cloud Drift -->
-        <g class="cloud-cluster cloud-cluster-3">
-          <circle cx="980" cy="580" r="120" fill="url(#cloudPuffHighlight)" />
-          <circle cx="1120" cy="620" r="105" fill="url(#cloudPuffHighlight)" />
-          <circle cx="860" cy="640" r="95" fill="url(#cloudPuffHighlight)" />
-          <ellipse cx="1000" cy="680" rx="280" ry="90" fill="url(#cloudGradSunlit)" />
-        </g>
-
-        <!-- Cloud Cluster D: Subtle Left Midground Drift -->
-        <g class="cloud-cluster cloud-cluster-4">
-          <circle cx="120" cy="680" r="85" fill="url(#cloudPuffHighlight)" />
-          <circle cx="210" cy="650" r="105" fill="url(#cloudPuffHighlight)" />
-          <circle cx="310" cy="690" r="75" fill="url(#cloudPuffHighlight)" />
-          <ellipse cx="200" cy="730" rx="220" ry="75" fill="url(#cloudGradSunlit)" />
-        </g>
-      </g>
     </svg>
+
+    <div class="clouds-drift-stage">
+      <!-- Cloud 1: Extra Large Towering Cumulus (Scale 1.45 - Random XL) -->
+      <div class="sky-cloud cloud-track-1">
+        <div class="cloud-bob">
+          <svg class="cloud-svg shape-a" viewBox="0 0 440 190">
+            <g filter="url(#cloudSoftBlur)">
+              <ellipse cx="220" cy="140" rx="190" ry="46" fill="url(#cloudGradSunlit)" />
+              <circle cx="220" cy="75" r="70" fill="url(#cloudPuffHighlight)" />
+              <circle cx="150" cy="95" r="58" fill="url(#cloudPuffHighlight)" />
+              <circle cx="295" cy="100" r="54" fill="url(#cloudPuffHighlight)" />
+              <circle cx="85" cy="125" r="44" fill="url(#cloudPuffHighlight)" />
+              <circle cx="360" cy="122" r="46" fill="url(#cloudPuffHighlight)" />
+            </g>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Cloud 2: Small High Altitude Wisp (Scale 0.48 - Random XS) -->
+      <div class="sky-cloud cloud-track-2">
+        <div class="cloud-bob">
+          <svg class="cloud-svg shape-d" viewBox="0 0 260 90">
+            <g filter="url(#cloudSoftBlur)">
+              <ellipse cx="140" cy="65" rx="115" ry="22" fill="url(#cloudGradSunlit)" />
+              <circle cx="135" cy="40" r="32" fill="url(#cloudPuffHighlight)" />
+              <circle cx="85" cy="48" r="25" fill="url(#cloudPuffHighlight)" />
+              <circle cx="195" cy="46" r="28" fill="url(#cloudPuffHighlight)" />
+            </g>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Cloud 3: Medium Billowing Cumulus (Scale 0.92 - Random MD) -->
+      <div class="sky-cloud cloud-track-3">
+        <div class="cloud-bob">
+          <svg class="cloud-svg shape-b" viewBox="0 0 370 160">
+            <g filter="url(#cloudSoftBlur)">
+              <ellipse cx="185" cy="115" rx="165" ry="40" fill="url(#cloudGradSunlit)" />
+              <circle cx="180" cy="65" r="52" fill="url(#cloudPuffHighlight)" />
+              <circle cx="110" cy="80" r="46" fill="url(#cloudPuffHighlight)" />
+              <circle cx="260" cy="76" r="48" fill="url(#cloudPuffHighlight)" />
+              <circle cx="50" cy="102" r="36" fill="url(#cloudPuffHighlight)" />
+              <circle cx="320" cy="96" r="38" fill="url(#cloudPuffHighlight)" />
+            </g>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Cloud 4: Compact Fluffy Cotton Puff (Scale 0.65 - Random SM) -->
+      <div class="sky-cloud cloud-track-4">
+        <div class="cloud-bob">
+          <svg class="cloud-svg shape-c" viewBox="0 0 240 140">
+            <g filter="url(#cloudSoftBlur)">
+              <ellipse cx="120" cy="105" rx="105" ry="32" fill="url(#cloudGradSunlit)" />
+              <circle cx="130" cy="60" r="48" fill="url(#cloudPuffHighlight)" />
+              <circle cx="80" cy="75" r="40" fill="url(#cloudPuffHighlight)" />
+              <circle cx="180" cy="75" r="42" fill="url(#cloudPuffHighlight)" />
+              <circle cx="40" cy="95" r="30" fill="url(#cloudPuffHighlight)" />
+            </g>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Cloud 5: Large Sunlit Cumulus Bank (Scale 1.25 - Random LG) -->
+      <div class="sky-cloud cloud-track-5">
+        <div class="cloud-bob">
+          <svg class="cloud-svg shape-a" viewBox="0 0 440 190">
+            <g filter="url(#cloudSoftBlur)">
+              <ellipse cx="220" cy="140" rx="190" ry="46" fill="url(#cloudGradSunlit)" />
+              <circle cx="220" cy="75" r="70" fill="url(#cloudPuffHighlight)" />
+              <circle cx="150" cy="95" r="58" fill="url(#cloudPuffHighlight)" />
+              <circle cx="295" cy="100" r="54" fill="url(#cloudPuffHighlight)" />
+              <circle cx="85" cy="125" r="44" fill="url(#cloudPuffHighlight)" />
+              <circle cx="360" cy="122" r="46" fill="url(#cloudPuffHighlight)" />
+            </g>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Cloud 6: Tiny Distant Horizon Cloud (Scale 0.40 - Random XS2) -->
+      <div class="sky-cloud cloud-track-6">
+        <div class="cloud-bob">
+          <svg class="cloud-svg shape-d" viewBox="0 0 260 90">
+            <g filter="url(#cloudSoftBlur)">
+              <ellipse cx="140" cy="65" rx="115" ry="22" fill="url(#cloudGradSunlit)" />
+              <circle cx="135" cy="40" r="32" fill="url(#cloudPuffHighlight)" />
+              <circle cx="85" cy="48" r="25" fill="url(#cloudPuffHighlight)" />
+              <circle cx="195" cy="46" r="28" fill="url(#cloudPuffHighlight)" />
+            </g>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Cloud 7: Mid-Atmosphere Fluffy Drift (Scale 0.85 - Random MD2) -->
+      <div class="sky-cloud cloud-track-7">
+        <div class="cloud-bob">
+          <svg class="cloud-svg shape-b" viewBox="0 0 370 160">
+            <g filter="url(#cloudSoftBlur)">
+              <ellipse cx="185" cy="115" rx="165" ry="40" fill="url(#cloudGradSunlit)" />
+              <circle cx="180" cy="65" r="52" fill="url(#cloudPuffHighlight)" />
+              <circle cx="110" cy="80" r="46" fill="url(#cloudPuffHighlight)" />
+              <circle cx="260" cy="76" r="48" fill="url(#cloudPuffHighlight)" />
+              <circle cx="50" cy="102" r="36" fill="url(#cloudPuffHighlight)" />
+              <circle cx="320" cy="96" r="38" fill="url(#cloudPuffHighlight)" />
+            </g>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Cloud 8: Soft Low-Drifting Puff (Scale 0.58 - Random SM2) -->
+      <div class="sky-cloud cloud-track-8">
+        <div class="cloud-bob">
+          <svg class="cloud-svg shape-c" viewBox="0 0 240 140">
+            <g filter="url(#cloudSoftBlur)">
+              <ellipse cx="120" cy="105" rx="105" ry="32" fill="url(#cloudGradSunlit)" />
+              <circle cx="130" cy="60" r="48" fill="url(#cloudPuffHighlight)" />
+              <circle cx="80" cy="75" r="40" fill="url(#cloudPuffHighlight)" />
+              <circle cx="180" cy="75" r="42" fill="url(#cloudPuffHighlight)" />
+              <circle cx="40" cy="95" r="30" fill="url(#cloudPuffHighlight)" />
+            </g>
+          </svg>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- Global Header Navigation -->

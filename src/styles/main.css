@@ -158,7 +158,7 @@ img {
    Navigation Bar
    ========================================================================== */
 /* ==========================================================================
-   Autumn Sky & Cumulus Clouds Canvas (화창한 가을하늘 뭉게구름)
+   Autumn Sky & Cumulus Clouds Canvas (화창한 가을하늘 좌->우 뭉게구름)
    ========================================================================== */
 .autumn-sky-canvas {
   position: fixed;
@@ -188,39 +188,159 @@ img {
   background: radial-gradient(circle, rgba(224, 242, 254, 0.22) 0%, rgba(186, 230, 253, 0.12) 35%, transparent 70%);
 }
 
-.clouds-svg {
+.clouds-drift-stage {
   position: absolute;
-  top: 0;
-  left: 0;
+  inset: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
   pointer-events: none;
 }
 
-[data-theme="dark"] .clouds-svg {
-  opacity: 0.28;
+[data-theme="dark"] .clouds-drift-stage {
+  opacity: 0.32;
   filter: brightness(0.65) saturate(0.8);
 }
 
-/* Gentle organic cloud drifting animations */
-@keyframes cloud-float-slow {
-  0%, 100% { transform: translateY(0px) translateX(0px); }
-  50% { transform: translateY(-8px) translateX(12px); }
-}
-@keyframes cloud-float-alt {
-  0%, 100% { transform: translateY(0px) translateX(0px); }
-  50% { transform: translateY(10px) translateX(-10px); }
+.sky-cloud {
+  position: absolute;
+  left: 0;
+  pointer-events: none;
+  will-change: transform;
 }
 
-.cloud-cluster-1 { animation: cloud-float-slow 22s ease-in-out infinite; }
-.cloud-cluster-2 { animation: cloud-float-alt 26s ease-in-out infinite; }
-.cloud-cluster-3 { animation: cloud-float-slow 30s ease-in-out infinite; }
-.cloud-cluster-4 { animation: cloud-float-alt 24s ease-in-out infinite; }
+.cloud-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Horizontal Left-to-Right Slow Continuous Drift */
+@keyframes cloud-drift-ltr {
+  0% {
+    transform: translate3d(-700px, 0, 0);
+  }
+  100% {
+    transform: translate3d(calc(100vw + 700px), 0, 0);
+  }
+}
+
+/* Organic Floating / Bobbing Animations */
+@keyframes cloud-gentle-bob-1 {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-12px); }
+}
+@keyframes cloud-gentle-bob-2 {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(10px); }
+}
+@keyframes cloud-gentle-bob-3 {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+}
+
+/* 8 Cloud Tracks: Randomized Sizes, Altitudes, Speeds & Staggered Offsets */
+/* Cloud 1: Extra Large Towering Cumulus (Scale ~1.45) */
+.cloud-track-1 {
+  top: 5%;
+  width: 638px;
+  opacity: 0.92;
+  animation: cloud-drift-ltr 115s linear infinite;
+  animation-delay: -32s;
+}
+.cloud-track-1 .cloud-bob {
+  animation: cloud-gentle-bob-1 18s ease-in-out infinite;
+}
+
+/* Cloud 2: Small High Altitude Wisp (Scale ~0.48) */
+.cloud-track-2 {
+  top: 18%;
+  width: 125px;
+  opacity: 0.65;
+  animation: cloud-drift-ltr 145s linear infinite;
+  animation-delay: -85s;
+}
+.cloud-track-2 .cloud-bob {
+  animation: cloud-gentle-bob-2 24s ease-in-out infinite;
+}
+
+/* Cloud 3: Medium Billowing Cumulus (Scale ~0.92) */
+.cloud-track-3 {
+  top: 32%;
+  width: 340px;
+  opacity: 0.85;
+  animation: cloud-drift-ltr 92s linear infinite;
+  animation-delay: -14s;
+}
+.cloud-track-3 .cloud-bob {
+  animation: cloud-gentle-bob-3 16s ease-in-out infinite;
+}
+
+/* Cloud 4: Compact Fluffy Cotton Puff (Scale ~0.65) */
+.cloud-track-4 {
+  top: 48%;
+  width: 156px;
+  opacity: 0.70;
+  animation: cloud-drift-ltr 130s linear infinite;
+  animation-delay: -70s;
+}
+.cloud-track-4 .cloud-bob {
+  animation: cloud-gentle-bob-1 20s ease-in-out infinite;
+}
+
+/* Cloud 5: Large Sunlit Cumulus Bank (Scale ~1.25) */
+.cloud-track-5 {
+  top: 60%;
+  width: 550px;
+  opacity: 0.88;
+  animation: cloud-drift-ltr 105s linear infinite;
+  animation-delay: -52s;
+}
+.cloud-track-5 .cloud-bob {
+  animation: cloud-gentle-bob-2 22s ease-in-out infinite;
+}
+
+/* Cloud 6: Tiny Distant Horizon Cloud (Scale ~0.40) */
+.cloud-track-6 {
+  top: 75%;
+  width: 104px;
+  opacity: 0.58;
+  animation: cloud-drift-ltr 160s linear infinite;
+  animation-delay: -125s;
+}
+.cloud-track-6 .cloud-bob {
+  animation: cloud-gentle-bob-3 26s ease-in-out infinite;
+}
+
+/* Cloud 7: Mid-Atmosphere Fluffy Drift (Scale ~0.85) */
+.cloud-track-7 {
+  top: 85%;
+  width: 315px;
+  opacity: 0.80;
+  animation: cloud-drift-ltr 96s linear infinite;
+  animation-delay: -42s;
+}
+.cloud-track-7 .cloud-bob {
+  animation: cloud-gentle-bob-1 19s ease-in-out infinite;
+}
+
+/* Cloud 8: Soft Low-Drifting Puff (Scale ~0.58) */
+.cloud-track-8 {
+  top: 14%;
+  width: 139px;
+  opacity: 0.68;
+  animation: cloud-drift-ltr 125s linear infinite;
+  animation-delay: -105s;
+}
+.cloud-track-8 .cloud-bob {
+  animation: cloud-gentle-bob-2 21s ease-in-out infinite;
+}
 
 @media (prefers-reduced-motion: reduce) {
-  .cloud-cluster-1, .cloud-cluster-2, .cloud-cluster-3, .cloud-cluster-4 {
-    animation: none;
+  .sky-cloud {
+    animation: none !important;
+  }
+  .cloud-bob {
+    animation: none !important;
   }
 }
 
@@ -256,7 +376,7 @@ img {
   gap: 10px;
   font-family: var(--font-serif);
   font-weight: 400;
-  font-size: 1.25rem;
+  font-size: 1.02rem;
   letter-spacing: -0.01em;
   color: var(--text-primary);
 }
@@ -295,7 +415,7 @@ img {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  font-size: 0.88rem;
+  font-size: 0.78rem;
   font-weight: 600;
   padding: 7px 14px;
   border-radius: var(--radius-full);
@@ -324,7 +444,7 @@ img {
 
 .editorial-title {
   font-family: var(--font-serif);
-  font-size: 3.8rem;
+  font-size: 3.0rem;
   font-weight: 400;
   letter-spacing: -0.01em;
   line-height: 1.1;
@@ -340,7 +460,7 @@ img {
 }
 
 .editorial-intro {
-  font-size: 1.15rem;
+  font-size: 0.95rem;
   line-height: 1.8;
   color: var(--text-secondary);
   word-break: keep-all;
@@ -627,7 +747,7 @@ img {
 
 .timeline-title {
   font-family: var(--font-serif);
-  font-size: 1.7rem;
+  font-size: 1.36rem;
   font-weight: 400;
   color: var(--text-primary);
   letter-spacing: -0.005em;
@@ -643,7 +763,7 @@ img {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  font-size: 0.85rem;
+  font-size: 0.72rem;
   font-weight: 600;
   color: var(--accent-primary);
   background: var(--accent-subtle);
@@ -659,7 +779,7 @@ img {
 }
 
 .timeline-text {
-  font-size: 1.05rem;
+  font-size: 0.88rem;
   line-height: 1.75;
   color: var(--text-secondary);
   word-break: keep-all;
@@ -727,7 +847,7 @@ img {
 }
 
 .modal-category-badge {
-  font-size: 0.75rem;
+  font-size: 0.68rem;
   font-weight: 700;
   color: var(--accent-primary);
   letter-spacing: 0.08em;
@@ -736,7 +856,7 @@ img {
 
 .modal-title {
   font-family: var(--font-serif);
-  font-size: 1.55rem;
+  font-size: 1.25rem;
   font-weight: 400;
   color: var(--text-primary);
 }
@@ -778,7 +898,7 @@ img {
 }
 
 .modal-banner-desc {
-  font-size: 0.96rem;
+  font-size: 0.84rem;
   line-height: 1.6;
   color: var(--text-secondary);
 }
@@ -839,7 +959,7 @@ img {
 }
 
 .badge-tag {
-  font-size: 0.78rem;
+  font-size: 0.70rem;
   font-weight: 700;
   padding: 3px 8px;
   border-radius: var(--radius-sm);
@@ -848,20 +968,20 @@ img {
 }
 
 .badge-episodes {
-  font-size: 0.8rem;
+  font-size: 0.70rem;
   color: var(--text-tertiary);
 }
 
 .novel-title {
   font-family: var(--font-serif);
-  font-size: 1.45rem;
+  font-size: 1.16rem;
   font-weight: 400;
   margin-bottom: 10px;
   color: var(--text-primary);
 }
 
 .novel-summary {
-  font-size: 0.95rem;
+  font-size: 0.82rem;
   line-height: 1.65;
   color: var(--text-secondary);
   margin-bottom: 14px;
@@ -876,7 +996,7 @@ img {
 }
 
 .novel-tag-item {
-  font-size: 0.8rem;
+  font-size: 0.70rem;
   color: var(--text-muted);
 }
 
@@ -910,19 +1030,19 @@ img {
 
 .service-name {
   font-family: var(--font-serif);
-  font-size: 1.4rem;
+  font-size: 1.12rem;
   font-weight: 400;
   color: var(--text-primary);
 }
 
 .service-tagline {
-  font-size: 0.88rem;
+  font-size: 0.76rem;
   color: var(--text-muted);
   margin-top: 2px;
 }
 
 .service-desc {
-  font-size: 0.95rem;
+  font-size: 0.82rem;
   line-height: 1.65;
   color: var(--text-secondary);
 }
@@ -939,7 +1059,7 @@ img {
 }
 
 .service-feature-item {
-  font-size: 0.88rem;
+  font-size: 0.76rem;
   color: var(--text-secondary);
   display: flex;
   align-items: center;
@@ -959,7 +1079,7 @@ img {
 }
 
 .tech-tag {
-  font-size: 0.78rem;
+  font-size: 0.70rem;
   padding: 3px 8px;
   background: var(--surface-alt);
   border-radius: var(--radius-sm);
@@ -985,7 +1105,7 @@ img {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 0.82rem;
+  font-size: 0.72rem;
   color: var(--text-muted);
   margin-bottom: 8px;
 }
@@ -997,7 +1117,7 @@ img {
 
 .article-title {
   font-family: var(--font-serif);
-  font-size: 1.35rem;
+  font-size: 1.08rem;
   font-weight: 400;
   color: var(--text-primary);
   margin-bottom: 8px;
@@ -1005,7 +1125,7 @@ img {
 }
 
 .article-excerpt {
-  font-size: 0.94rem;
+  font-size: 0.82rem;
   line-height: 1.6;
   color: var(--text-secondary);
   margin-bottom: 14px;
@@ -1066,7 +1186,7 @@ img {
 }
 
 .cert-badge {
-  font-size: 0.75rem;
+  font-size: 0.68rem;
   font-weight: 700;
   color: var(--accent-primary);
   background: var(--accent-subtle);
@@ -1076,14 +1196,14 @@ img {
 }
 
 .cert-issuer {
-  font-size: 0.8rem;
+  font-size: 0.70rem;
   color: var(--text-muted);
   font-weight: 600;
 }
 
 .cert-title {
   font-family: var(--font-serif);
-  font-size: 1.25rem;
+  font-size: 1.0rem;
   font-weight: 400;
   color: var(--text-primary);
   margin-bottom: 6px;
@@ -1091,7 +1211,7 @@ img {
 }
 
 .cert-desc {
-  font-size: 0.86rem;
+  font-size: 0.76rem;
   color: var(--text-secondary);
   line-height: 1.55;
 }
@@ -1105,7 +1225,7 @@ img {
 }
 
 .cert-recipient {
-  font-size: 0.78rem;
+  font-size: 0.70rem;
   color: var(--text-dim);
 }
 
@@ -1113,7 +1233,7 @@ img {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  font-size: 0.84rem;
+  font-size: 0.74rem;
   font-weight: 600;
   color: var(--accent-primary);
   transition: color var(--transition-fast);
@@ -1129,7 +1249,7 @@ img {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  font-size: 0.88rem;
+  font-size: 0.78rem;
   font-weight: 600;
   padding: 8px 16px;
   border-radius: var(--radius-full);
@@ -1147,7 +1267,7 @@ img {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  font-size: 0.88rem;
+  font-size: 0.78rem;
   font-weight: 600;
   padding: 8px 16px;
   border-radius: var(--radius-full);
@@ -1188,7 +1308,7 @@ img {
 }
 
 .copyright {
-  font-size: 0.88rem;
+  font-size: 0.76rem;
   color: var(--text-muted);
   letter-spacing: -0.01em;
 }
@@ -1203,12 +1323,12 @@ img {
   }
 
   .editorial-title {
-    font-size: 2.8rem;
+    font-size: 2.25rem;
     margin-bottom: 18px;
   }
 
   .editorial-intro {
-    font-size: 1.05rem;
+    font-size: 0.88rem;
     margin-bottom: 36px;
   }
 
@@ -1260,15 +1380,15 @@ img {
   }
 
   .timeline-title {
-    font-size: 1.45rem;
+    font-size: 1.18rem;
   }
 
   .timeline-text {
-    font-size: 0.98rem;
+    font-size: 0.82rem;
   }
 
   .timeline-badge {
-    font-size: 0.78rem;
+    font-size: 0.70rem;
     padding: 3px 8px;
   }
 
