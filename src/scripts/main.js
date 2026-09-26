@@ -652,7 +652,7 @@ class ProceduralSkyGenerator {
     const count = Math.floor(Math.random() * 4) + 8;
 
     // Guaranteed archetypes to ensure diversity on every refresh
-    const archetypes = ["elongated", "compact", "small", "towering", "scattered"];
+    const archetypes = ["elongated", "compact", "small", "towering", "scattered", "sheep"];
     
     // Fill remaining slots randomly
     const allTypes = [...archetypes];
@@ -686,6 +686,14 @@ class ProceduralSkyGenerator {
     // Cloud archetype configuration
     let config;
     switch (type) {
+      case "sheep": // 양떼 구름 (Altocumulus flock / Mackerel ripples)
+        config = {
+          width: Math.floor(Math.random() * 160) + 540, // 540px - 700px
+          duration: Math.floor(Math.random() * 30) + 110, // 110s - 140s
+          opacity: (Math.random() * 0.12 + 0.82).toFixed(2),
+          svg: this.getSheepFlockSvg()
+        };
+        break;
       case "elongated": // 긴 구름
         config = {
           width: Math.floor(Math.random() * 180) + 520, // 520px - 700px
@@ -751,6 +759,51 @@ class ProceduralSkyGenerator {
     wrapper.appendChild(bobContainer);
 
     return wrapper;
+  }
+
+  // 양떼 구름 (Altocumulus flock / Mackerel ripples)
+  getSheepFlockSvg() {
+    return `
+      <svg class="cloud-svg cloud-sheep-flock" viewBox="0 0 580 180" xmlns="http://www.w3.org/2000/svg">
+        <g filter="url(#cloudSoftBlur)">
+          <!-- Row 1: Top undulating sheep puffs -->
+          <circle cx="85" cy="45" r="18" fill="url(#cloudPuffHighlight)" />
+          <circle cx="135" cy="38" r="22" fill="url(#cloudPuffHighlight)" />
+          <circle cx="190" cy="42" r="20" fill="url(#cloudPuffHighlight)" />
+          <circle cx="250" cy="36" r="24" fill="url(#cloudPuffHighlight)" />
+          <circle cx="315" cy="40" r="21" fill="url(#cloudPuffHighlight)" />
+          <circle cx="375" cy="36" r="23" fill="url(#cloudPuffHighlight)" />
+          <circle cx="435" cy="44" r="19" fill="url(#cloudPuffHighlight)" />
+          <circle cx="490" cy="50" r="16" fill="url(#cloudPuffHighlight)" />
+
+          <!-- Row 2: Main center woolly flock -->
+          <ellipse cx="60" cy="85" rx="24" ry="18" fill="url(#cloudGradSunlit)" />
+          <circle cx="115" cy="80" r="25" fill="url(#cloudPuffHighlight)" />
+          <circle cx="170" cy="74" r="27" fill="url(#cloudPuffHighlight)" />
+          <circle cx="230" cy="70" r="28" fill="url(#cloudPuffHighlight)" />
+          <circle cx="295" cy="74" r="26" fill="url(#cloudPuffHighlight)" />
+          <circle cx="360" cy="72" r="27" fill="url(#cloudPuffHighlight)" />
+          <circle cx="420" cy="78" r="24" fill="url(#cloudPuffHighlight)" />
+          <circle cx="480" cy="84" r="22" fill="url(#cloudPuffHighlight)" />
+          <circle cx="530" cy="92" r="18" fill="url(#cloudPuffHighlight)" />
+
+          <!-- Row 3: Mid-lower sheep bellies -->
+          <circle cx="95" cy="118" r="22" fill="url(#cloudPuffHighlight)" />
+          <circle cx="150" cy="114" r="24" fill="url(#cloudPuffHighlight)" />
+          <circle cx="210" cy="110" r="26" fill="url(#cloudPuffHighlight)" />
+          <circle cx="275" cy="112" r="25" fill="url(#cloudPuffHighlight)" />
+          <circle cx="340" cy="112" r="24" fill="url(#cloudPuffHighlight)" />
+          <circle cx="400" cy="116" r="22" fill="url(#cloudPuffHighlight)" />
+          <circle cx="460" cy="122" r="20" fill="url(#cloudPuffHighlight)" />
+
+          <!-- Row 4: Lower trailing wool wisps -->
+          <circle cx="180" cy="146" r="16" fill="url(#cloudGradSunlit)" />
+          <circle cx="245" cy="144" r="18" fill="url(#cloudPuffHighlight)" />
+          <circle cx="310" cy="145" r="17" fill="url(#cloudPuffHighlight)" />
+          <circle cx="370" cy="148" r="15" fill="url(#cloudGradSunlit)" />
+        </g>
+      </svg>
+    `;
   }
 
   // 긴 구름 (Elongated / Stratus band)
@@ -845,9 +898,98 @@ class ProceduralSkyGenerator {
   }
 }
 
+/**
+ * Real-Time Dynamic Sky Atmosphere Controller
+ * Updates blue sky hue, gradients, sun position and radiance based on current time:
+ * - 아침 (06:00 ~ 09:00): 🌅 여명과 맑은 청록빛 하늘
+ * - 한낮 (09:00 ~ 15:00): ☀️ 높고 푸른 쾌청한 정오의 가을하늘
+ * - 오후 (15:00 ~ 17:30): 🌤️ 따스한 가을 볕과 온화한 세룰리안 블루
+ * - 노을 (17:30 ~ 19:30): 🌆 붉은 노을과 보랏빛이 감도는 황혼 하늘
+ * - 밤 (19:30 ~ 06:00): 🌙 별빛 깃든 고요한 가을밤 하늘
+ */
+class SkyTimeController {
+  constructor() {
+    this.skyPhaseBtn = document.getElementById("skyPhaseBtn");
+    this.skyPhaseIcon = document.getElementById("skyPhaseIcon");
+    this.skyPhaseText = document.getElementById("skyPhaseText");
+    
+    this.phases = [
+      { id: "morning", label: "아침 가을하늘", icon: "🌅" },
+      { id: "midday", label: "한낮 가을하늘", icon: "☀️" },
+      { id: "afternoon", label: "오후 가을하늘", icon: "🌤️" },
+      { id: "sunset", label: "노을빛 가을하늘", icon: "🌆" },
+      { id: "night", label: "가을 밤하늘", icon: "🌙" }
+    ];
+
+    this.manualOverride = false;
+    this.currentPhaseIndex = 0;
+
+    this.init();
+  }
+
+  init() {
+    this.syncWithRealTime();
+
+    if (this.skyPhaseBtn) {
+      this.skyPhaseBtn.addEventListener("click", () => this.cyclePhase());
+    }
+
+    // Auto-sync every 60 seconds
+    setInterval(() => {
+      if (!this.manualOverride) {
+        this.syncWithRealTime();
+      }
+    }, 60000);
+  }
+
+  getRealTimePhase() {
+    const now = new Date();
+    const totalMinutes = now.getHours() * 60 + now.getMinutes();
+
+    if (totalMinutes >= 360 && totalMinutes < 540) {
+      return "morning";
+    }
+    if (totalMinutes >= 540 && totalMinutes < 900) {
+      return "midday";
+    }
+    if (totalMinutes >= 900 && totalMinutes < 1050) {
+      return "afternoon";
+    }
+    if (totalMinutes >= 1050 && totalMinutes < 1170) {
+      return "sunset";
+    }
+    return "night";
+  }
+
+  syncWithRealTime() {
+    const phaseId = this.getRealTimePhase();
+    this.currentPhaseIndex = this.phases.findIndex(p => p.id === phaseId);
+    if (this.currentPhaseIndex === -1) this.currentPhaseIndex = 1;
+    this.applyPhase(this.phases[this.currentPhaseIndex]);
+  }
+
+  cyclePhase() {
+    this.manualOverride = true;
+    this.currentPhaseIndex = (this.currentPhaseIndex + 1) % this.phases.length;
+    this.applyPhase(this.phases[this.currentPhaseIndex]);
+  }
+
+  applyPhase(phase) {
+    document.documentElement.setAttribute("data-sky-phase", phase.id);
+
+    if (this.skyPhaseIcon) {
+      this.skyPhaseIcon.textContent = phase.icon;
+    }
+    if (this.skyPhaseText) {
+      this.skyPhaseText.textContent = phase.label;
+    }
+  }
+}
+
 // Instantiate on DOM ready
 document.addEventListener("DOMContentLoaded", () => {
   window.blogApp = new BlogApp();
+  window.skyTime = new SkyTimeController();
   window.proceduralSky = new ProceduralSkyGenerator();
   window.refreshClouds = () => window.proceduralSky && window.proceduralSky.generate();
 });
