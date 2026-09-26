@@ -652,7 +652,7 @@ class ProceduralSkyGenerator {
     const count = Math.floor(Math.random() * 4) + 8;
 
     // Guaranteed archetypes to ensure diversity on every refresh
-    const archetypes = ["elongated", "compact", "small", "towering", "scattered", "sheep"];
+    const archetypes = ["sheep", "sheep", "elongated", "compact", "small", "towering", "scattered"];
     
     // Fill remaining slots randomly
     const allTypes = [...archetypes];
@@ -686,11 +686,11 @@ class ProceduralSkyGenerator {
     // Cloud archetype configuration
     let config;
     switch (type) {
-      case "sheep": // 양떼 구름 (Altocumulus flock / Mackerel ripples)
+      case "sheep": // 양떼 구름 (Altocumulus sheep flock canopy matching real sky photo)
         config = {
-          width: Math.floor(Math.random() * 160) + 540, // 540px - 700px
-          duration: Math.floor(Math.random() * 30) + 110, // 110s - 140s
-          opacity: (Math.random() * 0.12 + 0.82).toFixed(2),
+          width: Math.floor(Math.random() * 250) + 850, // 850px - 1100px wide
+          duration: Math.floor(Math.random() * 35) + 120, // 120s - 155s slow majestic drift
+          opacity: (Math.random() * 0.10 + 0.85).toFixed(2),
           svg: this.getSheepFlockSvg()
         };
         break;
@@ -761,46 +761,46 @@ class ProceduralSkyGenerator {
     return wrapper;
   }
 
-  // 양떼 구름 (Altocumulus flock / Mackerel ripples)
+  // 양떼 구름 (Altocumulus flock canopy matching user photo)
   getSheepFlockSvg() {
+    const rows = [
+      { y: 35, count: 8, rMin: 12, rMax: 18, xStart: 110, xEnd: 870 },
+      { y: 78, count: 12, rMin: 15, rMax: 23, xStart: 70, xEnd: 910 },
+      { y: 125, count: 14, rMin: 18, rMax: 27, xStart: 45, xEnd: 940 },
+      { y: 170, count: 15, rMin: 20, rMax: 28, xStart: 35, xEnd: 950 },
+      { y: 215, count: 13, rMin: 18, rMax: 26, xStart: 60, xEnd: 930 },
+      { y: 260, count: 11, rMin: 15, rMax: 22, xStart: 85, xEnd: 890 },
+      { y: 300, count: 8, rMin: 12, rMax: 17, xStart: 130, xEnd: 850 }
+    ];
+
+    let puffs = "";
+    rows.forEach((row, rowIndex) => {
+      const step = (row.xEnd - row.xStart) / (row.count - 1);
+      for (let i = 0; i < row.count; i++) {
+        const wave = Math.sin((i / row.count) * Math.PI * 2 + rowIndex * 0.8) * 12;
+        const jx = (Math.random() * 14 - 7);
+        const jy = (Math.random() * 10 - 5);
+        const cx = Math.round(row.xStart + i * step + jx);
+        const cy = Math.round(row.y + wave + jy);
+        const rx = Math.round(row.rMin + Math.random() * (row.rMax - row.rMin));
+        const ry = Math.round(rx * (0.78 + Math.random() * 0.18));
+
+        puffs += `<ellipse cx="${cx}" cy="${cy + 2}" rx="${rx}" ry="${ry}" fill="url(#cloudGradSunlit)" />`;
+        puffs += `<circle cx="${cx - 1}" cy="${cy - 2}" r="${Math.round(rx * 0.88)}" fill="url(#cloudPuffHighlight)" />`;
+
+        if (Math.random() > 0.65) {
+          const ox = (Math.random() * 16 - 8);
+          const oy = (Math.random() * 12 - 6);
+          const cr = Math.round(rx * 0.62);
+          puffs += `<circle cx="${Math.round(cx + ox)}" cy="${Math.round(cy + oy)}" r="${cr}" fill="url(#cloudPuffHighlight)" />`;
+        }
+      }
+    });
+
     return `
-      <svg class="cloud-svg cloud-sheep-flock" viewBox="0 0 580 180" xmlns="http://www.w3.org/2000/svg">
+      <svg class="cloud-svg cloud-sheep-canopy" viewBox="0 0 980 340" xmlns="http://www.w3.org/2000/svg">
         <g filter="url(#cloudSoftBlur)">
-          <!-- Row 1: Top undulating sheep puffs -->
-          <circle cx="85" cy="45" r="18" fill="url(#cloudPuffHighlight)" />
-          <circle cx="135" cy="38" r="22" fill="url(#cloudPuffHighlight)" />
-          <circle cx="190" cy="42" r="20" fill="url(#cloudPuffHighlight)" />
-          <circle cx="250" cy="36" r="24" fill="url(#cloudPuffHighlight)" />
-          <circle cx="315" cy="40" r="21" fill="url(#cloudPuffHighlight)" />
-          <circle cx="375" cy="36" r="23" fill="url(#cloudPuffHighlight)" />
-          <circle cx="435" cy="44" r="19" fill="url(#cloudPuffHighlight)" />
-          <circle cx="490" cy="50" r="16" fill="url(#cloudPuffHighlight)" />
-
-          <!-- Row 2: Main center woolly flock -->
-          <ellipse cx="60" cy="85" rx="24" ry="18" fill="url(#cloudGradSunlit)" />
-          <circle cx="115" cy="80" r="25" fill="url(#cloudPuffHighlight)" />
-          <circle cx="170" cy="74" r="27" fill="url(#cloudPuffHighlight)" />
-          <circle cx="230" cy="70" r="28" fill="url(#cloudPuffHighlight)" />
-          <circle cx="295" cy="74" r="26" fill="url(#cloudPuffHighlight)" />
-          <circle cx="360" cy="72" r="27" fill="url(#cloudPuffHighlight)" />
-          <circle cx="420" cy="78" r="24" fill="url(#cloudPuffHighlight)" />
-          <circle cx="480" cy="84" r="22" fill="url(#cloudPuffHighlight)" />
-          <circle cx="530" cy="92" r="18" fill="url(#cloudPuffHighlight)" />
-
-          <!-- Row 3: Mid-lower sheep bellies -->
-          <circle cx="95" cy="118" r="22" fill="url(#cloudPuffHighlight)" />
-          <circle cx="150" cy="114" r="24" fill="url(#cloudPuffHighlight)" />
-          <circle cx="210" cy="110" r="26" fill="url(#cloudPuffHighlight)" />
-          <circle cx="275" cy="112" r="25" fill="url(#cloudPuffHighlight)" />
-          <circle cx="340" cy="112" r="24" fill="url(#cloudPuffHighlight)" />
-          <circle cx="400" cy="116" r="22" fill="url(#cloudPuffHighlight)" />
-          <circle cx="460" cy="122" r="20" fill="url(#cloudPuffHighlight)" />
-
-          <!-- Row 4: Lower trailing wool wisps -->
-          <circle cx="180" cy="146" r="16" fill="url(#cloudGradSunlit)" />
-          <circle cx="245" cy="144" r="18" fill="url(#cloudPuffHighlight)" />
-          <circle cx="310" cy="145" r="17" fill="url(#cloudPuffHighlight)" />
-          <circle cx="370" cy="148" r="15" fill="url(#cloudGradSunlit)" />
+          ${puffs}
         </g>
       </svg>
     `;

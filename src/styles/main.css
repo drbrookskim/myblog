@@ -110,7 +110,7 @@ html {
 
 body {
   font-family: var(--font-sans);
-  background: linear-gradient(180deg, #1d6fc2 0%, #4ea3ea 25%, #90d3f8 60%, #e2f3fe 100%) fixed;
+  background: linear-gradient(180deg, #1254a6 0%, #1d6fc5 30%, #3a8ee8 70%, #76bcf6 100%) fixed;
   background-attachment: fixed;
   color: var(--text-primary);
   line-height: 1.65;
@@ -126,19 +126,19 @@ body {
    Real-Time Dynamic Sky Phases (시간대별 가을 하늘 변화)
    ========================================================================== */
 
-/* 1. Morning (06:00 ~ 09:00): 아침 여명과 맑은 청록빛 하늘 */
+/* 1. Morning (06:00 ~ 09:00): 아침 여명과 맑은 청명빛 하늘 */
 [data-sky-phase="morning"] body {
-  background: linear-gradient(180deg, #2575ba 0%, #56a2e0 26%, #9fd8f6 60%, #fef3c7 100%) fixed;
+  background: linear-gradient(180deg, #185ea9 0%, #2b7bc4 28%, #5da9ea 62%, #bae2fb 100%) fixed;
 }
 
-/* 2. Midday (09:00 ~ 15:00): 높고 푸른 쾌청한 정오의 가을하늘 */
+/* 2. Midday (09:00 ~ 15:00): 높고 푸른 쾌청한 정오의 가을 코발트빛 하늘 (실사 사진 100% 매칭) */
 [data-sky-phase="midday"] body {
-  background: linear-gradient(180deg, #1d6fc2 0%, #4ea3ea 25%, #90d3f8 60%, #e2f3fe 100%) fixed;
+  background: linear-gradient(180deg, #1254a6 0%, #1d6fc5 30%, #3a8ee8 70%, #76bcf6 100%) fixed;
 }
 
 /* 3. Afternoon (15:00 ~ 17:30): 따스한 가을 볕과 온화한 세룰리안 블루 */
 [data-sky-phase="afternoon"] body {
-  background: linear-gradient(180deg, #236cb5 0%, #4f9de0 28%, #9ad3f5 62%, #fed7aa 100%) fixed;
+  background: linear-gradient(180deg, #175498 0%, #2971bd 30%, #5294de 65%, #9ecbf5 100%) fixed;
 }
 
 /* 4. Sunset / Dusk (17:30 ~ 19:30): 붉은 노을과 보랏빛이 감도는 황혼 하늘 */
@@ -280,10 +280,10 @@ img {
 /* Horizontal Left-to-Right Slow Continuous Drift */
 @keyframes cloud-drift-ltr {
   0% {
-    transform: translate3d(-800px, 0, 0);
+    transform: translate3d(-1250px, 0, 0);
   }
   100% {
-    transform: translate3d(calc(100vw + 800px), 0, 0);
+    transform: translate3d(calc(100vw + 1250px), 0, 0);
   }
 }
 
