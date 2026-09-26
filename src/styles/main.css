@@ -217,10 +217,10 @@ img {
 /* Horizontal Left-to-Right Slow Continuous Drift */
 @keyframes cloud-drift-ltr {
   0% {
-    transform: translate3d(-700px, 0, 0);
+    transform: translate3d(-800px, 0, 0);
   }
   100% {
-    transform: translate3d(calc(100vw + 700px), 0, 0);
+    transform: translate3d(calc(100vw + 800px), 0, 0);
   }
 }
 

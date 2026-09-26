@@ -628,7 +628,226 @@ class BlogApp {
   }
 }
 
+/**
+ * Procedural Sky Cloud Generator
+ * Dynamically generates a random, diverse ensemble of clouds on each page refresh/load:
+ * - 긴 구름 (Elongated / Stratus band)
+ * - 짧은 구름 (Compact / Chubby cotton puff)
+ * - 작은 구름 (Small / Delicate high wisp)
+ * - 큰 구름 (Towering / Cumulus congestus billow)
+ * - 흩어져있는 구름 (Scattered / Fractus loose cluster)
+ */
+class ProceduralSkyGenerator {
+  constructor(containerSelector = ".clouds-drift-stage") {
+    this.container = document.querySelector(containerSelector);
+    if (!this.container) return;
+    this.generate();
+  }
+
+  generate() {
+    if (!this.container) return;
+    this.container.innerHTML = "";
+
+    // Total clouds on this refresh: 8 to 11
+    const count = Math.floor(Math.random() * 4) + 8;
+
+    // Guaranteed archetypes to ensure diversity on every refresh
+    const archetypes = ["elongated", "compact", "small", "towering", "scattered"];
+    
+    // Fill remaining slots randomly
+    const allTypes = [...archetypes];
+    while (allTypes.length < count) {
+      allTypes.push(archetypes[Math.floor(Math.random() * archetypes.length)]);
+    }
+
+    // Shuffle the types
+    allTypes.sort(() => Math.random() - 0.5);
+
+    // Altitude distribution slots (3% to 86%)
+    const slotHeight = 83 / count;
+
+    allTypes.forEach((type, index) => {
+      // Stratified vertical altitude with organic jitter
+      const baseTop = 3 + index * slotHeight;
+      const topPercent = Math.min(88, Math.max(3, baseTop + (Math.random() * (slotHeight * 0.6) - slotHeight * 0.3)));
+
+      // Horizontal phase distribution (spread across the viewport on load)
+      const phase = ((index + Math.random() * 0.4) / count) % 1;
+
+      const cloudEl = this.createCloudElement(type, topPercent, phase);
+      this.container.appendChild(cloudEl);
+    });
+  }
+
+  createCloudElement(type, topPercent, phase) {
+    const wrapper = document.createElement("div");
+    wrapper.className = `sky-cloud cloud-procedural-${type}`;
+
+    // Cloud archetype configuration
+    let config;
+    switch (type) {
+      case "elongated": // 긴 구름
+        config = {
+          width: Math.floor(Math.random() * 180) + 520, // 520px - 700px
+          duration: Math.floor(Math.random() * 35) + 115, // 115s - 150s
+          opacity: (Math.random() * 0.15 + 0.75).toFixed(2),
+          svg: this.getElongatedSvg()
+        };
+        break;
+      case "compact": // 짧은 구름
+        config = {
+          width: Math.floor(Math.random() * 80) + 200, // 200px - 280px
+          duration: Math.floor(Math.random() * 25) + 95, // 95s - 120s
+          opacity: (Math.random() * 0.15 + 0.80).toFixed(2),
+          svg: this.getCompactSvg()
+        };
+        break;
+      case "small": // 작은 구름
+        config = {
+          width: Math.floor(Math.random() * 60) + 100, // 100px - 160px
+          duration: Math.floor(Math.random() * 40) + 125, // 125s - 165s
+          opacity: (Math.random() * 0.15 + 0.58).toFixed(2),
+          svg: this.getSmallSvg()
+        };
+        break;
+      case "towering": // 큰 구름
+        config = {
+          width: Math.floor(Math.random() * 180) + 520, // 520px - 700px
+          duration: Math.floor(Math.random() * 30) + 105, // 105s - 135s
+          opacity: (Math.random() * 0.10 + 0.88).toFixed(2),
+          svg: this.getToweringSvg()
+        };
+        break;
+      case "scattered": // 흩어져있는 구름
+      default:
+        config = {
+          width: Math.floor(Math.random() * 140) + 360, // 360px - 500px
+          duration: Math.floor(Math.random() * 30) + 90, // 90s - 120s
+          opacity: (Math.random() * 0.15 + 0.72).toFixed(2),
+          svg: this.getScatteredSvg()
+        };
+        break;
+    }
+
+    const delay = (phase * config.duration).toFixed(1);
+    const bobType = Math.floor(Math.random() * 3) + 1; // 1, 2, or 3
+    const bobDuration = Math.floor(Math.random() * 10) + 16; // 16s - 25s
+    const isFlipped = Math.random() > 0.5;
+
+    wrapper.style.top = `${topPercent.toFixed(1)}%`;
+    wrapper.style.width = `${config.width}px`;
+    wrapper.style.opacity = config.opacity;
+    wrapper.style.animation = `cloud-drift-ltr ${config.duration}s linear infinite`;
+    wrapper.style.animationDelay = `-${delay}s`;
+
+    const bobContainer = document.createElement("div");
+    bobContainer.className = "cloud-bob";
+    bobContainer.style.animation = `cloud-gentle-bob-${bobType} ${bobDuration}s ease-in-out infinite`;
+    if (isFlipped) {
+      bobContainer.style.transform = "scaleX(-1)";
+    }
+
+    bobContainer.innerHTML = config.svg;
+    wrapper.appendChild(bobContainer);
+
+    return wrapper;
+  }
+
+  // 긴 구름 (Elongated / Stratus band)
+  getElongatedSvg() {
+    return `
+      <svg class="cloud-svg" viewBox="0 0 600 120" xmlns="http://www.w3.org/2000/svg">
+        <g filter="url(#cloudSoftBlur)">
+          <ellipse cx="300" cy="85" rx="275" ry="24" fill="url(#cloudGradSunlit)" />
+          <ellipse cx="120" cy="65" rx="55" ry="28" fill="url(#cloudPuffHighlight)" />
+          <ellipse cx="210" cy="54" rx="65" ry="32" fill="url(#cloudPuffHighlight)" />
+          <ellipse cx="310" cy="48" rx="75" ry="35" fill="url(#cloudPuffHighlight)" />
+          <ellipse cx="410" cy="56" rx="65" ry="30" fill="url(#cloudPuffHighlight)" />
+          <ellipse cx="495" cy="68" rx="50" ry="25" fill="url(#cloudPuffHighlight)" />
+          <ellipse cx="545" cy="78" rx="35" ry="18" fill="url(#cloudPuffHighlight)" />
+          <ellipse cx="55" cy="78" rx="35" ry="18" fill="url(#cloudPuffHighlight)" />
+        </g>
+      </svg>
+    `;
+  }
+
+  // 짧은 구름 (Compact / Chubby cotton puff)
+  getCompactSvg() {
+    return `
+      <svg class="cloud-svg" viewBox="0 0 260 160" xmlns="http://www.w3.org/2000/svg">
+        <g filter="url(#cloudSoftBlur)">
+          <ellipse cx="130" cy="115" rx="112" ry="32" fill="url(#cloudGradSunlit)" />
+          <circle cx="130" cy="65" r="54" fill="url(#cloudPuffHighlight)" />
+          <circle cx="80" cy="82" r="44" fill="url(#cloudPuffHighlight)" />
+          <circle cx="180" cy="82" r="44" fill="url(#cloudPuffHighlight)" />
+          <circle cx="42" cy="104" r="30" fill="url(#cloudPuffHighlight)" />
+          <circle cx="218" cy="102" r="30" fill="url(#cloudPuffHighlight)" />
+        </g>
+      </svg>
+    `;
+  }
+
+  // 작은 구름 (Small / High wisp)
+  getSmallSvg() {
+    return `
+      <svg class="cloud-svg" viewBox="0 0 180 80" xmlns="http://www.w3.org/2000/svg">
+        <g filter="url(#cloudSoftBlur)">
+          <ellipse cx="90" cy="56" rx="76" ry="16" fill="url(#cloudGradSunlit)" />
+          <circle cx="65" cy="40" r="24" fill="url(#cloudPuffHighlight)" />
+          <circle cx="105" cy="36" r="26" fill="url(#cloudPuffHighlight)" />
+          <circle cx="140" cy="44" r="19" fill="url(#cloudPuffHighlight)" />
+          <circle cx="36" cy="46" r="18" fill="url(#cloudPuffHighlight)" />
+        </g>
+      </svg>
+    `;
+  }
+
+  // 큰 구름 (Towering / Cumulus congestus)
+  getToweringSvg() {
+    return `
+      <svg class="cloud-svg" viewBox="0 0 540 240" xmlns="http://www.w3.org/2000/svg">
+        <g filter="url(#cloudSoftBlur)">
+          <ellipse cx="270" cy="175" rx="245" ry="50" fill="url(#cloudGradSunlit)" />
+          <circle cx="270" cy="85" r="82" fill="url(#cloudPuffHighlight)" />
+          <circle cx="180" cy="110" r="70" fill="url(#cloudPuffHighlight)" />
+          <circle cx="360" cy="115" r="66" fill="url(#cloudPuffHighlight)" />
+          <circle cx="100" cy="148" r="52" fill="url(#cloudPuffHighlight)" />
+          <circle cx="440" cy="145" r="54" fill="url(#cloudPuffHighlight)" />
+          <circle cx="45" cy="165" r="38" fill="url(#cloudPuffHighlight)" />
+          <circle cx="495" cy="162" r="38" fill="url(#cloudPuffHighlight)" />
+        </g>
+      </svg>
+    `;
+  }
+
+  // 흩어져있는 구름 (Scattered / Fractus loose cluster)
+  getScatteredSvg() {
+    return `
+      <svg class="cloud-svg" viewBox="0 0 460 140" xmlns="http://www.w3.org/2000/svg">
+        <g filter="url(#cloudSoftBlur)">
+          <!-- Cluster 1: Left Main -->
+          <ellipse cx="110" cy="85" rx="70" ry="22" fill="url(#cloudGradSunlit)" />
+          <circle cx="95" cy="62" r="28" fill="url(#cloudPuffHighlight)" />
+          <circle cx="135" cy="65" r="25" fill="url(#cloudPuffHighlight)" />
+          <!-- Cluster 2: Mid-Right Detached -->
+          <ellipse cx="285" cy="55" rx="55" ry="18" fill="url(#cloudGradSunlit)" />
+          <circle cx="275" cy="38" r="24" fill="url(#cloudPuffHighlight)" />
+          <circle cx="305" cy="42" r="20" fill="url(#cloudPuffHighlight)" />
+          <!-- Cluster 3: Far-Right Trailing Wisp -->
+          <ellipse cx="405" cy="88" rx="40" ry="14" fill="url(#cloudGradSunlit)" />
+          <circle cx="400" cy="76" r="16" fill="url(#cloudPuffHighlight)" />
+          <!-- Cluster 4: Top-Left Floating Pufflet -->
+          <circle cx="40" cy="42" r="14" fill="url(#cloudPuffHighlight)" />
+          <ellipse cx="50" cy="46" rx="20" ry="8" fill="url(#cloudGradSunlit)" />
+        </g>
+      </svg>
+    `;
+  }
+}
+
 // Instantiate on DOM ready
 document.addEventListener("DOMContentLoaded", () => {
   window.blogApp = new BlogApp();
+  window.proceduralSky = new ProceduralSkyGenerator();
+  window.refreshClouds = () => window.proceduralSky && window.proceduralSky.generate();
 });
