@@ -1090,12 +1090,12 @@ img {
   color: var(--accent-primary);
 }
 
-.timeline-badges-col {
+.timeline-badges-group {
   display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 6px;
+  align-items: center;
+  gap: 8px;
   flex-shrink: 0;
+  flex-wrap: wrap;
 }
 
 .timeline-badge {
@@ -1124,38 +1124,6 @@ img {
   transform: translateY(-1px);
   box-shadow: 0 2px 8px rgba(56, 189, 248, 0.35);
   filter: brightness(1.08);
-}
-
-.timeline-badge-thoughts {
-  color: #0284c7;
-  background: rgba(14, 165, 233, 0.14);
-  border: 1px solid rgba(14, 165, 233, 0.28);
-}
-
-[data-theme="dark"] .timeline-badge-thoughts {
-  color: #7dd3fc;
-  background: rgba(56, 189, 248, 0.16);
-  border: 1px solid rgba(56, 189, 248, 0.35);
-}
-
-.timeline-item:hover .timeline-badge-thoughts {
-  background-color: #0284c7;
-  color: #ffffff;
-}
-
-[data-theme="dark"] .timeline-item:hover .timeline-badge-thoughts {
-  background-color: #38bdf8;
-  color: #091322;
-}
-
-.timeline-badge-thoughts:hover {
-  background-color: #0369a1 !important;
-  color: #ffffff !important;
-}
-
-[data-theme="dark"] .timeline-badge-thoughts:hover {
-  background-color: #7dd3fc !important;
-  color: #091322 !important;
 }
 
 .timeline-text {
@@ -1779,8 +1747,14 @@ img {
     font-size: 0.82rem;
   }
 
+  .timeline-header {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .timeline-badges-group,
   .timeline-badges-col {
-    gap: 4px;
+    gap: 6px;
   }
 
   .timeline-badge {
