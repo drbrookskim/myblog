@@ -355,6 +355,17 @@ class BlogApp {
             this.openModal(pillar);
           }
         });
+      } else if (pillar === "essays") {
+        item.addEventListener("click", (e) => {
+          if (e.target.closest("a")) return;
+          window.open("https://brunch.co.kr/@drbrooks", "_blank", "noopener,noreferrer");
+        });
+        item.addEventListener("keydown", (e) => {
+          if ((e.key === "Enter" || e.key === " ") && !e.target.closest("a")) {
+            e.preventDefault();
+            window.open("https://brunch.co.kr/@drbrooks", "_blank", "noopener,noreferrer");
+          }
+        });
       }
     });
 
