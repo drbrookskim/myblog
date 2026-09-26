@@ -36,9 +36,19 @@
 </head>
 <body>
 
-  <!-- Autumn Sky & Cumulus Clouds Canvas (화창한 가을하늘 좌->우 뭉게구름) -->
+  <!-- Autumn Sky & Cumulus Clouds Canvas (화창한 가을하늘 좌->우 뭉게구름 및 기상 상태 효과) -->
   <div class="autumn-sky-canvas" aria-hidden="true">
     <div class="sky-sun-radiance"></div>
+
+    <!-- Weather Atmospheric Stages (기상 상태별 동적 효과 레이어) -->
+    <div class="weather-stars-stage" id="weatherStarsStage"></div>
+    <div class="weather-fog-stage" id="weatherFogStage">
+      <div class="fog-band fog-band-1"></div>
+      <div class="fog-band fog-band-2"></div>
+      <div class="fog-band fog-band-3"></div>
+    </div>
+    <div class="weather-rain-stage" id="weatherRainStage"></div>
+    <div class="weather-snow-stage" id="weatherSnowStage"></div>
 
     <!-- Reusable Cloud Gradient & Filter Defs -->
     <svg class="cloud-defs" width="0" height="0" style="position:absolute;width:0;height:0;overflow:hidden;">
@@ -194,9 +204,9 @@
       </a>
 
       <div class="nav-actions">
-        <button id="skyPhaseBtn" class="sky-phase-btn" aria-label="하늘 시간대 전환" title="클릭 시 하늘 시간대(아침/한낮/오후/노을/밤) 전환">
+        <button id="skyPhaseBtn" class="sky-phase-btn" aria-label="기상 상태 및 밤낮 테마 전환" title="클릭하여 날씨와 밤낮을 변경해보세요 (현재: 실시간 날씨 연동)">
           <span id="skyPhaseIcon" class="sky-phase-icon">☀️</span>
-          <span id="skyPhaseText" class="sky-phase-text">가을 하늘</span>
+          <span id="skyPhaseText" class="sky-phase-text">실시간 기상</span>
         </button>
         <button id="themeToggleBtn" class="theme-toggle-btn" aria-label="테마 전환">
           <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">

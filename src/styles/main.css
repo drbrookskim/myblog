@@ -123,33 +123,78 @@ body {
 }
 
 /* ==========================================================================
-   Real-Time Dynamic Sky Phases (시간대별 가을 하늘 변화)
+   Weather Condition & Day/Night Atmosphere Backgrounds (기상상태 및 밤낮 배경)
    ========================================================================== */
 
-/* 1. Morning (06:00 ~ 09:00): 아침 여명과 맑은 청명빛 하늘 */
-[data-sky-phase="morning"] body {
-  background: linear-gradient(180deg, #185ea9 0%, #2b7bc4 28%, #5da9ea 62%, #bae2fb 100%) fixed;
-}
-
-/* 2. Midday (09:00 ~ 15:00): 높고 푸른 쾌청한 정오의 가을 코발트빛 하늘 (실사 사진 100% 매칭) */
-[data-sky-phase="midday"] body {
+/* 1. ☀️ CLEAR (맑음) - 낮: 깊고 청량한 코발트 가을하늘 */
+[data-weather="clear"] body,
+[data-weather="clear"][data-theme="light"] body {
   background: linear-gradient(180deg, #1254a6 0%, #1d6fc5 30%, #3a8ee8 70%, #76bcf6 100%) fixed;
 }
 
-/* 3. Afternoon (15:00 ~ 17:30): 따스한 가을 볕과 온화한 세룰리안 블루 */
-[data-sky-phase="afternoon"] body {
+/* 1. ☀️ CLEAR (맑음) - 밤: 별빛 깃든 깊은 가을 밤하늘 */
+[data-weather="clear"][data-theme="dark"] body {
+  background: linear-gradient(180deg, #07101d 0%, #0d1e38 35%, #132b4f 75%, #18335a 100%) fixed;
+}
+
+/* 2. ⛅ CLOUDY / OVERCAST (구름많음 / 흐림) - 낮: 부드러운 회청빛 가을하늘 */
+[data-weather="cloudy"] body,
+[data-weather="cloudy"][data-theme="light"] body {
+  background: linear-gradient(180deg, #2b4661 0%, #466785 30%, #6f8fae 70%, #a8c4db 100%) fixed;
+}
+/* 2. ⛅ CLOUDY / OVERCAST (흐림) - 밤: 짙은 구름에 덮인 묵직한 밤하늘 */
+[data-weather="cloudy"][data-theme="dark"] body {
+  background: linear-gradient(180deg, #0a1320 0%, #122033 35%, #1c2e44 75%, #253c57 100%) fixed;
+}
+
+/* 3. 🌧️ RAIN (비 / 소나기) - 낮: 비에 젖은 차분한 청회색 빗빛 하늘 */
+[data-weather="rain"] body,
+[data-weather="rain"][data-theme="light"] body {
+  background: linear-gradient(180deg, #24384c 0%, #3b5066 32%, #556c84 68%, #859db5 100%) fixed;
+}
+/* 3. 🌧️ RAIN (비) - 밤: 촉촉하게 젖어드는 깊은 밤비 하늘 */
+[data-weather="rain"][data-theme="dark"] body {
+  background: linear-gradient(180deg, #070c14 0%, #0e1724 35%, #152233 75%, #1c2b3e 100%) fixed;
+}
+
+/* 4. ❄️ SNOW (눈) - 낮: 포근한 실버블루 눈 하늘 */
+[data-weather="snow"] body,
+[data-weather="snow"][data-theme="light"] body {
+  background: linear-gradient(180deg, #375069 0%, #4f6c88 30%, #738ea8 68%, #b3c7d9 100%) fixed;
+}
+/* 4. ❄️ SNOW (눈) - 밤: 고요한 눈 내리는 밤하늘 */
+[data-weather="snow"][data-theme="dark"] body {
+  background: linear-gradient(180deg, #09121f 0%, #112033 35%, #1a2c44 75%, #223755 100%) fixed;
+}
+
+/* 5. 🌫️ FOG (안개 / 박무) - 낮: 몽환적인 옅은 은빛 안개 하늘 */
+[data-weather="fog"] body,
+[data-weather="fog"][data-theme="light"] body {
+  background: linear-gradient(180deg, #3c4c59 0%, #586976 30%, #82929e 68%, #bfcacf 100%) fixed;
+}
+/* 5. 🌫️ FOG (안개) - 밤: 신비롭고 아늑한 밤 안개 */
+[data-weather="fog"][data-theme="dark"] body {
+  background: linear-gradient(180deg, #0b131c 0%, #14202a 35%, #1d2c38 75%, #273847 100%) fixed;
+}
+
+/* 6. ⚡ THUNDER (뇌우) */
+[data-weather="thunder"] body {
+  background: linear-gradient(180deg, #18202d 0%, #253142 35%, #38475c 75%, #52637a 100%) fixed;
+}
+
+/* Time Phase Sub-Gradients (Clear 날씨 시 시간대별 미세 색감 변화) */
+[data-weather="clear"][data-sky-phase="morning"] body {
+  background: linear-gradient(180deg, #185ea9 0%, #2b7bc4 28%, #5da9ea 62%, #bae2fb 100%) fixed;
+}
+[data-weather="clear"][data-sky-phase="afternoon"] body {
   background: linear-gradient(180deg, #175498 0%, #2971bd 30%, #5294de 65%, #9ecbf5 100%) fixed;
 }
-
-/* 4. Sunset / Dusk (17:30 ~ 19:30): 붉은 노을과 보랏빛이 감도는 황혼 하늘 */
-[data-sky-phase="sunset"] body {
+[data-weather="clear"][data-sky-phase="sunset"] body {
   background: linear-gradient(180deg, #2e3b75 0%, #5b4a8e 24%, #a83d71 52%, #ea580c 78%, #fde047 100%) fixed;
 }
-
-/* 5. Night (19:30 ~ 06:00): 별빛 깃든 고요한 가을밤 하늘 */
 [data-sky-phase="night"] body,
 [data-theme="dark"] body {
-  background: linear-gradient(180deg, #091322 0%, #0d1e38 35%, #132b4f 75%, #18335a 100%) fixed;
+  background: linear-gradient(180deg, #07101d 0%, #0d1e38 35%, #132b4f 75%, #18335a 100%) fixed;
 }
 
 a {
@@ -405,6 +450,192 @@ img {
   .cloud-bob {
     animation: none !important;
   }
+}
+
+/* ==========================================================================
+   Weather Atmosphere Stages (별무리, 비, 눈, 안개 시각 효과)
+   ========================================================================== */
+
+/* 1. Twinkling Stars Stage (밤하늘 별무리) */
+.weather-stars-stage {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 1.2s ease;
+}
+
+[data-theme="dark"] .weather-stars-stage,
+[data-is-day="false"] .weather-stars-stage {
+  opacity: 1;
+}
+
+[data-weather="rain"] .weather-stars-stage,
+[data-weather="snow"] .weather-stars-stage,
+[data-weather="cloudy"] .weather-stars-stage,
+[data-weather="fog"] .weather-stars-stage {
+  opacity: 0.18;
+}
+
+.sky-star {
+  position: absolute;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 0 5px rgba(255, 255, 255, 0.95);
+  animation: star-twinkle 3.2s ease-in-out infinite alternate;
+}
+
+@keyframes star-twinkle {
+  0% { opacity: 0.22; transform: scale(0.75); }
+  50% { opacity: 0.98; transform: scale(1.2); box-shadow: 0 0 7px rgba(255, 255, 255, 1); }
+  100% { opacity: 0.32; transform: scale(0.85); }
+}
+
+/* 2. Rain Stage (가을비 효과) */
+.weather-rain-stage {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 3;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.8s ease, visibility 0.8s;
+  overflow: hidden;
+}
+
+[data-weather="rain"] .weather-rain-stage,
+[data-weather="thunder"] .weather-rain-stage {
+  opacity: 1;
+  visibility: visible;
+}
+
+.raindrop {
+  position: absolute;
+  top: -45px;
+  width: 1.5px;
+  background: linear-gradient(180deg, transparent 0%, rgba(224, 242, 254, 0.35) 45%, rgba(255, 255, 255, 0.9) 100%);
+  border-radius: 2px;
+  animation: raindrop-fall linear infinite;
+}
+
+@keyframes raindrop-fall {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(14deg);
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.85;
+  }
+  85% {
+    opacity: 0.85;
+  }
+  100% {
+    transform: translate3d(-170px, calc(100vh + 60px), 0) rotate(14deg);
+    opacity: 0;
+  }
+}
+
+/* 3. Snow Stage (눈송이 효과) */
+.weather-snow-stage {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 3;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.8s ease, visibility 0.8s;
+  overflow: hidden;
+}
+
+[data-weather="snow"] .weather-snow-stage {
+  opacity: 1;
+  visibility: visible;
+}
+
+.snowflake {
+  position: absolute;
+  top: -25px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.98) 0%, rgba(240, 249, 255, 0.8) 60%, transparent 100%);
+  box-shadow: 0 0 6px rgba(255, 255, 255, 0.85);
+  animation: snowflake-fall linear infinite;
+}
+
+@keyframes snowflake-fall {
+  0% {
+    transform: translate3d(0, 0, 0);
+    opacity: 0;
+  }
+  12% {
+    opacity: 0.92;
+  }
+  50% {
+    transform: translate3d(32px, 50vh, 0);
+  }
+  88% {
+    opacity: 0.88;
+  }
+  100% {
+    transform: translate3d(-24px, calc(100vh + 35px), 0);
+    opacity: 0;
+  }
+}
+
+/* 4. Fog Stage (몽환적인 안개 효과) */
+.weather-fog-stage {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 1.2s ease, visibility 1.2s;
+  overflow: hidden;
+}
+
+[data-weather="fog"] .weather-fog-stage {
+  opacity: 1;
+  visibility: visible;
+}
+
+.fog-band {
+  position: absolute;
+  width: 250%;
+  height: 290px;
+  left: -75%;
+  background: radial-gradient(ellipse at 50% 50%, rgba(241, 245, 249, 0.32) 0%, rgba(226, 232, 240, 0.18) 45%, transparent 75%);
+  filter: blur(36px);
+  animation: fog-sway 28s ease-in-out infinite alternate;
+}
+.fog-band-1 { top: 12%; animation-duration: 34s; }
+.fog-band-2 { top: 44%; animation-duration: 26s; animation-delay: -11s; }
+.fog-band-3 { top: 72%; animation-duration: 38s; animation-delay: -19s; }
+
+@keyframes fog-sway {
+  0% { transform: translate3d(-70px, 0, 0); }
+  100% { transform: translate3d(70px, 0, 0); }
+}
+
+/* Atmospheric Sun/Clouds Tints for Weather */
+[data-weather="rain"] .sky-sun-radiance,
+[data-weather="thunder"] .sky-sun-radiance {
+  opacity: 0.18;
+  filter: blur(60px);
+}
+[data-weather="cloudy"] .sky-sun-radiance {
+  opacity: 0.42;
+}
+[data-weather="rain"] .clouds-drift-stage {
+  filter: brightness(0.65) saturate(0.85);
+  opacity: 0.88;
+}
+[data-weather="snow"] .clouds-drift-stage {
+  filter: brightness(0.86) contrast(0.92);
+}
+[data-weather="fog"] .clouds-drift-stage {
+  opacity: 0.65;
+  filter: blur(1.5px);
 }
 
 /* ==========================================================================

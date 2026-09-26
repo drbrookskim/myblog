@@ -275,20 +275,38 @@ class BlogApp {
 
   initTheme() {
     const savedTheme = localStorage.getItem("drbrooks-theme");
-    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    const initialTheme = savedTheme || (prefersDark ? "dark" : "light");
+    const manualTheme = localStorage.getItem("drbrooks-theme-manual");
+
+    // Determine Day vs Night from current local time (06:00 ~ 18:30 is day)
+    const now = new Date();
+    const hours = now.getHours() + now.getMinutes() / 60;
+    const isDay = hours >= 6 && hours < 18.5;
+    const dayNightTheme = isDay ? "light" : "dark";
+
+    const initialTheme = manualTheme || dayNightTheme || savedTheme || "light";
 
     document.documentElement.setAttribute("data-theme", initialTheme);
     this.updateThemeToggleIcon(initialTheme);
+  }
+
+  setTheme(theme, isManual = false) {
+    document.documentElement.setAttribute("data-theme", theme);
+    localStorage.setItem("drbrooks-theme", theme);
+    if (isManual) {
+      localStorage.setItem("drbrooks-theme-manual", theme);
+    }
+    this.updateThemeToggleIcon(theme);
   }
 
   toggleTheme() {
     const currentTheme = document.documentElement.getAttribute("data-theme");
     const nextTheme = currentTheme === "dark" ? "light" : "dark";
 
-    document.documentElement.setAttribute("data-theme", nextTheme);
-    localStorage.setItem("drbrooks-theme", nextTheme);
-    this.updateThemeToggleIcon(nextTheme);
+    this.setTheme(nextTheme, true);
+
+    if (window.weatherSky) {
+      window.weatherSky.handleThemeToggle(nextTheme);
+    }
   }
 
   updateThemeToggleIcon(theme) {
@@ -846,97 +864,298 @@ class ProceduralSkyGenerator {
 }
 
 /**
- * Real-Time Dynamic Sky Atmosphere Controller
- * Updates blue sky hue, gradients, sun position and radiance based on current time:
- * - 아침 (06:00 ~ 09:00): 🌅 여명과 맑은 청록빛 하늘
- * - 한낮 (09:00 ~ 15:00): ☀️ 높고 푸른 쾌청한 정오의 가을하늘
- * - 오후 (15:00 ~ 17:30): 🌤️ 따스한 가을 볕과 온화한 세룰리안 블루
- * - 노을 (17:30 ~ 19:30): 🌆 붉은 노을과 보랏빛이 감도는 황혼 하늘
- * - 밤 (19:30 ~ 06:00): 🌙 별빛 깃든 고요한 가을밤 하늘
+ * WeatherSkyManager (기상 상태 및 밤낮 테마 통합 관리자)
+ * 1. 실시간 기상 API (Open-Meteo) 연동으로 현재 날씨, 기온, 낮/밤(is_day) 감지
+ * 2. 낮/밤 구분에 따라 라이트/다크 테마 자동 전환 (Day = Light Theme, Night = Dark Theme)
+ * 3. 기상 상태(맑음, 흐림, 비, 눈, 안개)에 따라 배경 그라데이션 및 파티클(별무리, 빗방울, 눈송이, 안개) 동적 제어
+ * 4. 상단 네비게이션 버튼을 통해 실시간 자동 모드 및 수동 프리셋 순환 감상 지원
  */
-class SkyTimeController {
+class WeatherSkyManager {
   constructor() {
     this.skyPhaseBtn = document.getElementById("skyPhaseBtn");
     this.skyPhaseIcon = document.getElementById("skyPhaseIcon");
     this.skyPhaseText = document.getElementById("skyPhaseText");
-    
-    this.phases = [
-      { id: "morning", label: "아침 가을하늘", icon: "🌅" },
-      { id: "midday", label: "한낮 가을하늘", icon: "☀️" },
-      { id: "afternoon", label: "오후 가을하늘", icon: "🌤️" },
-      { id: "sunset", label: "노을빛 가을하늘", icon: "🌆" },
-      { id: "night", label: "가을 밤하늘", icon: "🌙" }
+
+    this.starsStage = document.getElementById("weatherStarsStage");
+    this.rainStage = document.getElementById("weatherRainStage");
+    this.snowStage = document.getElementById("weatherSnowStage");
+
+    // WMO Weather interpretation codes mapping
+    this.weatherMap = {
+      0: { id: "clear", label: "맑음", icon: "☀️", nightIcon: "🌙" },
+      1: { id: "cloudy", label: "구름조금", icon: "🌤️", nightIcon: "☁️" },
+      2: { id: "cloudy", label: "구름많음", icon: "⛅", nightIcon: "☁️" },
+      3: { id: "cloudy", label: "흐림", icon: "☁️", nightIcon: "☁️" },
+      45: { id: "fog", label: "안개", icon: "🌫️", nightIcon: "🌫️" },
+      48: { id: "fog", label: "짙은 안개", icon: "🌫️", nightIcon: "🌫️" },
+      51: { id: "rain", label: "이슬비", icon: "🌧️", nightIcon: "🌧️" },
+      53: { id: "rain", label: "보슬비", icon: "🌧️", nightIcon: "🌧️" },
+      55: { id: "rain", label: "가랑비", icon: "🌧️", nightIcon: "🌧️" },
+      61: { id: "rain", label: "약한 비", icon: "🌧️", nightIcon: "🌧️" },
+      63: { id: "rain", label: "가을비", icon: "🌧️", nightIcon: "🌧️" },
+      65: { id: "rain", label: "강한 비", icon: "🌧️", nightIcon: "🌧️" },
+      71: { id: "snow", label: "약한 눈", icon: "❄️", nightIcon: "❄️" },
+      73: { id: "snow", label: "눈", icon: "❄️", nightIcon: "❄️" },
+      75: { id: "snow", label: "함박눈", icon: "❄️", nightIcon: "❄️" },
+      77: { id: "snow", label: "싸락눈", icon: "❄️", nightIcon: "❄️" },
+      80: { id: "rain", label: "소나기", icon: "🌧️", nightIcon: "🌧️" },
+      81: { id: "rain", label: "강한 소나기", icon: "🌧️", nightIcon: "🌧️" },
+      82: { id: "rain", label: "폭우", icon: "🌧️", nightIcon: "🌧️" },
+      85: { id: "snow", label: "눈보라", icon: "❄️", nightIcon: "❄️" },
+      86: { id: "snow", label: "대설", icon: "❄️", nightIcon: "❄️" },
+      95: { id: "thunder", label: "뇌우", icon: "⛈️", nightIcon: "⛈️" },
+      96: { id: "thunder", label: "뇌우", icon: "⛈️", nightIcon: "⛈️" },
+      99: { id: "thunder", label: "우박 뇌우", icon: "⛈️", nightIcon: "⛈️" }
+    };
+
+    // Preset list for interactive user cycling
+    this.presets = [
+      { id: "auto", isAuto: true, label: "실시간 자동", icon: "🔄" },
+      { id: "clear-day", weather: "clear", isDay: true, skyPhase: "midday", theme: "light", label: "맑음 · 낮", icon: "☀️" },
+      { id: "clear-night", weather: "clear", isDay: false, skyPhase: "night", theme: "dark", label: "맑음 · 밤", icon: "🌙" },
+      { id: "cloudy-day", weather: "cloudy", isDay: true, skyPhase: "afternoon", theme: "light", label: "흐림 · 낮", icon: "⛅" },
+      { id: "rain-day", weather: "rain", isDay: true, skyPhase: "afternoon", theme: "light", label: "가을비 · 낮", icon: "🌧️" },
+      { id: "rain-night", weather: "rain", isDay: false, skyPhase: "night", theme: "dark", label: "밤비 · 밤", icon: "🌧️" },
+      { id: "snow-day", weather: "snow", isDay: true, skyPhase: "morning", theme: "light", label: "첫눈 · 낮", icon: "❄️" },
+      { id: "snow-night", weather: "snow", isDay: false, skyPhase: "night", theme: "dark", label: "밤눈 · 밤", icon: "❄️" },
+      { id: "fog-day", weather: "fog", isDay: true, skyPhase: "morning", theme: "light", label: "안개 · 낮", icon: "🌫️" }
     ];
 
-    this.manualOverride = false;
-    this.currentPhaseIndex = 0;
+    this.currentPresetIndex = 0; // Starts in real-time Auto mode
+    this.liveWeather = null;
 
     this.init();
   }
 
   init() {
-    this.syncWithRealTime();
+    this.initAtmosphericStages();
+    this.fetchLiveWeather();
 
     if (this.skyPhaseBtn) {
       this.skyPhaseBtn.addEventListener("click", () => this.cyclePhase());
     }
 
-    // Auto-sync every 60 seconds
+    // Auto refresh live weather every 10 minutes
     setInterval(() => {
-      if (!this.manualOverride) {
-        this.syncWithRealTime();
+      if (this.currentPresetIndex === 0) {
+        this.fetchLiveWeather();
       }
-    }, 60000);
+    }, 10 * 60 * 1000);
   }
 
-  getRealTimePhase() {
+  initAtmosphericStages() {
+    // 1. Generate Starfield (45 organic twinkling stars)
+    if (this.starsStage && this.starsStage.children.length === 0) {
+      const starFragment = document.createDocumentFragment();
+      for (let i = 0; i < 45; i++) {
+        const star = document.createElement("div");
+        star.className = "sky-star";
+        star.style.left = `${(Math.random() * 96 + 2).toFixed(1)}%`;
+        star.style.top = `${(Math.random() * 65 + 3).toFixed(1)}%`;
+        const size = (Math.random() * 1.8 + 1.2).toFixed(1);
+        star.style.width = `${size}px`;
+        star.style.height = `${size}px`;
+        star.style.animationDelay = `${(Math.random() * 4).toFixed(1)}s`;
+        star.style.animationDuration = `${(Math.random() * 2.5 + 2.5).toFixed(1)}s`;
+        starFragment.appendChild(star);
+      }
+      this.starsStage.appendChild(starFragment);
+    }
+
+    // 2. Generate Rain Stage (65 slanted smooth raindrops)
+    if (this.rainStage && this.rainStage.children.length === 0) {
+      const rainFragment = document.createDocumentFragment();
+      for (let i = 0; i < 65; i++) {
+        const drop = document.createElement("div");
+        drop.className = "raindrop";
+        drop.style.left = `${(Math.random() * 106 - 3).toFixed(1)}%`;
+        drop.style.height = `${Math.floor(Math.random() * 14 + 18)}px`;
+        drop.style.animationDuration = `${(Math.random() * 0.45 + 0.65).toFixed(2)}s`;
+        drop.style.animationDelay = `-${(Math.random() * 1.5).toFixed(2)}s`;
+        drop.style.opacity = (Math.random() * 0.4 + 0.5).toFixed(2);
+        rainFragment.appendChild(drop);
+      }
+      this.rainStage.appendChild(rainFragment);
+    }
+
+    // 3. Generate Snow Stage (42 soft drifting snowflakes)
+    if (this.snowStage && this.snowStage.children.length === 0) {
+      const snowFragment = document.createDocumentFragment();
+      for (let i = 0; i < 42; i++) {
+        const flake = document.createElement("div");
+        flake.className = "snowflake";
+        flake.style.left = `${(Math.random() * 102 - 1).toFixed(1)}%`;
+        const size = (Math.random() * 4 + 2.5).toFixed(1);
+        flake.style.width = `${size}px`;
+        flake.style.height = `${size}px`;
+        flake.style.animationDuration = `${(Math.random() * 4 + 5.5).toFixed(2)}s`;
+        flake.style.animationDelay = `-${(Math.random() * 6).toFixed(2)}s`;
+        flake.style.opacity = (Math.random() * 0.45 + 0.45).toFixed(2);
+        snowFragment.appendChild(flake);
+      }
+      this.snowStage.appendChild(snowFragment);
+    }
+  }
+
+  async fetchLiveWeather() {
+    try {
+      const cached = sessionStorage.getItem("drbrooks-weather-cache");
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        if (Date.now() - parsed.timestamp < 15 * 60 * 1000) {
+          this.liveWeather = parsed.data;
+          this.applyLiveWeather();
+          return;
+        }
+      }
+
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 4000);
+
+      // Open-Meteo free API (Seoul default coordinates)
+      const res = await fetch(
+        "https://api.open-meteo.com/v1/forecast?latitude=37.5665&longitude=126.9780&current=temperature_2m,weather_code,is_day&timezone=auto",
+        { signal: controller.signal }
+      );
+      clearTimeout(timeoutId);
+
+      if (!res.ok) throw new Error("HTTP error " + res.status);
+      const data = await res.json();
+
+      if (data && data.current) {
+        this.liveWeather = {
+          temperature: Math.round(data.current.temperature_2m * 10) / 10,
+          weatherCode: data.current.weather_code,
+          isDay: data.current.is_day === 1
+        };
+        sessionStorage.setItem(
+          "drbrooks-weather-cache",
+          JSON.stringify({
+            data: this.liveWeather,
+            timestamp: Date.now()
+          })
+        );
+      }
+    } catch (e) {
+      console.warn("Using offline day/night fallback weather:", e);
+      // Offline fallback from system local hour
+      const now = new Date();
+      const hour = now.getHours();
+      const isDay = hour >= 6 && hour < 18.5;
+      this.liveWeather = {
+        temperature: 21,
+        weatherCode: 0,
+        isDay: isDay
+      };
+    }
+
+    this.applyLiveWeather();
+  }
+
+  applyLiveWeather() {
+    if (this.currentPresetIndex !== 0) return; // Retain user manual preset if active
+
+    if (!this.liveWeather) return;
+
+    const weatherInfo = this.weatherMap[this.liveWeather.weatherCode] || this.weatherMap[0];
+    const isDay = this.liveWeather.isDay;
+    const theme = isDay ? "light" : "dark";
+    const skyPhase = isDay ? this.getSkyPhaseFromHour() : "night";
+
+    this.applyState({
+      weather: weatherInfo.id,
+      isDay: isDay,
+      theme: theme,
+      skyPhase: skyPhase,
+      icon: isDay ? weatherInfo.icon : weatherInfo.nightIcon,
+      label: `${weatherInfo.label} ${this.liveWeather.temperature}°C · ${isDay ? "낮" : "가을밤"} (자동)`
+    });
+  }
+
+  getSkyPhaseFromHour() {
     const now = new Date();
     const totalMinutes = now.getHours() * 60 + now.getMinutes();
 
-    if (totalMinutes >= 360 && totalMinutes < 540) {
-      return "morning";
-    }
-    if (totalMinutes >= 540 && totalMinutes < 900) {
-      return "midday";
-    }
-    if (totalMinutes >= 900 && totalMinutes < 1050) {
-      return "afternoon";
-    }
-    if (totalMinutes >= 1050 && totalMinutes < 1170) {
-      return "sunset";
-    }
+    if (totalMinutes >= 360 && totalMinutes < 540) return "morning";
+    if (totalMinutes >= 540 && totalMinutes < 900) return "midday";
+    if (totalMinutes >= 900 && totalMinutes < 1050) return "afternoon";
+    if (totalMinutes >= 1050 && totalMinutes < 1170) return "sunset";
     return "night";
   }
 
-  syncWithRealTime() {
-    const phaseId = this.getRealTimePhase();
-    this.currentPhaseIndex = this.phases.findIndex(p => p.id === phaseId);
-    if (this.currentPhaseIndex === -1) this.currentPhaseIndex = 1;
-    this.applyPhase(this.phases[this.currentPhaseIndex]);
-  }
-
   cyclePhase() {
-    this.manualOverride = true;
-    this.currentPhaseIndex = (this.currentPhaseIndex + 1) % this.phases.length;
-    this.applyPhase(this.phases[this.currentPhaseIndex]);
+    this.currentPresetIndex = (this.currentPresetIndex + 1) % this.presets.length;
+    const preset = this.presets[this.currentPresetIndex];
+
+    if (preset.isAuto) {
+      localStorage.removeItem("drbrooks-theme-manual");
+      if (this.liveWeather) {
+        this.applyLiveWeather();
+      } else {
+        this.fetchLiveWeather();
+      }
+    } else {
+      this.applyState({
+        weather: preset.weather,
+        isDay: preset.isDay,
+        theme: preset.theme,
+        skyPhase: preset.skyPhase,
+        icon: preset.icon,
+        label: preset.label
+      });
+    }
   }
 
-  applyPhase(phase) {
-    document.documentElement.setAttribute("data-sky-phase", phase.id);
+  applyState({ weather, isDay, theme, skyPhase, icon, label }) {
+    const root = document.documentElement;
+    root.setAttribute("data-weather", weather);
+    root.setAttribute("data-is-day", isDay ? "true" : "false");
+    root.setAttribute("data-sky-phase", skyPhase);
 
+    // Synchronize Light/Dark theme according to Day/Night
+    if (window.blogApp) {
+      window.blogApp.setTheme(theme, false);
+    } else {
+      root.setAttribute("data-theme", theme);
+      localStorage.setItem("drbrooks-theme", theme);
+    }
+
+    // Update Nav Action Button UI
     if (this.skyPhaseIcon) {
-      this.skyPhaseIcon.textContent = phase.icon;
+      this.skyPhaseIcon.textContent = icon;
     }
     if (this.skyPhaseText) {
-      this.skyPhaseText.textContent = phase.label;
+      this.skyPhaseText.textContent = label;
+    }
+    if (this.skyPhaseBtn) {
+      this.skyPhaseBtn.setAttribute("title", `현재: ${label} | 클릭하여 다른 날씨/시간대로 전환`);
+    }
+  }
+
+  handleThemeToggle(newTheme) {
+    const isDay = newTheme === "light";
+    document.documentElement.setAttribute("data-is-day", isDay ? "true" : "false");
+    document.documentElement.setAttribute("data-sky-phase", isDay ? "midday" : "night");
+
+    if (this.currentPresetIndex === 0 && this.liveWeather) {
+      const weatherInfo = this.weatherMap[this.liveWeather.weatherCode] || this.weatherMap[0];
+      const icon = isDay ? weatherInfo.icon : weatherInfo.nightIcon;
+      if (this.skyPhaseIcon) this.skyPhaseIcon.textContent = icon;
+      if (this.skyPhaseText) {
+        this.skyPhaseText.textContent = `${weatherInfo.label} ${this.liveWeather.temperature}°C · ${isDay ? "낮" : "가을밤"}`;
+      }
     }
   }
 }
 
+// Backward compatibility alias
+class SkyTimeController extends WeatherSkyManager {}
+
 // Instantiate on DOM ready
 document.addEventListener("DOMContentLoaded", () => {
   window.blogApp = new BlogApp();
-  window.skyTime = new SkyTimeController();
+  window.weatherSky = new WeatherSkyManager();
+  window.skyTime = window.weatherSky;
   window.proceduralSky = new ProceduralSkyGenerator();
   window.refreshClouds = () => window.proceduralSky && window.proceduralSky.generate();
 });
