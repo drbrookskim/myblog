@@ -17,4 +17,5 @@
 | 2026-09-24 | 드래그 텍스트 선택 시 영문 번역 팝오버 툴팁 기능 구현 | `src/scripts/main.js`, `src/styles/main.css`, `src/data/translations.json` | 마우스 드래그 선택 시 영어 버전 노출 요청 |
 | 2026-09-25 | GitHub 원격 저장소(`drbrookskim/myblog.git`) 연결 및 Cloudflare Pages(`drbrooks.pages.dev`) 메인 배포 완료 | 전체, GitHub, Cloudflare Pages | 사용자 요청: myblog 메인 등록 및 GitHub 연결 |
 | 2026-09-25 | LinkedIn 링크 삭제 및 Anthropic/MCP 공인 자격증 7종(Skilljar) 등록 및 연동 | `src/data/certifications.json`, `src/data/profile.json`, `src/scripts/main.js`, `index.html`, `README.md` | 사용자 요청: LinkedIn 삭제 및 7개 Skilljar 자격증 등록 |
+| 2026-10-31 | 문피아 신규 SF 소설 《토큰사회》 등록 및 소설 4작품 체계 확장 | `src/data/novels.json`, `src/data/profile.json`, `src/scripts/main.js`, `index.html`, `README.md`, `scripts/verify-blog.js` | 사용자 요청: 신규 소설(토큰사회) 추가 |
 

@@ -23,13 +23,27 @@ const INITIAL_DATA = {
     stats: {
       careerYears: 12,
       brunchArticles: 193,
-      publishedNovels: 3,
+      publishedNovels: 4,
       certifications: 7,
       servicesBuilt: "Interactive Suite"
     },
     keywords: ["기획의 본질", "사용자 관점", "인간의 한계", "현대소설", "SF/미스터리", "인텔리전스 웹"]
   },
   novels: [
+    {
+      id: "tokensociety",
+      title: "토큰사회",
+      type: "연재",
+      badge: "하이퍼 리얼리스틱 SF",
+      genre: ["SF", "디스토피아", "인공지능"],
+      summary: "“질문에 돈이 드는 세상에서, 가장 비싼 질문은 진실이다.” AI 토큰 비용이 계층을 가르는 사회에서 벌어지는 계산의 서사.",
+      description: "AI 기술이 보편화될수록 역설적으로 심화되는 정보 격차와 구조적 폭력. 주인공은 끝까지 토큰을 계산하며, 마지막 순간 자신의 잔고 전부를 태워 비로소 토큰으로 환산될 수 없는 인간의 가치를 증명합니다.",
+      url: "https://library.munpia.com/drbrooks/novel/detail?novelId=618110",
+      cover: "https://cdn1.munpia.com/v2/files/tcover/2026/1030/23/FbqVRX--YAA",
+      platform: "문피아",
+      episodes: "연재중",
+      tags: ["SF", "인공지능", "토큰사회", "정보격차", "디스토피아", "계산의 서사"]
+    },
     {
       id: "chogang-mapae",
       title: "초강마패",
@@ -509,7 +523,7 @@ class BlogApp {
     return `
       <div class="modal-banner">
         <p class="modal-banner-desc">
-          인간의 한계와 감각, 조직의 역학을 탐구한 문학 작품입니다. 장편 1작품, 단편 2작품을 문피아에서 열람하실 수 있습니다.
+          인간의 한계와 감각, 조직의 역학, 기술 사회를 탐구한 문학 작품입니다. 장편 2작품, 단편 2작품(총 4작품)을 문피아에서 열람하실 수 있습니다.
         </p>
       </div>
       <div class="modal-card-list">

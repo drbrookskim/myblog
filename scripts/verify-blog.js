@@ -82,6 +82,7 @@ function fetchTitle(url) {
     'https://www.munpia.com/novel/detail/530809',
     'https://www.munpia.com/novel/detail/606595',
     'https://www.munpia.com/novel/detail/606594',
+    'https://library.munpia.com/drbrooks/novel/detail?novelId=618110',
     'https://drbrooks.pages.dev/'
   ];
 
